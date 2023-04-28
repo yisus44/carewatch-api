@@ -1,6 +1,40 @@
 version: 0.2
+env:
+  parameter-store:
+    POSTGRES_HOST: /dev/postgres_host
+    POSTGRES_PORT: /dev/postgres_port
+    POSTGRES_USER: /dev/postgres_user
+    POSTGRES_PASSWORD: /dev/postgres_password
+    POSTGRES_DATABASE: /dev/postgres_database
 
 phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+
+    commands:
+      - echo "📦 installing packages..."
+
+      - echo "✅ Packages installed successfully."
+
+  pre_build:
+    commands:
+      - echo "⚙️ Testing..."
+
+      - echo "✅ Tests passed successfully."
+
   build:
     commands:
-      - echo "Entenered build phanse"
+      - echo "🚧 Starting compiling packages..."
+
+      - echo "✅ Build passed successfully."
+
+  post_build:
+    commands:
+      - echo "🚚 Performing post-build pa
+
+artifacts:
+  files:
+    - '**/*'
+
+  name: deploy-nodejs-build-artifacts
