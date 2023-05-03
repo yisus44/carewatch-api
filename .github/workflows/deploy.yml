@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           npm install
       - name: Run test
@@ -26,8 +26,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      # - name: Check out the repository
-      #   uses: actions/checkout@v3
+      - name: Check out the repository
+        uses: actions/checkout@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
