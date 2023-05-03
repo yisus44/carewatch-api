@@ -45,8 +45,8 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: b0a3l3v9
-          REPOSITORY: care
-          IMAGE_TAG: care
+          REPOSITORY: carewatch
+          IMAGE_TAG: carewatch
         run: |
           docker build -t $IMAGE_TAG .
           docker tag $IMAGE_TAG:latest $REGISTRY/$REGISTRY_ALIAS/$IMAGE_TAG:latest
