@@ -6,8 +6,9 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 
 @Injectable()
 export class UsersService {
@@ -40,10 +41,19 @@ export class UsersService {
     const user = await this.usersRepository.update({ id }, updateUserDto);
     return user;
   }
-  async create(createUserDto: CreateUserDto) {
-    const user = new User();
-    user.name = createUserDto.name;
-    user.email = createUserDto.email;
-    return await this.usersRepository.save(user);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const user = this.usersRepository.create({
+        ...createUserDto,
+        isActive: false,
+      });
+      return await this.usersRepository.save(user);
+    } catch (error) {
+      if (error?.code === PostgresErrorCode.UniqueViolation) {
+        //TODO: add validation for id not in database
+        throw new BadRequestException('Email already in user');
+      }
+      throw error;
+    }
   }
 }
