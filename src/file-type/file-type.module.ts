@@ -4,9 +4,6 @@ import { FileTypeController } from './file-type.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileType } from './entities/file-type.entity';
 
-import { FileTypeRepository } from './file-type.repository';
-import { TypeORMAdapter } from 'src/common/repo/typeOrmAdapter';
-
 @Module({
   controllers: [FileTypeController],
   providers: [FileTypeService],

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FileTypeService } from './file-type.service';
 import { CreateFileTypeDto } from './dto/create-file-type.dto';
@@ -28,20 +29,20 @@ export class FileTypeController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.fileTypeService.findOne(+id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateFileTypeDto: UpdateFileTypeDto,
   ) {
     return this.fileTypeService.update(+id, updateFileTypeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fileTypeService.delete(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.fileTypeService.remove(+id);
   }
 }
