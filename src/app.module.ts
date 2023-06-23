@@ -14,6 +14,7 @@ import { FilesModule } from './files/files.module';
 import { FileTypeModule } from './file-type/file-type.module';
 import { SeedModule } from './seed/seed.module';
 import { JwtMiddleware } from './auth/middleware/jwt.middleware';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { JwtMiddleware } from './auth/middleware/jwt.middleware';
     FileTypeModule,
     FilesModule,
     SeedModule,
+    UserSettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

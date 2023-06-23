@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 import { sign } from 'jsonwebtoken';
 import { User } from 'src/users/entities/user.entity';
+import { CommonService } from 'src/common/common.service';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly commonService: CommonService,
   ) {}
   async signUp(registerDto: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -43,17 +45,22 @@ export class AuthService {
     if (!user) throw new BadRequestException('User not found');
     const match = this.verifyPassword(loginDto.password, user.password);
     if (!match) throw new BadRequestException('Invalid credentials');
-    const token = await this.signPayload(user);
-    return { token, user };
+    const expirationTime = process.env.JWT_EXPIRATION_TIME; // Example: "48h"
+    const token = await this.signPayload(user, expirationTime);
+    const expiresInMilliseconds =
+      this.commonService.parseDurationToMilliseconds(expirationTime);
+    const expirationTimestamp = Date.now() + expiresInMilliseconds;
+    return { token, user, expirationTimestamp };
   }
 
-  async signPayload(user: User) {
+  async signPayload(user: User, expirationTime: string) {
     const payload = {
       id: user.id,
       isActive: user.isActive,
     };
+
     return sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRATION_TIME,
+      expiresIn: expirationTime,
     });
   }
 

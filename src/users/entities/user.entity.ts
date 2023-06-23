@@ -1,7 +1,10 @@
+import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -31,6 +34,9 @@ export class User {
 
   @Column({ default: false })
   isActive: boolean;
+
+  @OneToMany(() => UserSetting, (userSetting: UserSetting) => userSetting.user)
+  userSetting: UserSetting;
 
   @CreateDateColumn()
   createdAt: Date;
