@@ -22,15 +22,11 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User | null> {
-    const user = await this.usersRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException();
-    return user;
+    return await this.usersRepository.findOneBy({ id });
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user = await this.usersRepository.findOneBy({ email });
-    if (!user) throw new NotFoundException();
-    return user;
+    return await this.usersRepository.findOneBy({ email });
   }
 
   async remove(id: number): Promise<DeleteResult> {
@@ -38,22 +34,13 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.usersRepository.update({ id }, updateUserDto);
-    return user;
+    return await this.usersRepository.update({ id }, updateUserDto);
   }
   async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const user = this.usersRepository.create({
-        ...createUserDto,
-        isActive: false,
-      });
-      return await this.usersRepository.save(user);
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        //TODO: add validation for id not in database
-        throw new BadRequestException('Email already in user');
-      }
-      throw error;
-    }
+    const user = this.usersRepository.create({
+      ...createUserDto,
+      isActive: false,
+    });
+    return await this.usersRepository.save(user);
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -13,6 +13,7 @@ import { CommonModule } from './common/common.module';
 import { FilesModule } from './files/files.module';
 import { FileTypeModule } from './file-type/file-type.module';
 import { SeedModule } from './seed/seed.module';
+import { JwtMiddleware } from './auth/middleware/jwt.middleware';
 
 @Module({
   imports: [
@@ -40,4 +41,8 @@ import { SeedModule } from './seed/seed.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JwtMiddleware).forRoutes('*');
+  }
+}

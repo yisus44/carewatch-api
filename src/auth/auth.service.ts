@@ -10,8 +10,9 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import TokenPayload from './tokenPayload.interface';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { sign } from 'jsonwebtoken';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -33,8 +34,27 @@ export class AuthService {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new BadRequestException('Email already on use');
       }
-      throw new InternalServerErrorException();
+      throw error;
     }
+  }
+
+  async signIn(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+    if (!user) throw new BadRequestException('User not found');
+    const match = this.verifyPassword(loginDto.password, user.password);
+    if (!match) throw new BadRequestException('Invalid credentials');
+    const token = await this.signPayload(user);
+    return { token, user };
+  }
+
+  async signPayload(user: User) {
+    const payload = {
+      id: user.id,
+      isActive: user.isActive,
+    };
+    return sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRATION_TIME,
+    });
   }
 
   async getAuthenticatedUser(loginDto: LoginDto) {
@@ -52,22 +72,9 @@ export class AuthService {
     plainTextPassword: string,
     hashedPassword: string,
   ) {
-    const isPasswordMatching = await bcrypt.compare(
-      plainTextPassword,
-      hashedPassword,
-    );
-    if (!isPasswordMatching) {
-      throw new BadRequestException('Invalid credentials');
-    }
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
-  public getCookieWithJwtToken(userId: number) {
-    const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_EXPIRATION_TIME',
-    )}`;
-  }
   public getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
   }
