@@ -28,6 +28,8 @@ $ docker compose up -d
 $ npm run typeorm:run-migrations
 ```
 
+4. Configure aws credentials to be able to send emails. Double check the steps in this link https://docs.aws.amazon.com/ses/latest/dg/create-shared-credentials-file.html
+
 ## Running the app
 
 ```bash

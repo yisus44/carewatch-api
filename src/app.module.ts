@@ -15,6 +15,10 @@ import { FileTypeModule } from './file-type/file-type.module';
 import { SeedModule } from './seed/seed.module';
 import { JwtMiddleware } from './auth/middleware/jwt.middleware';
 import { UserSettingsModule } from './user-settings/user-settings.module';
+import { MailModule } from './mail/mail.module';
+import { AwsModule } from './aws/aws.module';
+import { AssetsService } from './assets/assets.service';
+import { AssetsModule } from './assets/assets.module';
 
 @Module({
   imports: [
@@ -39,9 +43,12 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
     FilesModule,
     SeedModule,
     UserSettingsModule,
+    MailModule,
+    AwsModule,
+    AssetsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AssetsService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

@@ -35,6 +35,7 @@ export class AuthController {
   @Post('test')
   async test(@GetCurrentUser() currentUser: User) {
     console.log({ currentUser });
+    this.authService.demoEmail();
     return;
   }
 }

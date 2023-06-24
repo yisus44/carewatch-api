@@ -14,6 +14,7 @@ import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 import { sign } from 'jsonwebtoken';
 import { User } from 'src/users/entities/user.entity';
 import { CommonService } from 'src/common/common.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly commonService: CommonService,
+    private readonly mailService: MailService,
   ) {}
   async signUp(registerDto: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -84,5 +86,10 @@ export class AuthService {
 
   public getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
+
+  public demoEmail() {
+    this.mailService.demoEmail();
+    return;
   }
 }
