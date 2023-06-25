@@ -1,14 +1,13 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import * as Joi from '@hapi/joi';
-import { JwtModule } from '@nestjs/jwt';
 import { CommonModule } from './common/common.module';
 import { FilesModule } from './files/files.module';
 import { FileTypeModule } from './file-type/file-type.module';
@@ -19,7 +18,6 @@ import { MailModule } from './mail/mail.module';
 import { AwsModule } from './aws/aws.module';
 import { AssetsService } from './assets/assets.service';
 import { AssetsModule } from './assets/assets.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -46,6 +44,7 @@ import { AssetsModule } from './assets/assets.module';
     MailModule,
     AwsModule,
     AssetsModule,
+    CacheModule.register(),
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
