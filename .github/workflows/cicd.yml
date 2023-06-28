@@ -1,0 +1,34 @@
+name: Deploy to Elastic beanstalk
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'dev'
+  pull_request:
+    branches:
+      - 'main'
+      - 'dev'
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: cicsession
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install AWS EB CLI
+        run: |
+          pip install awsebcli --upgrade --user
+      - name: Deploy project to eb
+        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
