@@ -23,5 +23,8 @@ jobs:
           role-session-name: cicsession
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Install AWS EB CLI
+        run: |
+          pip install awsebcli --upgrade --user
       - name: Deploy project to eb
         run: eb deploy
