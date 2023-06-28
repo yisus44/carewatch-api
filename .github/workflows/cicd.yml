@@ -31,4 +31,4 @@ jobs:
         run: |
           pip install awsebcli --upgrade --user
       - name: Deploy project to eb
-        run: eb deploy
+        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
