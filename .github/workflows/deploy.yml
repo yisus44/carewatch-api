@@ -1,10 +1,14 @@
-name: Deploy to cicd
+name: Deploy to Elastic beanstalk
 
 on:
   push:
-    branches: [cicd]
+    branches:
+      - 'main'
+      - 'dev'
   pull_request:
-    branches: [cicd]
+    branches:
+      - 'main'
+      - 'dev'
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
