@@ -18,10 +18,14 @@ import { MailModule } from './mail/mail.module';
 import { AwsModule } from './aws/aws.module';
 import { AssetsService } from './assets/assets.service';
 import { AssetsModule } from './assets/assets.module';
+import { AwsS3Module } from './aws-s3/aws-s3.module';
+import { AwsSesModule } from './aws-ses/aws-ses.module';
+console.log(process.env.NODE_ENV);
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: './.env.copy',
+      envFilePath:
+        process.env.NODE_ENV == 'production' ? './.env' : './.env.copy',
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
         POSTGRES_PORT: Joi.number().required(),
@@ -31,6 +35,8 @@ import { AssetsModule } from './assets/assets.module';
         PORT: Joi.number(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION_TIME: Joi.string().required(),
+        AWS_REGION: Joi.string().required(),
+        AWS_S3_BUCKET_FILES: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -45,6 +51,8 @@ import { AssetsModule } from './assets/assets.module';
     AwsModule,
     AssetsModule,
     CacheModule.register(),
+    AwsS3Module,
+    AwsSesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
