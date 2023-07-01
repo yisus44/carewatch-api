@@ -40,6 +40,7 @@ import { StripeModule } from './stripe/stripe.module';
         AWS_S3_BUCKET_FILES: Joi.string().required(),
         STRIPE_SECRET_KEY: Joi.string().required(),
         STRIPE_PUBLISHABLE_KEY: Joi.string().required(),
+        STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID: Joi.string().required(),
       }),
     }),
     DatabaseModule,

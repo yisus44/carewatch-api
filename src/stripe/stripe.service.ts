@@ -1,11 +1,13 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateStripeClientDto } from './dto/create-stripe-client.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
 import Stripe from 'stripe';
+import { CreateStripeSubscriptiontDto } from './dto/create-stripe-subscription-.dto';
 
 @Injectable()
 export class StripeService {
@@ -43,8 +45,28 @@ export class StripeService {
       publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
     };
   }
-  async findCustomer(stripeId: string) {
-    return await this.stripe.customers.retrieve(stripeId);
+  async findCustomer(stripeCustomerId: string) {
+    return await this.stripe.customers.retrieve(stripeCustomerId);
+  }
+
+  async createSubscription(
+    createStripeSubscriptiontDto: CreateStripeSubscriptiontDto,
+  ) {
+    const { stripeCustomerId } = createStripeSubscriptiontDto;
+    const price = process.env.STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID;
+    const subscription = await this.stripe.subscriptions.list({
+      customer: stripeCustomerId,
+      price,
+    });
+    if (subscription.data.length > 0) return subscription.data[0];
+    return await this.stripe.subscriptions.create({
+      customer: stripeCustomerId,
+      items: [
+        {
+          price,
+        },
+      ],
+    });
   }
 
   findAll() {
