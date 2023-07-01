@@ -20,6 +20,7 @@ import { AssetsService } from './assets/assets.service';
 import { AssetsModule } from './assets/assets.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { AwsSesModule } from './aws-ses/aws-ses.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { AwsSesModule } from './aws-ses/aws-ses.module';
     CacheModule.register(),
     AwsS3Module,
     AwsSesModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
