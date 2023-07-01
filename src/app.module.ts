@@ -20,7 +20,7 @@ import { AssetsService } from './assets/assets.service';
 import { AssetsModule } from './assets/assets.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { AwsSesModule } from './aws-ses/aws-ses.module';
-console.log(process.env.NODE_ENV);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
