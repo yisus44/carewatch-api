@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateStripeDto } from './create-stripe.dto';
+import { CreateStripeClientDto } from './create-stripe-client.dto';
 
-export class UpdateStripeDto extends PartialType(CreateStripeDto) {}
+export class UpdateStripeDto extends PartialType(CreateStripeClientDto) {}

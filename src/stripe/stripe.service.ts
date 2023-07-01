@@ -1,11 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStripeDto } from './dto/create-stripe.dto';
+import { CreateStripeClientDto } from './dto/create-stripe-client.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
+import Stripe from 'stripe';
 
 @Injectable()
 export class StripeService {
-  create(createStripeDto: CreateStripeDto) {
-    return 'This action adds a new stripe';
+  constructor(private readonly stripe: Stripe) {}
+  async createCustomer(createStripeClientDto: CreateStripeClientDto) {
+    const { email } = createStripeClientDto;
+    const client = await this.stripe.customers.list({
+      email,
+    });
+    if (client.data.length > 0) return client.data[0];
+    try {
+      return await this.stripe.customers.create({
+        email,
+      });
+    } catch (exception) {
+      console.log(exception.message);
+      throw exception;
+    }
+  }
+
+  async findCustomer(stripeId: string) {
+    return await this.stripe.customers.retrieve(stripeId);
   }
 
   findAll() {
