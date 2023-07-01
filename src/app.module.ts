@@ -37,6 +37,8 @@ console.log(process.env.NODE_ENV);
         JWT_EXPIRATION_TIME: Joi.string().required(),
         AWS_REGION: Joi.string().required(),
         AWS_S3_BUCKET_FILES: Joi.string().required(),
+        STRIPE_SECRET_KEY: Joi.string().required(),
+        STRIPE_PUBLISHABLE_KEY: Joi.string().required(),
       }),
     }),
     DatabaseModule,
