@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { StripeController } from './stripe.controller';
-import { StripeService } from './stripe.service';
+import { StripeController } from '../stripe.controller';
+import { StripeService } from '../stripe.service';
 
 describe('StripeController', () => {
   let controller: StripeController;
