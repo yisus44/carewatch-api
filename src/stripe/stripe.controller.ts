@@ -16,8 +16,13 @@ export class StripeController {
   constructor(private readonly stripeService: StripeService) {}
 
   @Post('add-client')
-  create(@Body() createStripeClientDto: CreateStripeClientDto) {
+  createCustomer(@Body() createStripeClientDto: CreateStripeClientDto) {
     return this.stripeService.createCustomer(createStripeClientDto);
+  }
+
+  @Get('payment-sheet/:id')
+  paymentIntent(@Param('id') customerId: string) {
+    return this.stripeService.paymentIntent(customerId);
   }
 
   @Get()

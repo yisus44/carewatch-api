@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateStripeClientDto } from './dto/create-stripe-client.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
 import Stripe from 'stripe';
@@ -22,6 +26,23 @@ export class StripeService {
     }
   }
 
+  async paymentIntent(customerId: string) {
+    // Use an existing Customer ID if this is a returning customer.
+    const customer = await this.findCustomer(customerId);
+    const ephemeralKey = await this.stripe.ephemeralKeys.create(
+      { customer: customer.id },
+      { apiVersion: '2022-08-01' },
+    );
+    const setupIntent = await this.stripe.setupIntents.create({
+      customer: customer.id,
+    });
+    return {
+      setupIntent: setupIntent.client_secret,
+      ephemeralKey: ephemeralKey.secret,
+      customer: customer.id,
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    };
+  }
   async findCustomer(stripeId: string) {
     return await this.stripe.customers.retrieve(stripeId);
   }
