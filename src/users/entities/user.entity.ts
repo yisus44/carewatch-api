@@ -1,3 +1,4 @@
+import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
 import {
   Column,
@@ -37,6 +38,12 @@ export class User {
 
   @OneToMany(() => UserSetting, (userSetting: UserSetting) => userSetting.user)
   userSetting: UserSetting;
+
+  @OneToMany(
+    () => Subscription,
+    (subscription: Subscription) => subscription.user,
+  )
+  subscription: Subscription;
 
   @CreateDateColumn()
   createdAt: Date;

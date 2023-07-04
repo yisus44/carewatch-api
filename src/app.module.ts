@@ -21,6 +21,7 @@ import { AssetsModule } from './assets/assets.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { AwsSesModule } from './aws-ses/aws-ses.module';
 import { StripeModule } from './stripe/stripe.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { StripeModule } from './stripe/stripe.module';
     AwsS3Module,
     AwsSesModule,
     StripeModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
