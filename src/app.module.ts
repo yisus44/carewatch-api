@@ -42,6 +42,7 @@ import { SubscriptionsHistoryModule } from './subscriptions_history/subscription
         STRIPE_SECRET_KEY: Joi.string().required(),
         STRIPE_PUBLISHABLE_KEY: Joi.string().required(),
         STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID: Joi.string().required(),
+        STRIPE_WEBHOOK_SECRET: Joi.string().required(),
       }),
     }),
     DatabaseModule,

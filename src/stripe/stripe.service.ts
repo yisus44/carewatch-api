@@ -104,4 +104,14 @@ export class StripeService {
     if (!subscription) throw new NotFoundException();
     return subscription;
   }
+
+  public async constructEventFromPayload(signature: string, payload: Buffer) {
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    return this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      webhookSecret,
+    );
+  }
 }
