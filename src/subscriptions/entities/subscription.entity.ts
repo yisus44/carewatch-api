@@ -17,7 +17,7 @@ export class Subscription {
   @Column({ length: 50 })
   stripeUserId: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 100, nullable: true })
   stripeSubscriptionId: string;
 
   @Column()
@@ -28,11 +28,11 @@ export class Subscription {
   })
   user: User;
 
-  @Column()
+  @Column({ default: 30 })
   frequency: number;
 
-  @Column()
-  active: number;
+  @Column({ default: false })
+  active: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

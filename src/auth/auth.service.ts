@@ -15,15 +15,15 @@ import { sign } from 'jsonwebtoken';
 import { User } from 'src/users/entities/user.entity';
 import { CommonService } from 'src/common/common.service';
 import { MailService } from 'src/mail/mail.service';
+import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     private readonly commonService: CommonService,
     private readonly mailService: MailService,
+    private readonly subscriptionsService: SubscriptionsService,
   ) {}
   async signUp(registerDto: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -33,7 +33,8 @@ export class AuthService {
         password: hashedPassword,
       });
       delete createdUser.password;
-      return createdUser;
+      await this.subscriptionsService.create(createdUser);
+      return await this.getAuthInfo(createdUser);
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new BadRequestException('Email already on use');
@@ -47,6 +48,10 @@ export class AuthService {
     if (!user) throw new BadRequestException('User not found');
     const match = this.verifyPassword(loginDto.password, user.password);
     if (!match) throw new BadRequestException('Invalid credentials');
+    return await this.getAuthInfo(user);
+  }
+
+  async getAuthInfo(user: User) {
     const expirationTime = process.env.JWT_EXPIRATION_TIME; // Example: "48h"
     const token = await this.signPayload(user, expirationTime);
     const expiresInMilliseconds =

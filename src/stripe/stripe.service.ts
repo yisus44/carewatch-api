@@ -54,11 +54,12 @@ export class StripeService {
   ) {
     const { stripeCustomerId } = createStripeSubscriptiontDto;
     const price = process.env.STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID;
-    const subscription = await this.stripe.subscriptions.list({
-      customer: stripeCustomerId,
-      price,
-    });
-    if (subscription.data.length > 0) return subscription.data[0];
+    const existingSubscription = await this.findCustomerSubscription(
+      stripeCustomerId,
+    );
+    //if they already have one, we will resume it
+    if (existingSubscription)
+      return await this.resumeSubscription(stripeCustomerId);
     return await this.stripe.subscriptions.create({
       customer: stripeCustomerId,
       items: [
@@ -69,19 +70,38 @@ export class StripeService {
     });
   }
 
-  findAll() {
-    return `This action returns all stripe`;
+  async findCustomerSubscription(
+    stripeCustomerId: string,
+    price: string = process.env.STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID,
+  ) {
+    const subscription = await this.stripe.subscriptions.list({
+      customer: stripeCustomerId,
+      price,
+    });
+    console.log(subscription);
+    if (subscription.data.length > 0) return subscription.data[0];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stripe`;
+  async cancelSubscription(stripeCustomerId: string) {
+    const subscription = await this.validateAndFindSubscription(
+      stripeCustomerId,
+    );
+    return await this.stripe.subscriptions.update(subscription.id, {
+      cancel_at_period_end: true,
+    });
   }
 
-  update(id: number, updateStripeDto: UpdateStripeDto) {
-    return `This action updates a #${id} stripe`;
+  async resumeSubscription(stripeCustomerId: string) {
+    const subscription = await this.validateAndFindSubscription(
+      stripeCustomerId,
+    );
+    return await this.stripe.subscriptions.update(subscription.id, {
+      cancel_at_period_end: false,
+    });
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} stripe`;
+  async validateAndFindSubscription(stripeCustomerId: string) {
+    const subscription = await this.findCustomerSubscription(stripeCustomerId);
+    if (!subscription) throw new NotFoundException();
+    return subscription;
   }
 }

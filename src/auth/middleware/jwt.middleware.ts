@@ -22,7 +22,10 @@ export class JwtMiddleware implements NestMiddleware {
       try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
         const userCached: User = await this.cacheManager.get(decoded.id);
-        if (userCached) return userCached;
+        if (userCached) {
+          req.user = userCached;
+          return next();
+        }
         const user = await this.userService.findOne(decoded.id);
         await this.cacheManager.set(
           decoded.id,
@@ -31,7 +34,7 @@ export class JwtMiddleware implements NestMiddleware {
         );
         req.user = user;
       } catch (ex) {
-        // console.log(ex.message);
+        console.log(ex.message);
       }
     }
     next();

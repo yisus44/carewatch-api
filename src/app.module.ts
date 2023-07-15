@@ -26,8 +26,7 @@ import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:
-        process.env.NODE_ENV == 'production' ? './.env' : './.env.copy',
+      envFilePath: './.env',
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
         POSTGRES_PORT: Joi.number().required(),

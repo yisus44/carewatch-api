@@ -6,11 +6,13 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MailModule } from 'src/mail/mail.module';
+import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
+    SubscriptionsModule,
     UsersModule,
     PassportModule,
     ConfigModule,
