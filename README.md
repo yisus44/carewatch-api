@@ -30,6 +30,9 @@ $ npm run typeorm:run-migrations
 
 4. Configure aws credentials to be able to send emails. Double check the steps in this link https://docs.aws.amazon.com/ses/latest/dg/create-shared-credentials-file.html
 
+5. Install the stripe cli to be able to test webhook. Double check the steps in this link https://stripe.com/docs/stripe-cli
+   If you need to test webhook, also follow this guide https://stripe.com/docs/webhooks/test then use the webhook secret provided by the cli to fill the environment variable STRIPE_WEBHOOK_SECRET
+
 ## Running the app
 
 ```bash
