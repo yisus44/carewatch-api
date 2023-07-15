@@ -1,9 +1,11 @@
+import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -23,10 +25,17 @@ export class Subscription {
   @Column()
   userId: number;
 
-  @ManyToOne(() => User, (user: User) => user.userSetting, {
+  @OneToOne(() => User, (user: User) => user.subscription, {
     eager: true,
   })
   user: User;
+
+  @OneToMany(
+    () => SubscriptionsHistory,
+    (SubscriptionsHistory: SubscriptionsHistory) =>
+      SubscriptionsHistory.subscription,
+  )
+  subscriptionHistory: [SubscriptionsHistory];
 
   @Column({ default: 30 })
   frequency: number;
