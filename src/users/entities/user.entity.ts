@@ -39,7 +39,7 @@ export class User {
   @OneToMany(() => UserSetting, (userSetting: UserSetting) => userSetting.user)
   userSetting: UserSetting;
 
-  @OneToMany(
+  @OneToOne(
     () => Subscription,
     (subscription: Subscription) => subscription.user,
   )

@@ -12,6 +12,10 @@ export class SubscriptionsService {
     @InjectRepository(Subscription)
     private subscriptionsRepository: Repository<Subscription>,
   ) {}
+
+  async findOneBy(query: Partial<Subscription>) {
+    return await this.subscriptionsRepository.findOneBy(query);
+  }
   async create(user: User) {
     const customer = await this.stripeService.createCustomer({
       email: user.email,

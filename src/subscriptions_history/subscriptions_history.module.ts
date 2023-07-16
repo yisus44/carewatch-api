@@ -9,6 +9,6 @@ import { JwtService } from '@nestjs/jwt';
   controllers: [SubscriptionsHistoryController],
   providers: [SubscriptionsHistoryService, JwtService],
   imports: [TypeOrmModule.forFeature([SubscriptionsHistory])],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, SubscriptionsHistoryService],
 })
 export class SubscriptionsHistoryModule {}

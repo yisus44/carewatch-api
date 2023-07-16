@@ -25,9 +25,7 @@ export class Subscription {
   @Column()
   userId: number;
 
-  @OneToOne(() => User, (user: User) => user.subscription, {
-    eager: true,
-  })
+  @OneToOne(() => User, (user: User) => user.subscription)
   user: User;
 
   @OneToMany(

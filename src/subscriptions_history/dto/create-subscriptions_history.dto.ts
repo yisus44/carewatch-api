@@ -26,4 +26,10 @@ export class CreateSubscriptionsHistoryDto {
   @MinLength(10)
   @MaxLength(200)
   stripePaymentObject: string;
+
+  @IsNotEmpty()
+  startDate: Date;
+
+  @IsNotEmpty()
+  endDate: Date;
 }

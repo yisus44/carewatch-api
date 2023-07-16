@@ -1,34 +1,29 @@
 import {
   Controller,
   Post,
-  Headers,
   Req,
+  Headers,
   BadRequestException,
 } from '@nestjs/common';
-import { StripeService } from './stripe.service';
+import { StripeWebhooksService } from './stripe-webhooks.service';
 import RequestWithRawBody from 'src/common/interface/requestWithRawBody.interface';
-@Controller('stripe/webhook')
-export default class StripeWebhookController {
-  constructor(private readonly stripeService: StripeService) {}
+
+@Controller('stripe-webhooks')
+export class StripeWebhooksController {
+  constructor(private readonly stripeWebhooksService: StripeWebhooksService) {}
 
   @Post()
   async handleIncomingEvents(
     @Headers('stripe-signature') signature: string,
     @Req() request: RequestWithRawBody,
   ) {
-    console.log('reached');
     if (!signature) {
       throw new BadRequestException('Missing stripe-signature header');
     }
 
-    const event = await this.stripeService.constructEventFromPayload(
+    return this.stripeWebhooksService.handleSubscriptionPayment(
       signature,
       request.rawBody,
     );
-    console.log({ event });
-
-    return event;
-
-    // ...
   }
 }

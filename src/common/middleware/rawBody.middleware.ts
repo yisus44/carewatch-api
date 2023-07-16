@@ -9,7 +9,7 @@ function rawBodyMiddleware() {
       response: Response,
       buffer: Buffer,
     ) => {
-      if (request.url === '/stripe/webhook' && Buffer.isBuffer(buffer)) {
+      if (request.url === '/stripe-webhooks' && Buffer.isBuffer(buffer)) {
         request.rawBody = Buffer.from(buffer);
       }
       return true;

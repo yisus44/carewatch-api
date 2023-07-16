@@ -23,6 +23,7 @@ import { AwsSesModule } from './aws-ses/aws-ses.module';
 import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { SubscriptionsHistoryModule } from './subscriptions_history/subscriptions_history.module';
+import { StripeWebhooksModule } from './stripe-webhooks/stripe-webhooks.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { SubscriptionsHistoryModule } from './subscriptions_history/subscription
     StripeModule,
     SubscriptionsModule,
     SubscriptionsHistoryModule,
+    StripeWebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

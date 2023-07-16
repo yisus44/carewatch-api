@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,7 +15,7 @@ export class SubscriptionsHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(
+  @OneToMany(
     () => Subscription,
     (subscription: Subscription) => subscription.subscriptionHistory,
   )
@@ -28,6 +29,12 @@ export class SubscriptionsHistory {
 
   @Column({ type: 'json' })
   stripePaymentObject: string;
+
+  @Column()
+  startDate: Date;
+
+  @Column()
+  endDate: Date;
 
   @CreateDateColumn()
   createdAt: Date;
