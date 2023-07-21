@@ -35,6 +35,6 @@ export class SubscriptionsHistoryController {
     @Query() paginationDto: PaginationDto,
     @GetCurrentUser() currentUser: User,
   ) {
-    return this.subscriptionsHistoryService.findAll(paginationDto);
+    return this.subscriptionsHistoryService.findAll(paginationDto, currentUser);
   }
 }

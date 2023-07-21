@@ -24,6 +24,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { SubscriptionsHistoryModule } from './subscriptions_history/subscriptions_history.module';
 import { StripeWebhooksModule } from './stripe-webhooks/stripe-webhooks.module';
+import { SubscriptionsUserModule } from './subscriptions-user/subscriptions-user.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { StripeWebhooksModule } from './stripe-webhooks/stripe-webhooks.module';
     SubscriptionsModule,
     SubscriptionsHistoryModule,
     StripeWebhooksModule,
+    SubscriptionsUserModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

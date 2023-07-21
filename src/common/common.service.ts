@@ -1,4 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationDto } from './dto/pagination.dto';
+import { PageDto } from './dto/page.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CommonService {

@@ -3,14 +3,18 @@ import { CreateSubscriptionsHistoryDto } from './dto/create-subscriptions_histor
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { SubscriptionsHistory } from './entities/subscriptions_history.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
+import { User } from 'aws-sdk/clients/budgets';
+import { BaseService } from 'src/common/base.service';
 
 @Injectable()
-export class SubscriptionsHistoryService {
+export class SubscriptionsHistoryService extends BaseService<SubscriptionsHistory> {
   constructor(
     @InjectRepository(SubscriptionsHistory)
     private subscriptionsHistoryRepository: Repository<SubscriptionsHistory>,
-  ) {}
+  ) {
+    super(subscriptionsHistoryRepository);
+  }
   async create(createSubscriptionsHistoryDto: CreateSubscriptionsHistoryDto) {
     const subscription = this.subscriptionsHistoryRepository.create({
       ...createSubscriptionsHistoryDto,
@@ -18,7 +22,11 @@ export class SubscriptionsHistoryService {
     return await this.subscriptionsHistoryRepository.save(subscription);
   }
 
-  findAll(paginationDto: PaginationDto) {
-    return `This action returns all subscriptionsHistory`;
+  async findAll(paginationDto: PaginationDto, user: User) {
+    return await this.findPaginated(paginationDto);
+  }
+  async findUserSubscriptionService(subscriptionId: number) {
+    const date = new Date();
+    return await this.list({ subscriptionId, endDate: MoreThan(date) });
   }
 }
