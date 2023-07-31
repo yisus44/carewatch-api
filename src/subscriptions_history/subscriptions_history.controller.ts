@@ -28,13 +28,4 @@ export class SubscriptionsHistoryController {
       createSubscriptionsHistoryDto,
     );
   }
-
-  @Get()
-  @UseGuards(AuthGuard)
-  findAll(
-    @Query() paginationDto: PaginationDto,
-    @GetCurrentUser() currentUser: User,
-  ) {
-    return this.subscriptionsHistoryService.findAll(paginationDto, currentUser);
-  }
 }

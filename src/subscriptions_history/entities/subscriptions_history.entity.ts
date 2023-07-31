@@ -1,3 +1,4 @@
+import { CoreEntity } from 'src/core/entities/core-entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 
 import {
@@ -11,10 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class SubscriptionsHistory {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class SubscriptionsHistory extends CoreEntity {
   @OneToMany(
     () => Subscription,
     (subscription: Subscription) => subscription.subscriptionHistory,
@@ -35,10 +33,4 @@ export class SubscriptionsHistory {
 
   @Column()
   endDate: Date;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

@@ -5,10 +5,10 @@ import { SubscriptionsHistory } from './entities/subscriptions_history.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { User } from 'aws-sdk/clients/budgets';
-import { BaseService } from 'src/common/base.service';
+import { CoreService } from 'src/core/core.service';
 
 @Injectable()
-export class SubscriptionsHistoryService extends BaseService<SubscriptionsHistory> {
+export class SubscriptionsHistoryService extends CoreService<SubscriptionsHistory> {
   constructor(
     @InjectRepository(SubscriptionsHistory)
     private subscriptionsHistoryRepository: Repository<SubscriptionsHistory>,
@@ -22,9 +22,6 @@ export class SubscriptionsHistoryService extends BaseService<SubscriptionsHistor
     return await this.subscriptionsHistoryRepository.save(subscription);
   }
 
-  async findAll(paginationDto: PaginationDto, user: User) {
-    return await this.findPaginated(paginationDto);
-  }
   async findUserSubscriptionService(subscriptionId: number) {
     const date = new Date();
     return await this.list({ subscriptionId, endDate: MoreThan(date) });

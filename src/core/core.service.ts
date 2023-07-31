@@ -1,9 +1,15 @@
 import { User } from 'aws-sdk/clients/budgets';
-import { PaginationDto } from './dto/pagination.dto';
-import { FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
-import { PageDto } from './dto/page.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import {
+  DeleteResult,
+  FindOptionsOrder,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
+import { PageDto } from '../common/dto/page.dto';
+import { CoreEntity } from './entities/core-entity';
 
-export abstract class BaseService<T> {
+export abstract class CoreService<T extends CoreEntity> {
   constructor(private readonly repository: Repository<T>) {}
 
   async findPaginated(
@@ -32,6 +38,12 @@ export abstract class BaseService<T> {
     };
   }
 
+  async findOneById(id: any) {
+    return await this.repository.findOneBy({
+      id,
+    });
+  }
+
   async list(
     findOptionsWhere: FindOptionsWhere<T> = {},
     findOptionsOrder: FindOptionsOrder<T> = {},
@@ -42,7 +54,7 @@ export abstract class BaseService<T> {
     });
   }
 
-  async delete(id: number): Promise<void> {
-    await this.repository.delete(id);
+  async delete(id: number): Promise<DeleteResult> {
+    return await this.repository.delete(id);
   }
 }
