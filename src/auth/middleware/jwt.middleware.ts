@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
+import { generateUserCache } from '../utils/generateUserCachKey';
 
 interface AuthenticatedRequest extends Request {
   user?: any;
@@ -21,14 +22,15 @@ export class JwtMiddleware implements NestMiddleware {
     if (token) {
       try {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
-        const userCached: User = await this.cacheManager.get(decoded.id);
+        const userCacheKey = generateUserCache(decoded);
+        const userCached: User = await this.cacheManager.get(userCacheKey);
         if (userCached) {
           req.user = userCached;
           return next();
         }
         const user = await this.userService.findOne(decoded.id);
         await this.cacheManager.set(
-          decoded.id,
+          userCacheKey,
           user,
           +process.env.USER_CACHE_DEFAULT,
         );

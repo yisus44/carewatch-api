@@ -2,9 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { UserSubscriber } from './subscribers/user.subscriber';
+import { SubscriptionsUserService } from 'src/subscriptions-user/subscriptions-user.service';
+import { SubscriptionsUserModule } from 'src/subscriptions-user/subscriptions-user.module';
 
 @Module({
+  providers: [UserSubscriber],
   imports: [
+    SubscriptionsUserModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

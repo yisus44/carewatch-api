@@ -42,4 +42,6 @@ export class User extends CoreEntity {
     (subscription: Subscription) => subscription.user,
   )
   subscription: Subscription;
+
+  isPremium: boolean;
 }

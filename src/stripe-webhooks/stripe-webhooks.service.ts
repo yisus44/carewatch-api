@@ -1,15 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { StripeWebHookEvents } from './enum/stripe-webook-events.enum';
 import { SubscriptionsHistoryService } from 'src/subscriptions_history/subscriptions_history.service';
 import Stripe from 'stripe';
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { generateUserCache } from 'src/auth/utils/generateUserCachKey';
+import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class StripeWebhooksService {
   constructor(
     private readonly subscriptionHistoryService: SubscriptionsHistoryService,
     private readonly subscriptionService: SubscriptionsService,
+    private readonly userService: UsersService,
     private readonly stripe: Stripe,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   public async constructEventFromPayload(signature: string, payload: Buffer) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -33,6 +39,9 @@ export class StripeWebhooksService {
         stripeUserId: customer.id,
       });
       if (!subscription) throw new NotFoundException();
+      const user = await this.userService.listOne({ email: customer.email });
+      const userCacheKey = generateUserCache(user);
+      await this.cacheManager.del(userCacheKey);
       return await this.subscriptionHistoryService.create({
         endDate,
         startDate,

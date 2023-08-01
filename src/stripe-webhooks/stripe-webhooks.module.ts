@@ -4,6 +4,8 @@ import { StripeWebhooksController } from './stripe-webhooks.controller';
 import { SubscriptionsHistoryModule } from 'src/subscriptions_history/subscriptions_history.module';
 import Stripe from 'stripe';
 import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
+import { UsersModule } from 'src/users/users.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   controllers: [StripeWebhooksController],
@@ -18,6 +20,11 @@ import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
         }),
     },
   ],
-  imports: [SubscriptionsHistoryModule, SubscriptionsModule],
+  imports: [
+    UsersModule,
+    SubscriptionsHistoryModule,
+    SubscriptionsModule,
+    CacheModule.register(),
+  ],
 })
 export class StripeWebhooksModule {}

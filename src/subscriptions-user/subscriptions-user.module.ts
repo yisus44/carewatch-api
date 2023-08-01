@@ -6,5 +6,6 @@ import { SubscriptionsHistoryModule } from 'src/subscriptions_history/subscripti
 @Module({
   providers: [SubscriptionsUserService],
   imports: [SubscriptionsModule, SubscriptionsHistoryModule],
+  exports: [SubscriptionsUserService],
 })
 export class SubscriptionsUserModule {}
