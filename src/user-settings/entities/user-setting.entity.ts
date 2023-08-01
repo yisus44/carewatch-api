@@ -1,3 +1,4 @@
+import { CoreEntity } from 'src/core/entities/core-entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -10,10 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class UserSetting {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class UserSetting extends CoreEntity {
   @Column()
   userId: number;
 
@@ -27,10 +25,4 @@ export class UserSetting {
     eager: true,
   })
   user: User;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

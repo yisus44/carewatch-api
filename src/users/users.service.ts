@@ -9,33 +9,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { CoreService } from 'src/core/core.service';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends CoreService<User> {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+  ) {
+    super(usersRepository);
+  }
 
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
 
   async findOne(id: number): Promise<User | null> {
-    return await this.usersRepository.findOneBy({ id });
+    return await super.findOneById(id);
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return await this.usersRepository.findOneBy({ email });
   }
 
-  async remove(id: number): Promise<DeleteResult> {
-    return await this.usersRepository.delete(id);
-  }
-
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return await this.usersRepository.update({ id }, updateUserDto);
-  }
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create({
       ...createUserDto,

@@ -101,7 +101,8 @@ export class StripeService {
   }
   async validateAndFindSubscription(stripeCustomerId: string) {
     const subscription = await this.findCustomerSubscription(stripeCustomerId);
-    if (!subscription) throw new NotFoundException();
+    if (!subscription)
+      throw new NotFoundException('Subscription already cancelled');
     return subscription;
   }
 }

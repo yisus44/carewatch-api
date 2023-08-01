@@ -1,3 +1,4 @@
+import { CoreEntity } from 'src/core/entities/core-entity';
 import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -12,10 +13,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Subscription {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Subscription extends CoreEntity {
   @Column({ length: 50 })
   stripeUserId: string;
 
@@ -40,10 +38,4 @@ export class Subscription {
 
   @Column({ default: false })
   active: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

@@ -15,12 +15,6 @@ export class SubscriptionsHistoryService extends CoreService<SubscriptionsHistor
   ) {
     super(subscriptionsHistoryRepository);
   }
-  async create(createSubscriptionsHistoryDto: CreateSubscriptionsHistoryDto) {
-    const subscription = this.subscriptionsHistoryRepository.create({
-      ...createSubscriptionsHistoryDto,
-    });
-    return await this.subscriptionsHistoryRepository.save(subscription);
-  }
 
   async findUserSubscriptionService(subscriptionId: number) {
     const date = new Date();

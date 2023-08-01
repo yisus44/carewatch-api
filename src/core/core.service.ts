@@ -1,6 +1,7 @@
 import { User } from 'aws-sdk/clients/budgets';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import {
+  DeepPartial,
   DeleteResult,
   FindOptionsOrder,
   FindOptionsWhere,
@@ -8,6 +9,9 @@ import {
 } from 'typeorm';
 import { PageDto } from '../common/dto/page.dto';
 import { CoreEntity } from './entities/core-entity';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class CoreService<T extends CoreEntity> {
   constructor(private readonly repository: Repository<T>) {}
@@ -39,9 +43,11 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async findOneById(id: any) {
-    return await this.repository.findOneBy({
+    const match = await this.repository.findOneBy({
       id,
     });
+    if (!match) throw new NotFoundException();
+    return match;
   }
 
   async list(
@@ -54,7 +60,36 @@ export abstract class CoreService<T extends CoreEntity> {
     });
   }
 
-  async delete(id: number): Promise<DeleteResult> {
+  async listOne(
+    findOptionsWhere: FindOptionsWhere<T> = {},
+    findOptionsOrder: FindOptionsOrder<T> = {},
+  ) {
+    return await this.repository.findOne({
+      where: findOptionsWhere,
+      order: findOptionsOrder,
+    });
+  }
+
+  async create(createDto: Partial<T>) {
+    try {
+      const entity = this.repository.create(createDto as DeepPartial<T>);
+      return await this.repository.save(entity);
+    } catch (error) {
+      if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
+        throw new BadRequestException('Relationdo not exist');
+      }
+      throw error;
+    }
+  }
+
+  async update(id: any, updateDto: Partial<T>) {
+    const file = await this.repository.update(
+      { id },
+      updateDto as unknown as QueryDeepPartialEntity<T>,
+    );
+    return file;
+  }
+  async remove(id: number): Promise<DeleteResult> {
     return await this.repository.delete(id);
   }
 }

@@ -1,3 +1,4 @@
+import { CoreEntity } from 'src/core/entities/core-entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
 import {
@@ -11,10 +12,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends CoreEntity {
   @Column({ nullable: true })
   profilePictureId?: number;
 
@@ -44,10 +42,4 @@ export class User {
     (subscription: Subscription) => subscription.user,
   )
   subscription: Subscription;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }

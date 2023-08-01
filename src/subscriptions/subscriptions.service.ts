@@ -4,14 +4,17 @@ import { User } from 'src/users/entities/user.entity';
 import { Subscription } from './entities/subscription.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CoreService } from 'src/core/core.service';
 
 @Injectable()
-export class SubscriptionsService {
+export class SubscriptionsService extends CoreService<Subscription> {
   constructor(
     private readonly stripeService: StripeService,
     @InjectRepository(Subscription)
     private subscriptionsRepository: Repository<Subscription>,
-  ) {}
+  ) {
+    super(subscriptionsRepository);
+  }
 
   async findOneBy(query: Partial<Subscription>) {
     return await this.subscriptionsRepository.findOneBy(query);
@@ -21,15 +24,15 @@ export class SubscriptionsService {
       email: user.email,
     });
 
-    const subscription = this.subscriptionsRepository.create({
+    const subscription = super.create({
       userId: user.id,
       stripeUserId: customer.id,
     });
-    return await this.subscriptionsRepository.save(subscription);
+    return subscription;
   }
 
   async getUserSubscription(user: User) {
-    return await this.subscriptionsRepository.findOneBy({
+    return await super.listOne({
       userId: user.id,
     });
   }
@@ -56,7 +59,8 @@ export class SubscriptionsService {
     const subscription = await this.subscriptionsRepository.findOneBy({
       userId: user.id,
     });
-    if (!subscription) throw new NotFoundException();
+    if (!subscription)
+      throw new NotFoundException('Subscription already cancelled');
     //We cancel it, stripe will remove when the billing period is finished
     await this.stripeService.cancelSubscription(subscription.stripeUserId);
     await this.subscriptionsRepository.update(subscription.id, {

@@ -12,40 +12,29 @@ import { DeleteResult, Repository } from 'typeorm';
 import { PageDto } from 'src/common/dto/page.dto';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 import { User } from 'src/users/entities/user.entity';
+import { CoreService } from 'src/core/core.service';
 
 @Injectable()
-export class UserSettingsService {
+export class UserSettingsService extends CoreService<UserSetting> {
   constructor(
     @InjectRepository(UserSetting)
     private readonly userSettingRepository: Repository<UserSetting>,
-  ) {}
+  ) {
+    super(userSettingRepository);
+  }
   async findAll(
     paginationDto: PaginationDto,
     currentUser: User,
   ): Promise<PageDto<UserSetting[]>> {
-    const { page, perPage } = paginationDto;
-    const skippedItems = (page - 1) * perPage;
-    const [data, totalCount] = await this.userSettingRepository.findAndCount({
-      skip: skippedItems,
-      take: perPage,
-      where: {
+    return await super.findPaginated(
+      paginationDto,
+      {
         userId: currentUser.id,
       },
-      order: {
+      {
         createdAt: 'desc',
       },
-    });
-    const totalPages = Math.ceil(totalCount / perPage);
-    const hasNextPage = page < totalPages;
-    const hasPreviousPage = page > 1;
-    return {
-      data,
-      page,
-      perPage,
-      totalPages,
-      hasNextPage,
-      hasPreviousPage,
-    };
+    );
   }
 
   async findOne(id: number): Promise<UserSetting | null> {
@@ -59,16 +48,12 @@ export class UserSettingsService {
   async update(id: number, updateFileDto: UpdateUserSettingDto) {
     return await this.userSettingRepository.update({ id }, updateFileDto);
   }
-  async create(
-    createFileTypeDto: CreateUserSettingDto,
-    userId: number,
-  ): Promise<UserSetting> {
+  async create(createFileTypeDto: CreateUserSettingDto): Promise<UserSetting> {
     try {
-      const userSetting = this.userSettingRepository.create({
+      const userSetting = await super.create({
         ...createFileTypeDto,
-        userId,
       });
-      return await this.userSettingRepository.save(userSetting);
+      return userSetting;
     } catch (error) {
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
         throw new BadRequestException('User do not exist');

@@ -29,10 +29,10 @@ export class UserSettingsController {
     @GetCurrentUser() currentUser: User,
   ) {
     console.log({ currentUser });
-    return this.userSettingsService.create(
-      createUserSettingDto,
-      currentUser.id,
-    );
+    return this.userSettingsService.create({
+      ...createUserSettingDto,
+      userId: currentUser.id,
+    });
   }
 
   @Get()

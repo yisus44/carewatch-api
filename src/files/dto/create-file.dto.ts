@@ -7,6 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { CoreEntity } from 'src/core/entities/core-entity';
 
 export class CreateFileDto {
   @IsNotEmpty()

@@ -1,3 +1,4 @@
+import { CoreEntity } from 'src/core/entities/core-entity';
 import { FileType } from 'src/file-type/entities/file-type.entity';
 import {
   Column,
@@ -9,10 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class File {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class File extends CoreEntity {
   @Column({ length: 50 })
   key: string;
 
@@ -29,10 +27,4 @@ export class File {
     eager: true,
   })
   fileType: FileType;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

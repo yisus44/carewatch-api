@@ -18,4 +18,6 @@ export class CreateUserSettingDto {
   @MinLength(8)
   @MaxLength(64)
   value: string;
+
+  userId: number;
 }
