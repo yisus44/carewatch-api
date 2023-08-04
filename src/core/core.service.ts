@@ -42,10 +42,11 @@ export abstract class CoreService<T extends CoreEntity> {
     };
   }
 
-  async findOneById(id: any) {
-    const match = await this.repository.findOneBy({
+  async findOneById(id: number) {
+    const query = {
       id,
-    });
+    } as unknown as any;
+    const match = await this.repository.findOneBy(query);
     if (!match) throw new NotFoundException();
     return match;
   }

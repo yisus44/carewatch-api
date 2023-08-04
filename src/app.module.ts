@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -26,6 +25,8 @@ import { SubscriptionsHistoryModule } from './subscriptions_history/subscription
 import { StripeWebhooksModule } from './stripe-webhooks/stripe-webhooks.module';
 import { SubscriptionsUserModule } from './subscriptions-user/subscriptions-user.module';
 import { CoreModule } from './core/core.module';
+import { GroupsModule } from './groups/groups.module';
+import { GroupInvitationsModule } from './group-invitations/group-invitations.module';
 
 @Module({
   imports: [
@@ -68,6 +69,8 @@ import { CoreModule } from './core/core.module';
     StripeWebhooksModule,
     SubscriptionsUserModule,
     CoreModule,
+    GroupsModule,
+    GroupInvitationsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
