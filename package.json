@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/cache-manager": "^2.0.1",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
@@ -43,6 +44,7 @@
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.35",
     "aws-sdk": "^2.1404.0",
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "cache-manager": "^5.2.3",
     "class-transformer": "^0.5.1",

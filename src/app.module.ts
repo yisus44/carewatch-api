@@ -27,6 +27,7 @@ import { SubscriptionsUserModule } from './subscriptions-user/subscriptions-user
 import { CoreModule } from './core/core.module';
 import { GroupsModule } from './groups/groups.module';
 import { GroupInvitationsModule } from './group-invitations/group-invitations.module';
+import { WhatsappModule } from './whatsapp/whatsapp.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { GroupInvitationsModule } from './group-invitations/group-invitations.mo
         STRIPE_PUBLISHABLE_KEY: Joi.string().required(),
         STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID: Joi.string().required(),
         STRIPE_WEBHOOK_SECRET: Joi.string().required(),
+        WHATSAPP_TOKEN: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -71,6 +73,7 @@ import { GroupInvitationsModule } from './group-invitations/group-invitations.mo
     CoreModule,
     GroupsModule,
     GroupInvitationsModule,
+    WhatsappModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
