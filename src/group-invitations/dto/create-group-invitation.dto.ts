@@ -7,7 +7,7 @@ export class CreateGroupInvitationDto {
 
   @IsOptional()
   @IsNumber()
-  userId: number;
+  userId?: number;
 
   @IsOptional()
   @IsString()
@@ -33,5 +33,5 @@ export class CreateGroupInvitationDto {
   @IsString()
   guestPhone?: string;
 
-  isAdmin: boolean = false;
+  isAdmin?: boolean = false;
 }

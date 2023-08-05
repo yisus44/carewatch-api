@@ -22,6 +22,17 @@ export class AwsService {
     );
   }
 
+  async generateMailTemplate() {
+    const templateName = EmailTemplates.groupInvitation;
+    const subject = 'Join to a group';
+    const templateHtmlFileName = 'group-invitation-template';
+    return await this.generateTemplate(
+      templateName,
+      subject,
+      templateHtmlFileName,
+    );
+  }
+
   async generateTemplate(
     templateName: string,
     templateSubject: string,
@@ -85,6 +96,6 @@ export class AwsService {
     // Create the promise and SES service object
     const sendPromise = this.awsSesClient.sendTemplatedEmail(params).promise();
     const sendResult = await sendPromise;
-    console.log(sendResult.MessageId);
+    console.log(sendResult);
   }
 }

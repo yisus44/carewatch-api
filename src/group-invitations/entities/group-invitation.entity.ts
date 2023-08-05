@@ -6,6 +6,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 export class GroupInvitation extends CoreEntity {
   @ManyToOne(() => User, (user: User) => user.groupInvitation, {
     eager: true,
+    nullable: true,
   })
   user: User;
 
@@ -17,7 +18,7 @@ export class GroupInvitation extends CoreEntity {
   @Column()
   groupId: number;
 
-  @Column()
+  @Column({ nullable: true })
   userId: number;
 
   @Column({ default: false })
