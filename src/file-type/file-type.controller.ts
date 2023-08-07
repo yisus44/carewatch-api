@@ -25,12 +25,12 @@ export class FileTypeController {
 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
-    return this.fileTypeService.findAll(paginationDto);
+    return this.fileTypeService.findPaginated(paginationDto);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.fileTypeService.findOne(+id);
+    return this.fileTypeService.findOneById(+id);
   }
 
   @Patch(':id')

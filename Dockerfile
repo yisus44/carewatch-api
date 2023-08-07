@@ -13,6 +13,9 @@ RUN npm install --omit=dev
 # Copy the rest of the application code to the container
 COPY . .
 
+# Set flag to production
+ENV NODE_ENV=production
+
 # Build the application
 RUN npm run build
 

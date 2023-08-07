@@ -10,15 +10,20 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import TokenPayload from './tokenPayload.interface';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { sign } from 'jsonwebtoken';
+import { User } from 'src/users/entities/user.entity';
+import { CommonService } from 'src/common/common.service';
+import { MailService } from 'src/mail/mail.service';
+import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly commonService: CommonService,
+    private readonly mailService: MailService,
+    private readonly subscriptionsService: SubscriptionsService,
   ) {}
   async signUp(registerDto: RegisterDto) {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
@@ -28,13 +33,42 @@ export class AuthService {
         password: hashedPassword,
       });
       delete createdUser.password;
-      return createdUser;
+      await this.subscriptionsService.create(createdUser);
+      return await this.getAuthInfo(createdUser);
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new BadRequestException('Email already on use');
       }
-      throw new InternalServerErrorException();
+      throw error;
     }
+  }
+
+  async signIn(loginDto: LoginDto) {
+    const user = await this.usersService.findByEmail(loginDto.email);
+    if (!user) throw new BadRequestException('User not found');
+    const match = this.verifyPassword(loginDto.password, user.password);
+    if (!match) throw new BadRequestException('Invalid credentials');
+    return await this.getAuthInfo(user);
+  }
+
+  async getAuthInfo(user: User) {
+    const expirationTime = process.env.JWT_EXPIRATION_TIME; // Example: "48h"
+    const token = await this.signPayload(user, expirationTime);
+    const expiresInMilliseconds =
+      this.commonService.parseDurationToMilliseconds(expirationTime);
+    const expirationTimestamp = Date.now() + expiresInMilliseconds;
+    return { token, user, expirationTimestamp };
+  }
+
+  async signPayload(user: User, expirationTime: string) {
+    const payload = {
+      id: user.id,
+      isActive: user.isActive,
+    };
+
+    return sign(payload, process.env.JWT_SECRET, {
+      expiresIn: expirationTime,
+    });
   }
 
   async getAuthenticatedUser(loginDto: LoginDto) {
@@ -52,23 +86,15 @@ export class AuthService {
     plainTextPassword: string,
     hashedPassword: string,
   ) {
-    const isPasswordMatching = await bcrypt.compare(
-      plainTextPassword,
-      hashedPassword,
-    );
-    if (!isPasswordMatching) {
-      throw new BadRequestException('Invalid credentials');
-    }
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
-  public getCookieWithJwtToken(userId: number) {
-    const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_EXPIRATION_TIME',
-    )}`;
-  }
   public getCookieForLogOut() {
     return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
+
+  public demoEmail() {
+    this.mailService.demoEmail();
+    return;
   }
 }
