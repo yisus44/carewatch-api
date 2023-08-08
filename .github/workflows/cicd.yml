@@ -4,12 +4,11 @@ on:
   push:
     branches:
       - 'main'
-      - 'yisus44/feature/parameter-store'
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
