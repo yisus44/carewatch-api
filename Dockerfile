@@ -16,6 +16,8 @@ COPY . .
 # Set flag to production
 ENV NODE_ENV=production
 
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+
 # Build the application
 RUN npm run build
 
