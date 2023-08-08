@@ -1,4 +1,4 @@
-name: Deploy to Elastic beanstalk
+name: Deploy to ecs
 
 on:
   push:
