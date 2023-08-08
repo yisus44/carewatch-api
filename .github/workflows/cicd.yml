@@ -21,26 +21,25 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: cicsession
           aws-region: ${{ secrets.AWS_REGION }}
-      - name: Login to Amazon ECR Public
-        id: carewatch-backend
+
+      - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          registry-type: public
 
-      - name: Build, tag, and push docker image to Amazon ECR Public
-        env:
-          REGISTRY: ${{ steps.carewatch-backend.outputs.registry }}
-          REGISTRY_ALIAS: my-ecr-public-registry-alias
-          REPOSITORY: carewatch-backend
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+      # - name: Build, tag, and push docker image to Amazon ECR Public
+      #   env:
+      #     REGISTRY: ${{ steps.carewatch-backend.outputs.registry }}
+      #     REGISTRY_ALIAS: my-ecr-public-registry-alias
+      #     REPOSITORY: carewatch-backend
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
+      #     docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
-      - name: Build Docker Image
-        run: docker build -t your-image-name:latest .
-      - name: Install AWS EB CLI
-        run: |
-          pip install awsebcli --upgrade --user
-      - name: Deploy project to eb
-        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
+      # - name: Build Docker Image
+      #   run: docker build -t your-image-name:latest .
+      # - name: Install AWS EB CLI
+      #   run: |
+      #     pip install awsebcli --upgrade --user
+      # - name: Deploy project to eb
+      #   run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
