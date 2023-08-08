@@ -31,26 +31,6 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: './.env',
-      validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DATABASE: Joi.string().required(),
-        PORT: Joi.number(),
-        JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().required(),
-        AWS_REGION: Joi.string().required(),
-        AWS_S3_BUCKET_FILES: Joi.string().required(),
-        STRIPE_SECRET_KEY: Joi.string().required(),
-        STRIPE_PUBLISHABLE_KEY: Joi.string().required(),
-        STRIPE_PREMIUM_SUBSCRIPTION_PRICE_ID: Joi.string().required(),
-        STRIPE_WEBHOOK_SECRET: Joi.string().required(),
-        WHATSAPP_TOKEN: Joi.string().required(),
-      }),
-    }),
     DatabaseModule,
     UsersModule,
     AuthModule,
