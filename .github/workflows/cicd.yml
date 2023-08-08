@@ -22,6 +22,8 @@ jobs:
           role-session-name: cicsession
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Build Docker Image
+        run: docker build -t your-image-name:latest .
       - name: Install AWS EB CLI
         run: |
           pip install awsebcli --upgrade --user
