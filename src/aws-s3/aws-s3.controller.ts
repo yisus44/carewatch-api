@@ -11,6 +11,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  Query,
 } from '@nestjs/common';
 import { AwsS3Service } from './aws-s3.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -30,7 +31,12 @@ export class AwsS3Controller {
     )
     file: Express.Multer.File,
   ) {
-    return this.awsS3Service.deleteFile(file.originalname);
     return this.awsS3Service.upload(file);
+  }
+
+  // Should we allow this?
+  @Delete('delete')
+  delete(@Query('key') key: string) {
+    return this.awsS3Service.deleteFile(key);
   }
 }

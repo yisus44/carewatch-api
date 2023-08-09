@@ -13,7 +13,7 @@ export class AwsS3Service {
   ) {
     const params = {
       Bucket: bucket,
-      Key: file.originalname,
+      Key: Date.now() + file.originalname,
       Body: file.buffer,
       ContentType: file.mimetype,
     };
