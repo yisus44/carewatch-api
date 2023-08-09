@@ -34,8 +34,6 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      - name: Install AWS EB CLI
+     - name: Redeploy ECS service
         run: |
-          pip install awsebcli --upgrade --user
-      - name: Deploy project to eb
-        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
+          aws ecs update-service --cluster DemoCluster --service CarewatchBackendService --force-new-deployment
