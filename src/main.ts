@@ -16,6 +16,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.enableCors();
   app.use(rawBodyMiddleware());
   await app.listen(3000);
 }
