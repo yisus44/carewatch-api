@@ -36,4 +36,4 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       - name: Redeploy ECS service
         run: |
-          aws ecs update-service --cluster DemoCluster --service CarewatchBackendService --force-new-deployment
+          aws ecs update-service --cluster DemoCluster --service CarewatchBackendService --force-new-deployment --region ${{ secrets.AWS_REGION }}
