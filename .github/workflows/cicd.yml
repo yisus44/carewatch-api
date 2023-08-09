@@ -26,12 +26,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Install AWS EB CLI
-        run: |
-          pip install awsebcli --upgrade --user
-      - name: Deploy project to eb
-        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
-
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -40,3 +34,8 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Install AWS EB CLI
+        run: |
+          pip install awsebcli --upgrade --user
+      - name: Deploy project to eb
+        run: eb deploy ${{ secrets.AWS_EB_ENV_NAME }}
