@@ -16,6 +16,7 @@ export class SubscriptionsHistory extends CoreEntity {
   @OneToMany(
     () => Subscription,
     (subscription: Subscription) => subscription.subscriptionHistory,
+    { onDelete: 'CASCADE' },
   )
   subscription: Subscription;
 

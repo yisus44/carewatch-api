@@ -30,6 +30,7 @@ export class Subscription extends CoreEntity {
     () => SubscriptionsHistory,
     (SubscriptionsHistory: SubscriptionsHistory) =>
       SubscriptionsHistory.subscription,
+    { onDelete: 'CASCADE' },
   )
   subscriptionHistory: [SubscriptionsHistory];
 

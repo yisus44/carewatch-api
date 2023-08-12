@@ -35,18 +35,24 @@ export class User extends CoreEntity {
   @Column({ default: false })
   isActive: boolean;
 
-  @OneToMany(() => UserSetting, (userSetting: UserSetting) => userSetting.user)
+  @OneToMany(
+    () => UserSetting,
+    (userSetting: UserSetting) => userSetting.user,
+    { onDelete: 'CASCADE' },
+  )
   userSetting: UserSetting;
 
   @OneToMany(
     () => GroupInvitation,
     (groupInvitation: GroupInvitation) => groupInvitation.user,
+    { onDelete: 'CASCADE' },
   )
   groupInvitation: GroupInvitation;
 
   @OneToOne(
     () => Subscription,
     (subscription: Subscription) => subscription.user,
+    { onDelete: 'CASCADE' },
   )
   subscription: Subscription;
 

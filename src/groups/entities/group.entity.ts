@@ -15,6 +15,7 @@ export class Group extends CoreEntity {
   @OneToMany(
     () => GroupInvitation,
     (groupInvitation: GroupInvitation) => groupInvitation.group,
+    { onDelete: 'CASCADE' },
   )
   groupInvitations: GroupInvitation;
 }

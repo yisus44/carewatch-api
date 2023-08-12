@@ -7,6 +7,6 @@ export class FileType extends CoreEntity {
   @Column({ length: 25, unique: true })
   type: string;
 
-  @OneToMany(() => File, (file: File) => file.fileType)
+  @OneToMany(() => File, (file: File) => file.fileType, { onDelete: 'CASCADE' })
   files: File[];
 }
