@@ -4,6 +4,8 @@ import { FilesService } from 'src/files/files.service';
 import { UsersService } from 'src/users/users.service';
 import { fileTypeData } from './data/file-type.seed';
 import { CreateFileTypeDto } from 'src/file-type/dto/create-file-type.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { userSeed } from './data/user.seed';
 @Injectable()
 export class SeedService {
   constructor(
@@ -13,6 +15,7 @@ export class SeedService {
   ) {}
   async seed() {
     this.seedFileType();
+    this.seedUsers();
     return 'finished';
   }
 
@@ -21,6 +24,9 @@ export class SeedService {
       fileTypeData,
       this.fileTypeService,
     );
+  }
+  async seedUsers() {
+    return await this.seedBulk<CreateUserDto>(userSeed, this.userService);
   }
 
   async seedBulk<T>(seedDataCollection: T[], service: any) {
