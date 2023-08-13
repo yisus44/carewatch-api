@@ -28,6 +28,7 @@ import { CoreModule } from './core/core.module';
 import { GroupsModule } from './groups/groups.module';
 import { GroupInvitationsModule } from './group-invitations/group-invitations.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
+import { GroupInvitationsUserModule } from './group-invitations-user/group-invitations-user.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
     GroupsModule,
     GroupInvitationsModule,
     WhatsappModule,
+    GroupInvitationsUserModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

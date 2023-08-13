@@ -93,4 +93,8 @@ export abstract class CoreService<T extends CoreEntity> {
   async remove(id: number): Promise<DeleteResult> {
     return await this.repository.delete(id);
   }
+
+  getQueryBuilder(alias: string) {
+    return this.repository.createQueryBuilder(alias);
+  }
 }
