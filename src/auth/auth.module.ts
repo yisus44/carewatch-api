@@ -30,6 +30,6 @@ import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscri
       }),
     }),
   ],
-  exports: [JwtModule],
+  exports: [JwtModule, AuthService],
 })
 export class AuthModule {}

@@ -4,10 +4,11 @@ import { SeedController } from './seed.controller';
 import { FileTypeModule } from 'src/file-type/file-type.module';
 import { FilesModule } from 'src/files/files.module';
 import { UsersModule } from 'src/users/users.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
-  imports: [FileTypeModule, FilesModule, UsersModule],
+  imports: [FileTypeModule, FilesModule, UsersModule, AuthModule],
 })
 export class SeedModule {}

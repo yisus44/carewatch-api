@@ -1,6 +1,7 @@
+import { RegisterDto } from 'src/auth/dto/register.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
-export const userSeed: CreateUserDto[] = [
+export const userSeed: RegisterDto[] = [
   {
     email: 'a20110354@ceti.mx',
     lastName: 'Davalos Sigala',
