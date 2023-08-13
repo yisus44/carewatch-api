@@ -77,7 +77,7 @@ export abstract class CoreService<T extends CoreEntity> {
       return await this.repository.save(entity);
     } catch (error) {
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
-        throw new BadRequestException('Relationdo not exist');
+        throw new BadRequestException('Relation do not exist');
       }
       throw error;
     }
