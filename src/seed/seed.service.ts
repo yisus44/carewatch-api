@@ -6,7 +6,7 @@ import { fileTypeData } from './data/file-type.seed';
 import { CreateFileTypeDto } from 'src/file-type/dto/create-file-type.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { userSeed } from './data/user.seed';
-import { RegisterDto } from 'src/auth/dto/register.dto';
+import { SignUpDto } from 'src/auth/dto/signup.dto';
 import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class SeedService {
@@ -29,11 +29,7 @@ export class SeedService {
     );
   }
   async seedUsers() {
-    return await this.seedBulk<RegisterDto>(
-      userSeed,
-      this.authService,
-      'signUp',
-    );
+    return await this.seedBulk<SignUpDto>(userSeed, this.authService, 'signUp');
   }
 
   async seedBulk<T>(seedDataCollection: T[], service: any, method = 'create') {

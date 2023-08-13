@@ -3,9 +3,9 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { RegisterDto } from './dto/register.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { UsersService } from '../users/users.service';
-import { LoginDto } from './dto/login.dto';
+import { SignInDto } from './dto/signin.dto';
 
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -25,7 +25,7 @@ export class AuthService {
     private readonly mailService: MailService,
     private readonly subscriptionsService: SubscriptionsService,
   ) {}
-  async signUp(registerDto: RegisterDto) {
+  async signUp(registerDto: SignUpDto) {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     try {
       const createdUser = await this.usersService.create({
@@ -43,14 +43,21 @@ export class AuthService {
     }
   }
 
-  async signIn(loginDto: LoginDto) {
-    const user = await this.usersService.findByEmail(loginDto.email);
+  async signIn(signInDto: SignInDto) {
+    const user = await this.usersService.findByEmail(signInDto.email);
     if (!user) throw new BadRequestException('User not found');
-    const match = this.verifyPassword(loginDto.password, user.password);
+    const match = await this.verifyPassword(signInDto.password, user.password);
     if (!match) throw new BadRequestException('Invalid credentials');
     return await this.getAuthInfo(user);
   }
-
+  async verify(signInDto: SignInDto) {
+    try {
+      await this.signIn(signInDto);
+      return { result: true };
+    } catch (error) {
+      return { result: false };
+    }
+  }
   async getAuthInfo(user: User) {
     const expirationTime = process.env.JWT_EXPIRATION_TIME; // Example: "48h"
     const token = await this.signPayload(user, expirationTime);
@@ -71,10 +78,10 @@ export class AuthService {
     });
   }
 
-  async getAuthenticatedUser(loginDto: LoginDto) {
+  async getAuthenticatedUser(signInDto: SignInDto) {
     try {
-      const user = await this.usersService.findByEmail(loginDto.email);
-      await this.verifyPassword(loginDto.password, user.password);
+      const user = await this.usersService.findByEmail(signInDto.email);
+      await this.verifyPassword(signInDto.password, user.password);
       delete user.password;
       return user;
     } catch (error) {
