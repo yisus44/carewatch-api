@@ -17,7 +17,7 @@ export abstract class CoreService<T extends CoreEntity> {
   constructor(private readonly repository: Repository<T>) {}
 
   async findPaginated(
-    paginationDto: PaginationDto = { page: 1, perPage: 10 },
+    paginationDto: PaginationDto = { page: 1, perPage: 100 },
     findOptionsWhere: FindOptionsWhere<T> = {},
     findOptionsOrder: FindOptionsOrder<T> = {},
   ): Promise<PageDto<T[]>> {
