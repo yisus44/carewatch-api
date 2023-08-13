@@ -30,6 +30,7 @@ import { GroupInvitationsModule } from './group-invitations/group-invitations.mo
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { GroupInvitationsUserModule } from './group-invitations-user/group-invitations-user.module';
 import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
+import { MedicinesModule } from './medicines/medicines.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
     WhatsappModule,
     GroupInvitationsUserModule,
     MedicineUnitsModule,
+    MedicinesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
