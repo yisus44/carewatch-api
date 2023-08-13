@@ -8,6 +8,9 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { userSeed } from './data/user.seed';
 import { SignUpDto } from 'src/auth/dto/signup.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { CreateMedicineUnitDto } from 'src/medicine-units/dto/create-medicine-unit.dto';
+import { MediceUnitsSeed } from './data/medicine-units.seed';
+import { MedicineUnitsService } from 'src/medicine-units/medicine-units.service';
 @Injectable()
 export class SeedService {
   constructor(
@@ -15,10 +18,12 @@ export class SeedService {
     private readonly fileService: FilesService,
     private readonly userService: UsersService,
     private readonly authService: AuthService,
+    private readonly medicineUnitService: MedicineUnitsService,
   ) {}
   async seed() {
     this.seedFileType();
     this.seedUsers();
+    this.seedMedicineUnits();
     return 'finished';
   }
 
@@ -30,6 +35,13 @@ export class SeedService {
   }
   async seedUsers() {
     return await this.seedBulk<SignUpDto>(userSeed, this.authService, 'signUp');
+  }
+
+  async seedMedicineUnits() {
+    return await this.seedBulk<CreateMedicineUnitDto>(
+      MediceUnitsSeed,
+      this.medicineUnitService,
+    );
   }
 
   async seedBulk<T>(seedDataCollection: T[], service: any, method = 'create') {

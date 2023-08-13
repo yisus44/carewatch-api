@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()
 export class MedicineUnit extends CoreEntity {
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()

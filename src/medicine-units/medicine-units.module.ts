@@ -8,6 +8,7 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   controllers: [MedicineUnitsController],
   providers: [MedicineUnitsService],
+  exports: [MedicineUnitsService],
   imports: [TypeOrmModule.forFeature([MedicineUnit]), AuthModule],
 })
 export class MedicineUnitsModule {}
