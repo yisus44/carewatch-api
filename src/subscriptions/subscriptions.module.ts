@@ -3,7 +3,6 @@ import { SubscriptionsService } from './subscriptions.service';
 import { SubscriptionsController } from './subscriptions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Subscription } from './entities/subscription.entity';
-import { AuthModule } from 'src/auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
 import { StripeModule } from 'src/stripe/stripe.module';
 

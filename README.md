@@ -73,6 +73,10 @@ $ typeorm:revert-migration
 
 Note: You can delete a migration file without running any command on your terminal, the configuration takes care of only running the migrations that are present in the /migration folders
 
+## Additional notes
+
+1. Always use the AuthGuard on the top of the controller when using Permissions decorator, otherwise the permission decorator will take preference and it wont found the user in the request
+
 ## Test
 
 ```bash

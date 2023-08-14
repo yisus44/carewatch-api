@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from 'src/users/users.module';
@@ -8,7 +8,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MailModule } from 'src/mail/mail.module';
 import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
-
+@Global()
 @Module({
   controllers: [AuthController],
   providers: [AuthService],

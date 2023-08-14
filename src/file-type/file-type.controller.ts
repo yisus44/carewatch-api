@@ -8,12 +8,15 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FileTypeService } from './file-type.service';
 import { CreateFileTypeDto } from './dto/create-file-type.dto';
 import { UpdateFileTypeDto } from './dto/update-file-type.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('file-type')
 export class FileTypeController {
   constructor(private readonly fileTypeService: FileTypeService) {}
