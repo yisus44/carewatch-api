@@ -9,6 +9,7 @@ import {
   UseGuards,
   ForbiddenException,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -17,6 +18,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { GetCurrentUser } from 'src/auth/decorators/current-user';
 import { User } from 'src/users/entities/user.entity';
 import { MailInvitation } from './dto/mail-invitation.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 @UseGuards(AuthGuard)
 @Controller('groups')
 export class GroupsController {
@@ -39,8 +41,11 @@ export class GroupsController {
   }
 
   @Get()
-  findAll(@GetCurrentUser() currentUser: User) {
-    return this.groupsService.findPaginated();
+  findAll(
+    @Query() paginationDto: PaginationDto,
+    @GetCurrentUser() currentUser: User,
+  ) {
+    return this.groupsService.getUserGroups(paginationDto, currentUser);
   }
 
   @Get(':id')

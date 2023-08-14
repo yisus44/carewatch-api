@@ -22,6 +22,7 @@ export class GroupInvitationsUserController {
   @Get()
   search(@Query() searchGroupInvitation: SearchGroupInvitationDto) {
     return this.groupInvitationsUserService.searchUsers(
+      searchGroupInvitation,
       searchGroupInvitation.term,
       searchGroupInvitation.groupId,
     );

@@ -5,8 +5,9 @@ import {
   IsString,
   Min,
 } from 'class-validator';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
-export class SearchGroupInvitationDto {
+export class SearchGroupInvitationDto extends PaginationDto {
   @IsNotEmpty()
   @IsNumberString()
   groupId: number;

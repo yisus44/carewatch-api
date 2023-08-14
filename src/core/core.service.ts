@@ -29,6 +29,15 @@ export abstract class CoreService<T extends CoreEntity> {
       where: findOptionsWhere,
       order: findOptionsOrder,
     });
+    return this.calculatePagination(data, totalCount, page, perPage);
+  }
+
+  calculatePagination(
+    data: T[],
+    totalCount: number,
+    page: number,
+    perPage: number,
+  ) {
     const totalPages = Math.ceil(totalCount / perPage);
     const hasNextPage = page < totalPages;
     const hasPreviousPage = page > 1;

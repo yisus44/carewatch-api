@@ -12,6 +12,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { User } from 'src/users/entities/user.entity';
 import { GroupInvitationsService } from 'src/group-invitations/group-invitations.service';
 import { MailService } from 'src/mail/mail.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class GroupsService extends CoreService<Group> {
@@ -35,6 +36,18 @@ export class GroupsService extends CoreService<Group> {
       isAdmin: true,
     });
     return group;
+  }
+
+  async getUserGroups(paginationDto: PaginationDto, user: User) {
+    const { page, perPage } = paginationDto;
+    const skippedItems = (page - 1) * perPage;
+    const [data, totalCount] = await this.getQueryBuilder('groups')
+      .leftJoinAndSelect('groups.groupInvitations', 'group_invitation') // Use alias 'group_invitation' for the join
+      .where(`group_invitation.user_id = :userId `, { userId: user.id })
+      .skip(skippedItems)
+      .take(perPage)
+      .getManyAndCount();
+    return this.calculatePagination(data, totalCount, page, perPage);
   }
 
   async inviteByMail(guestEmail: string, groupId: number) {
