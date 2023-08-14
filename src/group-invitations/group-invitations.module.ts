@@ -5,9 +5,17 @@ import { GroupInvitation } from './entities/group-invitation.entity';
 import { GroupInvitationsController } from './group-invitations.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { APP_GUARD } from '@nestjs/core';
+import { PermissionGuard } from './guards/permission.guard';
 
 @Module({
-  providers: [GroupInvitationsService],
+  providers: [
+    GroupInvitationsService,
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+  ],
   exports: [GroupInvitationsService],
   imports: [
     TypeOrmModule.forFeature([GroupInvitation]),

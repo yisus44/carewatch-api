@@ -37,7 +37,7 @@ export class GroupInvitation extends CoreEntity {
   readPermissionFile: boolean;
 
   @Column({ default: false })
-  uploadPermissionFIle: boolean;
+  uploadPermissionFile: boolean;
 
   @Column({ default: false })
   deletePermissionFile: boolean;
