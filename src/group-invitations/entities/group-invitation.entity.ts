@@ -10,9 +10,7 @@ export class GroupInvitation extends CoreEntity {
   })
   user: User;
 
-  @ManyToOne(() => Group, (group: Group) => group.groupInvitations, {
-    eager: true,
-  })
+  @ManyToOne(() => Group, (group: Group) => group.groupInvitations)
   group: Group;
 
   @Column()
