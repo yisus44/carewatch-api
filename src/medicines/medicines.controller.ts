@@ -14,19 +14,25 @@ import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { PaginateGroupDto } from 'src/group-invitations/dto/paginate-group.dto';
+import { Permission } from 'src/group-invitations/enums/permission.enum';
+import { Permissions } from 'src/group-invitations/decorators/permission.decorator';
 @UseGuards(AuthGuard)
 @Controller('medicines')
 export class MedicinesController {
   constructor(private readonly medicinesService: MedicinesService) {}
-
+  @Permissions(Permission.writePermissionMedicine)
   @Post()
   create(@Body() createMedicineDto: CreateMedicineDto) {
     return this.medicinesService.create(createMedicineDto);
   }
 
+  @Permissions(Permission.readPermissionMedicine)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.medicinesService.findPaginated(paginationDto);
+  findAll(@Query() paginateGroupDto: PaginateGroupDto) {
+    return this.medicinesService.findPaginated(paginateGroupDto, {
+      groupId: paginateGroupDto.groupId,
+    });
   }
 
   @Get(':id')
@@ -34,6 +40,7 @@ export class MedicinesController {
     return this.medicinesService.findOneById(+id);
   }
 
+  @Permissions(Permission.writePermissionMedicine)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -42,6 +49,7 @@ export class MedicinesController {
     return this.medicinesService.update(+id, updateMedicineDto);
   }
 
+  @Permissions(Permission.writePermissionMedicine)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.medicinesService.remove(+id);

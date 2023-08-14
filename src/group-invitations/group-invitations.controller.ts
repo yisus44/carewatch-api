@@ -36,7 +36,6 @@ export class GroupInvitationsController {
   async getMemembers(
     @GetCurrentUser() user: User,
     @Query() paginateGroupDto: PaginateGroupDto,
-    // @Query('groupId', ParseIntPipe) groupId: number,
   ) {
     return await this.groupInvitationService.findPaginated(paginateGroupDto, {
       groupId: paginateGroupDto.groupId,

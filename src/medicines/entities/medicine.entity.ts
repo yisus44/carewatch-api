@@ -17,9 +17,7 @@ export class Medicine extends CoreEntity {
   @Column()
   medicineUnitId: number;
 
-  @ManyToOne(() => Group, (group: Group) => group.medicines, {
-    eager: true,
-  })
+  @ManyToOne(() => Group, (group: Group) => group.medicines)
   group: Group;
 
   @Column()

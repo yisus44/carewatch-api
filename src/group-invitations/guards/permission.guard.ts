@@ -37,10 +37,13 @@ export class PermissionGuard implements CanActivate {
     const requestQuery = request.query;
     const groupId = requestBody.groupId || requestQuery.groupId;
     if (!groupId) throw new NotFoundException('Group not found');
+    if (!user) throw new ForbiddenException('User not logged in');
     const groupInvitation = await this.groupInvitationService.listOne({
       groupId,
       userId: user.id,
     });
+    if (!groupInvitation)
+      throw new ForbiddenException('User not part of this group');
     for (const requiredPermission of requiredPermissions) {
       if (!groupInvitation.isAdmin && !groupInvitation[requiredPermission])
         return false;
