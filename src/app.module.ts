@@ -31,6 +31,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { GroupInvitationsUserModule } from './group-invitations-user/group-invitations-user.module';
 import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
 import { MedicinesModule } from './medicines/medicines.module';
+import { RemindersModule } from './reminders/reminders.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { MedicinesModule } from './medicines/medicines.module';
     GroupInvitationsUserModule,
     MedicineUnitsModule,
     MedicinesModule,
+    RemindersModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

@@ -1,6 +1,7 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { GroupInvitation } from 'src/group-invitations/entities/group-invitation.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 @Entity()
 export class Group extends CoreEntity {
@@ -24,4 +25,9 @@ export class Group extends CoreEntity {
     onDelete: 'CASCADE',
   })
   medicines: Medicine;
+
+  @OneToMany(() => Reminder, (reminder: Reminder) => reminder.group, {
+    onDelete: 'CASCADE',
+  })
+  reminders: Reminder;
 }
