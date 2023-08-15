@@ -1,12 +1,10 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
-import * as Joi from '@hapi/joi';
 import { CommonModule } from './common/common.module';
 import { FilesModule } from './files/files.module';
 import { FileTypeModule } from './file-type/file-type.module';
@@ -34,6 +32,7 @@ import { MedicinesModule } from './medicines/medicines.module';
 import { RemindersModule } from './reminders/reminders.module';
 import { GroupFilesModule } from './group-files/group-files.module';
 import { ReminderFilesModule } from './reminder-files/reminder-files.module';
+import { WeekDaysModule } from './week-days/week-days.module';
 
 @Module({
   imports: [
@@ -66,6 +65,7 @@ import { ReminderFilesModule } from './reminder-files/reminder-files.module';
     RemindersModule,
     GroupFilesModule,
     ReminderFilesModule,
+    WeekDaysModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

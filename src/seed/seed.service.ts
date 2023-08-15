@@ -11,6 +11,9 @@ import { AuthService } from 'src/auth/auth.service';
 import { CreateMedicineUnitDto } from 'src/medicine-units/dto/create-medicine-unit.dto';
 import { MediceUnitsSeed } from './data/medicine-units.seed';
 import { MedicineUnitsService } from 'src/medicine-units/medicine-units.service';
+import { CreateWeekDayDto } from 'src/week-days/dto/create-week-day.dto';
+import { weekDaysSeed } from './data/week-days.seed';
+import { WeekDaysService } from 'src/week-days/week-days.service';
 @Injectable()
 export class SeedService {
   constructor(
@@ -19,11 +22,13 @@ export class SeedService {
     private readonly userService: UsersService,
     private readonly authService: AuthService,
     private readonly medicineUnitService: MedicineUnitsService,
+    private readonly weekDaysService: WeekDaysService,
   ) {}
   async seed() {
     this.seedFileType();
     this.seedUsers();
     this.seedMedicineUnits();
+    this.seedWeekDay();
     return 'finished';
   }
 
@@ -44,6 +49,12 @@ export class SeedService {
     );
   }
 
+  async seedWeekDay() {
+    return await this.seedBulk<CreateWeekDayDto>(
+      weekDaysSeed,
+      this.weekDaysService,
+    );
+  }
   async seedBulk<T>(seedDataCollection: T[], service: any, method = 'create') {
     const promiseArr = [];
     for (const seedData of seedDataCollection) {

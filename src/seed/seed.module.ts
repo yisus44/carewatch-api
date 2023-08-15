@@ -6,6 +6,7 @@ import { FilesModule } from 'src/files/files.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { MedicineUnitsModule } from 'src/medicine-units/medicine-units.module';
+import { WeekDaysModule } from 'src/week-days/week-days.module';
 
 @Module({
   controllers: [SeedController],
@@ -16,6 +17,7 @@ import { MedicineUnitsModule } from 'src/medicine-units/medicine-units.module';
     UsersModule,
     MedicineUnitsModule,
     AuthModule,
+    WeekDaysModule,
   ],
 })
 export class SeedModule {}
