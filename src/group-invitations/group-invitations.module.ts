@@ -6,6 +6,8 @@ import { GroupInvitationsController } from './group-invitations.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './guards/permission.guard';
+import { RemindersModule } from 'src/reminders/reminders.module';
+import { MedicinesModule } from 'src/medicines/medicines.module';
 
 @Module({
   providers: [
@@ -19,6 +21,8 @@ import { PermissionGuard } from './guards/permission.guard';
   imports: [
     TypeOrmModule.forFeature([GroupInvitation]),
     CacheModule.register(),
+    RemindersModule,
+    MedicinesModule,
   ],
   controllers: [GroupInvitationsController],
 })

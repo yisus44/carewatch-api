@@ -13,6 +13,7 @@ import { PageDto } from 'src/common/dto/page.dto';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 import { User } from 'src/users/entities/user.entity';
 import { CoreService } from 'src/core/core.service';
+import { UserNotFoundException } from 'src/common/exceptions/user-not-found.excepction';
 
 @Injectable()
 export class UserSettingsService extends CoreService<UserSetting> {
@@ -56,7 +57,7 @@ export class UserSettingsService extends CoreService<UserSetting> {
       return userSetting;
     } catch (error) {
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
-        throw new BadRequestException('User do not exist');
+        throw new UserNotFoundException();
       }
       throw error;
     }

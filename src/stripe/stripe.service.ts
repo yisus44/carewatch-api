@@ -8,6 +8,7 @@ import { CreateStripeClientDto } from './dto/create-stripe-client.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
 import Stripe from 'stripe';
 import { CreateStripeSubscriptiontDto } from './dto/create-stripe-subscription-.dto';
+import { StripeSubscriptionAlreadyCancelledException } from 'src/common/exceptions/stripe-subscription-already-cancelled';
 
 @Injectable()
 export class StripeService {
@@ -101,8 +102,7 @@ export class StripeService {
   }
   async validateAndFindSubscription(stripeCustomerId: string) {
     const subscription = await this.findCustomerSubscription(stripeCustomerId);
-    if (!subscription)
-      throw new NotFoundException('Subscription already cancelled');
+    if (!subscription) throw new StripeSubscriptionAlreadyCancelledException();
     return subscription;
   }
 }

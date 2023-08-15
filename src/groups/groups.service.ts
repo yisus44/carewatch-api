@@ -13,6 +13,8 @@ import { User } from 'src/users/entities/user.entity';
 import { GroupInvitationsService } from 'src/group-invitations/group-invitations.service';
 import { MailService } from 'src/mail/mail.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { FreePlanReachedException } from 'src/common/exceptions/free-plan-reached.exception';
+import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
 
 @Injectable()
 export class GroupsService extends CoreService<Group> {
@@ -27,8 +29,7 @@ export class GroupsService extends CoreService<Group> {
 
   async add(createGroupDto: CreateGroupDto, user: User) {
     const canCreateMoreGroups = await this.canCreateMoreGroups(user);
-    if (!canCreateMoreGroups)
-      throw new BadRequestException('Free plan reached');
+    if (!canCreateMoreGroups) throw new FreePlanReachedException();
     const group = await super.create(createGroupDto);
     await this.groupInvitationService.create({
       userId: user.id,
@@ -52,7 +53,7 @@ export class GroupsService extends CoreService<Group> {
 
   async inviteByMail(guestEmail: string, groupId: number) {
     const group = await this.findOneById(groupId);
-    if (!group) throw new NotFoundException();
+    if (!group) throw new GroupNotFoundException();
     const match = await this.groupInvitationService.listOne({
       groupId,
       guestEmail,

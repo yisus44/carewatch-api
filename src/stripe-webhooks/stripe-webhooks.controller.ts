@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { StripeWebhooksService } from './stripe-webhooks.service';
 import RequestWithRawBody from 'src/common/interface/requestWithRawBody.interface';
+import { StripeMissingSignatureException } from 'src/common/exceptions/stripe-missing-signature.exception';
 
 @Controller('stripe-webhooks')
 export class StripeWebhooksController {
@@ -18,7 +19,7 @@ export class StripeWebhooksController {
     @Req() request: RequestWithRawBody,
   ) {
     if (!signature) {
-      throw new BadRequestException('Missing stripe-signature header');
+      throw new StripeMissingSignatureException();
     }
 
     return this.stripeWebhooksService.handleSubscriptionPayment(

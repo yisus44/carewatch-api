@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { AuthError } from '../enum/auth-errors.enum';
+import { JwtTokenExpired } from 'src/common/exceptions/token-expired.exception';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,7 +26,7 @@ export class AuthGuard implements CanActivate {
     } catch (ex) {
       console.log(ex.message);
       if (ex.message == AuthError.tokenExpired) {
-        throw new UnauthorizedException('Token expired');
+        throw new JwtTokenExpired();
       }
       throw ex;
     }

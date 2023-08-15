@@ -16,6 +16,9 @@ import { User } from 'src/users/entities/user.entity';
 import { CommonService } from 'src/common/common.service';
 import { MailService } from 'src/mail/mail.service';
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
+import { UserNotFoundException } from 'src/common/exceptions/user-not-found.excepction';
+import { InvalidCredentialsException } from 'src/common/exceptions/invalid-credentails.exception';
+import { EmailInUseException } from 'src/common/exceptions/email-in-use.exception';
 
 @Injectable()
 export class AuthService {
@@ -37,7 +40,7 @@ export class AuthService {
       return await this.getAuthInfo(createdUser);
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new BadRequestException('Email already on use');
+        throw new EmailInUseException();
       }
       throw error;
     }
@@ -45,9 +48,9 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const user = await this.usersService.findByEmail(signInDto.email);
-    if (!user) throw new BadRequestException('User not found');
+    if (!user) throw new UserNotFoundException();
     const match = await this.verifyPassword(signInDto.password, user.password);
-    if (!match) throw new BadRequestException('Invalid credentials');
+    if (!match) throw new InvalidCredentialsException();
     return await this.getAuthInfo(user);
   }
   async verify(signInDto: SignInDto) {
@@ -85,7 +88,7 @@ export class AuthService {
       delete user.password;
       return user;
     } catch (error) {
-      throw new BadRequestException('Invalid credentials');
+      throw new InvalidCredentialsException();
     }
   }
 

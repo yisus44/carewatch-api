@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [RemindersController],
   providers: [RemindersService],
   imports: [TypeOrmModule.forFeature([Reminder])],
+  exports: [RemindersService],
 })
 export class RemindersModule {}

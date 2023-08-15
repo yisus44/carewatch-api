@@ -13,6 +13,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { generateUserInvitationCache } from '../utils/generate-user-invitation-cache-key.util';
 import { GroupInvitation } from '../entities/group-invitation.entity';
+import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
+import { UserNotInGroupException } from 'src/common/exceptions/user-not-in-group.exception';
 
 @Injectable()
 export class MemberGuard implements CanActivate {
@@ -25,7 +27,7 @@ export class MemberGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     const requestBody = request.body;
-    if (!requestBody) throw new NotFoundException('Group not found');
+    if (!requestBody) throw new GroupNotFoundException();
     const groupId = request.body.groupId;
     const groupInvitationcacheKey = generateUserInvitationCache(user, groupId);
     const cachedGroupInvitation: GroupInvitation = await this.cacheManager.get(
@@ -33,16 +35,13 @@ export class MemberGuard implements CanActivate {
     );
     if (cachedGroupInvitation) return true;
     let groupInvitation;
-    try {
-      groupInvitation = await this.groupInvitationService.listOne({
-        groupId,
-        userId: user.id,
-      });
-    } catch (ex) {
-      throw new ForbiddenException();
-    }
 
-    if (!groupInvitation) throw new ForbiddenException();
+    groupInvitation = await this.groupInvitationService.listOne({
+      groupId,
+      userId: user.id,
+    });
+
+    if (!groupInvitation) throw new UserNotInGroupException();
     await this.cacheManager.set(
       groupInvitationcacheKey,
       groupInvitation,

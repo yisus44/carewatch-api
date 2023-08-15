@@ -5,6 +5,7 @@ import { Subscription } from './entities/subscription.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreService } from 'src/core/core.service';
+import { StripeSubscriptionAlreadyCancelledException } from 'src/common/exceptions/stripe-subscription-already-cancelled';
 
 @Injectable()
 export class SubscriptionsService extends CoreService<Subscription> {
@@ -59,8 +60,7 @@ export class SubscriptionsService extends CoreService<Subscription> {
     const subscription = await this.subscriptionsRepository.findOneBy({
       userId: user.id,
     });
-    if (!subscription)
-      throw new NotFoundException('Subscription already cancelled');
+    if (!subscription) throw new StripeSubscriptionAlreadyCancelledException();
     //We cancel it, stripe will remove when the billing period is finished
     await this.stripeService.cancelSubscription(subscription.stripeUserId);
     await this.subscriptionsRepository.update(subscription.id, {

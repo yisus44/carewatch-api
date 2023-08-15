@@ -12,6 +12,7 @@ import { CoreEntity } from './entities/core-entity';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { RelationDoNotExistsException } from 'src/common/exceptions/relation-do-not-exists.exception';
 
 export abstract class CoreService<T extends CoreEntity> {
   constructor(private readonly repository: Repository<T>) {}
@@ -86,7 +87,7 @@ export abstract class CoreService<T extends CoreEntity> {
       return await this.repository.save(entity);
     } catch (error) {
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
-        throw new BadRequestException('Relation do not exist');
+        throw new RelationDoNotExistsException();
       }
       throw error;
     }
