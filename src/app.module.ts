@@ -33,6 +33,7 @@ import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
 import { MedicinesModule } from './medicines/medicines.module';
 import { RemindersModule } from './reminders/reminders.module';
 import { GroupFilesModule } from './group-files/group-files.module';
+import { ReminderFilesModule } from './reminder-files/reminder-files.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { GroupFilesModule } from './group-files/group-files.module';
     MedicinesModule,
     RemindersModule,
     GroupFilesModule,
+    ReminderFilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

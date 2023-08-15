@@ -1,11 +1,14 @@
+import { bool } from 'aws-sdk/clients/signer';
 import { IsNotEmpty, IsPositive } from 'class-validator';
 
-export class CreateGroupFileDto {
+export class CreateReminderFileDto {
   @IsNotEmpty()
   @IsPositive()
-  groupId: number;
+  reminderId: number;
 
   @IsNotEmpty()
   @IsPositive()
   fileId: number;
+
+  isFromCarewatch: boolean;
 }

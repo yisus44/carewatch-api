@@ -1,7 +1,8 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Reminder extends CoreEntity {
@@ -16,6 +17,15 @@ export class Reminder extends CoreEntity {
 
   @Column()
   medicineId: number;
+
+  @OneToMany(
+    () => ReminderFile,
+    (reminderFile: ReminderFile) => reminderFile.reminder,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  reminderFiles: ReminderFile;
 
   @Column()
   name: string;

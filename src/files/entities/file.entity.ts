@@ -1,6 +1,7 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { FileType } from 'src/file-type/entities/file-type.entity';
 import { GroupFile } from 'src/group-files/entities/group-file.entity';
+import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
 import {
   Column,
   CreateDateColumn,
@@ -34,4 +35,13 @@ export class File extends CoreEntity {
     onDelete: 'CASCADE',
   })
   groupFiles: GroupFile;
+
+  @OneToMany(
+    () => ReminderFile,
+    (reminderFile: ReminderFile) => reminderFile.file,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  reminderFiles: ReminderFile;
 }
