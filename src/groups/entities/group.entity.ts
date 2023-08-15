@@ -1,4 +1,5 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
+import { GroupFile } from 'src/group-files/entities/group-file.entity';
 import { GroupInvitation } from 'src/group-invitations/entities/group-invitation.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Reminder } from 'src/reminders/entities/reminder.entity';
@@ -30,4 +31,9 @@ export class Group extends CoreEntity {
     onDelete: 'CASCADE',
   })
   reminders: Reminder;
+
+  @OneToMany(() => GroupFile, (groupFile: GroupFile) => groupFile.group, {
+    onDelete: 'CASCADE',
+  })
+  groupFiles: GroupFile;
 }

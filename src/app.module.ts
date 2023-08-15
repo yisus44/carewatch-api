@@ -32,6 +32,7 @@ import { GroupInvitationsUserModule } from './group-invitations-user/group-invit
 import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
 import { MedicinesModule } from './medicines/medicines.module';
 import { RemindersModule } from './reminders/reminders.module';
+import { GroupFilesModule } from './group-files/group-files.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { RemindersModule } from './reminders/reminders.module';
     MedicineUnitsModule,
     MedicinesModule,
     RemindersModule,
+    GroupFilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
