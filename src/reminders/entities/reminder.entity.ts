@@ -35,6 +35,6 @@ export class Reminder extends CoreEntity {
   @Column()
   enableSmartwatch: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   additionalDetails: string;
 }

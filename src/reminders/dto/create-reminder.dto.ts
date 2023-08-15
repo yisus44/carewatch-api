@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsPositive,
   IsString,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -18,7 +19,7 @@ export class CreateReminderDto {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(50)
+  @MaxLength(50)
   name: string;
 
   @IsNotEmpty()
