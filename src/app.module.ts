@@ -33,6 +33,7 @@ import { RemindersModule } from './reminders/reminders.module';
 import { GroupFilesModule } from './group-files/group-files.module';
 import { ReminderFilesModule } from './reminder-files/reminder-files.module';
 import { WeekDaysModule } from './week-days/week-days.module';
+import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { WeekDaysModule } from './week-days/week-days.module';
     GroupFilesModule,
     ReminderFilesModule,
     WeekDaysModule,
+    ReminderWeekDaysModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
