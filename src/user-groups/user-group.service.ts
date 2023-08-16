@@ -1,18 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateGroupInvitationDto } from './dto/create-group-invitation.dto';
-import { UpdateGroupInvitationDto } from './dto/update-group-invitation.dto';
+import { CreateUserGroupDto } from './dto/create-group-invitation.dto';
+import { UpdateUserGroupDto } from './dto/update-group-invitation.dto';
 import { CoreService } from 'src/core/core.service';
-import { GroupInvitation } from './entities/group-invitation.entity';
+import { UserGroup } from './entities/group-invitation.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
 import { InvitateUsersToGroup } from './dto/invitate-users-to-group.dto';
 
 @Injectable()
-export class GroupInvitationsService extends CoreService<GroupInvitation> {
+export class UserGroupService extends CoreService<UserGroup> {
   constructor(
-    @InjectRepository(GroupInvitation)
-    private readonly fileRepository: Repository<GroupInvitation>,
+    @InjectRepository(UserGroup)
+    private readonly fileRepository: Repository<UserGroup>,
   ) {
     super(fileRepository);
   }
@@ -21,16 +21,16 @@ export class GroupInvitationsService extends CoreService<GroupInvitation> {
     return crypto.randomBytes(10).toString('hex');
   }
 
-  async create(createGroupInvitationDto: CreateGroupInvitationDto) {
+  async create(createUserGroupDto: CreateUserGroupDto) {
     const token = this.generateTokenInvitation();
-    if (createGroupInvitationDto.userId) {
+    if (createUserGroupDto.userId) {
       const match = await this.listOne({
-        userId: createGroupInvitationDto.userId,
-        groupId: createGroupInvitationDto.groupId,
+        userId: createUserGroupDto.userId,
+        groupId: createUserGroupDto.groupId,
       });
       if (match) return match;
     }
-    return await super.create({ ...createGroupInvitationDto, token });
+    return await super.create({ ...createUserGroupDto, token });
   }
 
   async inviteUsersToGroup(invitateUsersToGroup: InvitateUsersToGroup) {

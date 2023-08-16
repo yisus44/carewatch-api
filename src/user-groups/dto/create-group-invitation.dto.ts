@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreateGroupInvitationDto {
+export class CreateUserGroupDto {
   @IsNotEmpty()
   @IsNumber()
   groupId: number;

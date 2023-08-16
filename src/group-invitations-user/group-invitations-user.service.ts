@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { GroupInvitationsService } from 'src/group-invitations/group-invitations.service';
+import { UserGroupService } from 'src/user-groups/user-group.service';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class GroupInvitationsUserService {
   constructor(
-    private readonly groupInvitationService: GroupInvitationsService,
+    private readonly userGroupService: UserGroupService,
     private readonly userService: UsersService,
   ) {}
   async searchUsers(
@@ -18,10 +18,10 @@ export class GroupInvitationsUserService {
     const skippedItems = (page - 1) * perPage;
     const [data, totalCount] = await this.userService
       .getQueryBuilder('users')
-      .leftJoinAndSelect('users.groupInvitation', 'group_invitation') // Use alias 'group_invitation' for the join
+      .leftJoinAndSelect('users.userGroup', 'user_group') // Use alias 'user_group' for the join
       .where(
         `(LOWER(users.name) like LOWER(:term) OR LOWER(users.last_name) like LOWER(:term)) 
-      AND (group_invitation.group_id <> :groupId OR group_invitation.group_id IS NULL)`,
+      AND (user_group.group_id <> :groupId OR user_group.group_id IS NULL)`,
         { term: `%${term}%`, groupId: +groupId },
       )
       .skip(skippedItems)

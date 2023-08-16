@@ -8,7 +8,9 @@ export class GroupFile extends CoreEntity {
   @Column()
   groupId: number;
 
-  @ManyToOne(() => Group, (group: Group) => group.medicines)
+  @ManyToOne(() => Group, (group: Group) => group.medicines, {
+    onDelete: 'CASCADE',
+  })
   group: Group;
 
   @ManyToOne(() => Reminder, (reminder: Reminder) => reminder.group, {

@@ -1,5 +1,5 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
-import { GroupInvitation } from 'src/group-invitations/entities/group-invitation.entity';
+import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
 import {
@@ -42,12 +42,10 @@ export class User extends CoreEntity {
   )
   userSetting: UserSetting;
 
-  @OneToMany(
-    () => GroupInvitation,
-    (groupInvitation: GroupInvitation) => groupInvitation.user,
-    { onDelete: 'CASCADE' },
-  )
-  groupInvitation: GroupInvitation;
+  @OneToMany(() => UserGroup, (userGroup: UserGroup) => userGroup.user, {
+    onDelete: 'CASCADE',
+  })
+  userGroup: UserGroup;
 
   @OneToOne(
     () => Subscription,

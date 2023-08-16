@@ -3,7 +3,7 @@ import { GroupsService } from './groups.service';
 import { GroupsController } from './groups.controller';
 import { Group } from './entities/group.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GroupInvitationsModule } from 'src/group-invitations/group-invitations.module';
+import { UserGroupModule } from 'src/user-groups/user-group.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { MailModule } from 'src/mail/mail.module';
 
@@ -12,7 +12,7 @@ import { MailModule } from 'src/mail/mail.module';
   providers: [GroupsService],
   imports: [
     TypeOrmModule.forFeature([Group]),
-    GroupInvitationsModule,
+    UserGroupModule,
     AuthModule,
     MailModule,
   ],

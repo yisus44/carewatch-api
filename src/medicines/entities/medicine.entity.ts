@@ -18,7 +18,9 @@ export class Medicine extends CoreEntity {
   @Column()
   medicineUnitId: number;
 
-  @ManyToOne(() => Group, (group: Group) => group.medicines)
+  @ManyToOne(() => Group, (group: Group) => group.medicines, {
+    onDelete: 'CASCADE',
+  })
   group: Group;
 
   @OneToMany(() => Reminder, (reminder: Reminder) => reminder.group, {

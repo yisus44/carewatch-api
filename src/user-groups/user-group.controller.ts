@@ -10,7 +10,7 @@ import {
 import { AdminGuard } from './guards/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { InvitateUsersToGroup } from './dto/invitate-users-to-group.dto';
-import { GroupInvitationsService } from './group-invitations.service';
+import { UserGroupService } from './user-group.service';
 import { Permissions } from './decorators/permission.decorator';
 import { Permission } from './enums/permission.enum';
 import { MemberGuard } from './guards/member.guard';
@@ -19,11 +19,9 @@ import { User } from 'aws-sdk/clients/budgets';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { PaginateGroupDto } from './dto/paginate-group.dto';
 @UseGuards(AuthGuard)
-@Controller('group-invitations')
-export class GroupInvitationsController {
-  constructor(
-    private readonly groupInvitationService: GroupInvitationsService,
-  ) {}
+@Controller('user-groups')
+export class UserGroupsController {
+  constructor(private readonly userGroupService: UserGroupService) {}
 
   @Permissions(Permission.writePermissionMedicine)
   @Post('demo')
@@ -37,13 +35,13 @@ export class GroupInvitationsController {
     @GetCurrentUser() user: User,
     @Query() paginateGroupDto: PaginateGroupDto,
   ) {
-    return await this.groupInvitationService.findPaginated(paginateGroupDto, {
+    return await this.userGroupService.findPaginated(paginateGroupDto, {
       groupId: paginateGroupDto.groupId,
     });
   }
   @UseGuards(AuthGuard, AdminGuard)
   @Post('invite')
   inviteUsersToGroup(@Body() invitateUsersToGroup: InvitateUsersToGroup) {
-    return this.groupInvitationService.inviteUsersToGroup(invitateUsersToGroup);
+    return this.userGroupService.inviteUsersToGroup(invitateUsersToGroup);
   }
 }

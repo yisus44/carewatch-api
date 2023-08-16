@@ -14,8 +14,8 @@ import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { Permission } from 'src/group-invitations/enums/permission.enum';
-import { Permissions } from 'src/group-invitations/decorators/permission.decorator';
+import { Permission } from 'src/user-groups/enums/permission.enum';
+import { Permissions } from 'src/user-groups/decorators/permission.decorator';
 
 @UseGuards(AuthGuard)
 @Controller('reminders')

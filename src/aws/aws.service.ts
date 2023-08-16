@@ -23,7 +23,7 @@ export class AwsService {
   }
 
   async generateMailTemplate() {
-    const templateName = EmailTemplates.groupInvitation;
+    const templateName = EmailTemplates.userGroupInvitation;
     const subject = 'Join to a group';
     const templateHtmlFileName = 'group-invitation-template';
     return await this.generateTemplate(

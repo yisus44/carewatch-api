@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { GroupInvitationsService } from '../group-invitations.service';
+import { UserGroupService } from '../user-group.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Reflector } from '@nestjs/core';
@@ -24,7 +24,7 @@ import { ResourceNotPartOfGroupException } from 'src/common/exceptions/resource-
 @Injectable()
 export class PermissionGuard implements CanActivate {
   constructor(
-    private readonly groupInvitationService: GroupInvitationsService,
+    private readonly userGroupService: UserGroupService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private reflector: Reflector,
     private readonly reminderService: RemindersService,
@@ -44,11 +44,11 @@ export class PermissionGuard implements CanActivate {
     const groupId = requestBody.groupId || requestQuery.groupId;
     if (!groupId) throw new GroupNotFoundException();
     if (!user) throw new UserNotLoggedInException();
-    const groupInvitation = await this.groupInvitationService.listOne({
+    const userGroup = await this.userGroupService.listOne({
       groupId,
       userId: user.id,
     });
-    if (!groupInvitation) throw new UserNotInGroupException();
+    if (!userGroup) throw new UserNotInGroupException();
     const reminderId = requestBody.reminderId || requestQuery.reminderId;
     if (reminderId) {
       const match = await this.reminderService.listOne({ groupId });
@@ -60,8 +60,7 @@ export class PermissionGuard implements CanActivate {
       if (!match) throw new ResourceNotPartOfGroupException();
     }
     for (const requiredPermission of requiredPermissions) {
-      if (!groupInvitation.isAdmin && !groupInvitation[requiredPermission])
-        return false;
+      if (!userGroup.isAdmin && !userGroup[requiredPermission]) return false;
     }
 
     return true;

@@ -67,6 +67,7 @@ export class AuthService {
     const expiresInMilliseconds =
       this.commonService.parseDurationToMilliseconds(expirationTime);
     const expirationTimestamp = Date.now() + expiresInMilliseconds;
+    delete user.password;
     return { token, user, expirationTimestamp };
   }
 

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { GroupInvitationsService } from './group-invitations.service';
+import { UserGroupService } from './user-group.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { GroupInvitation } from './entities/group-invitation.entity';
-import { GroupInvitationsController } from './group-invitations.controller';
+import { UserGroup } from './entities/group-invitation.entity';
+import { UserGroupsController } from './user-group.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './guards/permission.guard';
@@ -11,19 +11,19 @@ import { MedicinesModule } from 'src/medicines/medicines.module';
 
 @Module({
   providers: [
-    GroupInvitationsService,
+    UserGroupService,
     {
       provide: APP_GUARD,
       useClass: PermissionGuard,
     },
   ],
-  exports: [GroupInvitationsService],
+  exports: [UserGroupService],
   imports: [
-    TypeOrmModule.forFeature([GroupInvitation]),
+    TypeOrmModule.forFeature([UserGroup]),
     CacheModule.register(),
     RemindersModule,
     MedicinesModule,
   ],
-  controllers: [GroupInvitationsController],
+  controllers: [UserGroupsController],
 })
-export class GroupInvitationsModule {}
+export class UserGroupModule {}

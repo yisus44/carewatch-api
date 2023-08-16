@@ -24,7 +24,7 @@ import { StripeWebhooksModule } from './stripe-webhooks/stripe-webhooks.module';
 import { SubscriptionsUserModule } from './subscriptions-user/subscriptions-user.module';
 import { CoreModule } from './core/core.module';
 import { GroupsModule } from './groups/groups.module';
-import { GroupInvitationsModule } from './group-invitations/group-invitations.module';
+import { UserGroupModule } from './user-groups/user-group.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { GroupInvitationsUserModule } from './group-invitations-user/group-invitations-user.module';
 import { MedicineUnitsModule } from './medicine-units/medicine-units.module';
@@ -34,6 +34,7 @@ import { GroupFilesModule } from './group-files/group-files.module';
 import { ReminderFilesModule } from './reminder-files/reminder-files.module';
 import { WeekDaysModule } from './week-days/week-days.module';
 import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -58,7 +59,7 @@ import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.
     SubscriptionsUserModule,
     CoreModule,
     GroupsModule,
-    GroupInvitationsModule,
+    UserGroupModule,
     WhatsappModule,
     GroupInvitationsUserModule,
     MedicineUnitsModule,
@@ -68,6 +69,7 @@ import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.
     ReminderFilesModule,
     WeekDaysModule,
     ReminderWeekDaysModule,
+    SchedulesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

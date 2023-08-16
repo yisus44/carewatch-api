@@ -5,13 +5,17 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()
 export class ReminderFile extends CoreEntity {
-  @ManyToOne(() => Reminder, (reminder: Reminder) => reminder.reminderFiles, {})
+  @ManyToOne(() => Reminder, (reminder: Reminder) => reminder.reminderFiles, {
+    onDelete: 'CASCADE',
+  })
   reminder: Reminder;
 
   @Column()
   reminderId: number;
 
-  @ManyToOne(() => File, (file: File) => file.reminderFiles, {})
+  @ManyToOne(() => File, (file: File) => file.reminderFiles, {
+    onDelete: 'CASCADE',
+  })
   file: File;
 
   @Column()

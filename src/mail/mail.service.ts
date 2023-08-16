@@ -12,7 +12,7 @@ export class MailService {
     this.awsService.sendEmail(
       ['jesusadrian1953.1@gmail.com'],
       'jesusadrian1953.1@gmail.com',
-      EmailTemplates.groupInvitation,
+      EmailTemplates.userGroupInvitation,
       JSON.stringify({ group: groupName, link }),
     );
   }

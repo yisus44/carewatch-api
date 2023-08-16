@@ -6,7 +6,9 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Reminder extends CoreEntity {
-  @ManyToOne(() => Group, (group: Group) => group.reminders, {})
+  @ManyToOne(() => Group, (group: Group) => group.reminders, {
+    onDelete: 'CASCADE',
+  })
   group: Group;
 
   @Column()

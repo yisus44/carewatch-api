@@ -10,18 +10,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { User } from 'src/users/entities/user.entity';
-import { GroupInvitationsService } from 'src/group-invitations/group-invitations.service';
 import { MailService } from 'src/mail/mail.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { FreePlanReachedException } from 'src/common/exceptions/free-plan-reached.exception';
 import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
+import { UserGroupService } from 'src/user-groups/user-group.service';
 
 @Injectable()
 export class GroupsService extends CoreService<Group> {
   constructor(
     @InjectRepository(Group)
     private groupRepository: Repository<Group>,
-    private readonly groupInvitationService: GroupInvitationsService,
+    private readonly userGroupService: UserGroupService,
     private readonly mailService: MailService,
   ) {
     super(groupRepository);
@@ -31,7 +31,7 @@ export class GroupsService extends CoreService<Group> {
     const canCreateMoreGroups = await this.canCreateMoreGroups(user);
     if (!canCreateMoreGroups) throw new FreePlanReachedException();
     const group = await super.create(createGroupDto);
-    await this.groupInvitationService.create({
+    await this.userGroupService.create({
       userId: user.id,
       groupId: group.id,
       isAdmin: true,
@@ -43,7 +43,7 @@ export class GroupsService extends CoreService<Group> {
     const { page, perPage } = paginationDto;
     const skippedItems = (page - 1) * perPage;
     const [data, totalCount] = await this.getQueryBuilder('groups')
-      .leftJoinAndSelect('groups.groupInvitations', 'group_invitation') // Use alias 'group_invitation' for the join
+      .leftJoinAndSelect('groups.userGroups', 'group_invitation') // Use alias 'group_invitation' for the join
       .where(`group_invitation.user_id = :userId `, { userId: user.id })
       .skip(skippedItems)
       .take(perPage)
@@ -54,7 +54,7 @@ export class GroupsService extends CoreService<Group> {
   async inviteByMail(guestEmail: string, groupId: number) {
     const group = await this.findOneById(groupId);
     if (!group) throw new GroupNotFoundException();
-    const match = await this.groupInvitationService.listOne({
+    const match = await this.userGroupService.listOne({
       groupId,
       guestEmail,
     });
@@ -67,7 +67,7 @@ export class GroupsService extends CoreService<Group> {
         link,
       );
     }
-    const invitation = await this.groupInvitationService.create({
+    const invitation = await this.userGroupService.create({
       groupId,
       guestEmail,
     });
@@ -80,7 +80,7 @@ export class GroupsService extends CoreService<Group> {
   }
 
   async canCreateMoreGroups(user: User) {
-    const usersGroup = await this.groupInvitationService.list({
+    const usersGroup = await this.userGroupService.list({
       isAdmin: true,
       userId: user.id,
     });

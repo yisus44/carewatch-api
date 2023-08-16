@@ -1,17 +1,25 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { Group } from 'src/groups/entities/group.entity';
+import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 @Entity()
-export class GroupInvitation extends CoreEntity {
-  @ManyToOne(() => User, (user: User) => user.groupInvitation, {
+export class UserGroup extends CoreEntity {
+  @ManyToOne(() => User, (user: User) => user.userGroup, {
     eager: true,
     nullable: true,
   })
   user: User;
 
-  @ManyToOne(() => Group, (group: Group) => group.groupInvitations)
+  @ManyToOne(() => Group, (group: Group) => group.userGroups, {
+    onDelete: 'CASCADE',
+  })
   group: Group;
+
+  @OneToMany(() => Schedule, (Schedule: Schedule) => Schedule.userGroup, {
+    onDelete: 'CASCADE',
+  })
+  schedules: Schedule;
 
   @Column()
   groupId: number;

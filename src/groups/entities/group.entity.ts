@@ -1,6 +1,6 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { GroupFile } from 'src/group-files/entities/group-file.entity';
-import { GroupInvitation } from 'src/group-invitations/entities/group-invitation.entity';
+import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
@@ -16,11 +16,11 @@ export class Group extends CoreEntity {
   patientName: string;
 
   @OneToMany(
-    () => GroupInvitation,
-    (groupInvitation: GroupInvitation) => groupInvitation.group,
+    () => UserGroup,
+    (groupInvitation: UserGroup) => groupInvitation.group,
     { onDelete: 'CASCADE' },
   )
-  groupInvitations: GroupInvitation;
+  userGroups: UserGroup;
 
   @OneToMany(() => Medicine, (medicine: Medicine) => medicine.group, {
     onDelete: 'CASCADE',
