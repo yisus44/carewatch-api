@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsPositive, Matches } from 'class-validator';
+import { IsNotEmpty, IsPositive, Matches, Validate } from 'class-validator';
+import { IsValidTimeConstraint } from 'src/common/decorators/validators/is-valid-time';
 
 export class CreateReminderWeekDayDto {
   @IsNotEmpty()
@@ -6,6 +7,6 @@ export class CreateReminderWeekDayDto {
   weekDayId: number;
 
   @IsNotEmpty()
-  @Matches(/^(1[0-2]|0?[1-9]):([0-5]?[0-9]):([0-5]?[0-9])$/)
+  @Validate(IsValidTimeConstraint)
   time: string;
 }
