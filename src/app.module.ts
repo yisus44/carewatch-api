@@ -36,6 +36,7 @@ import { WeekDaysModule } from './week-days/week-days.module';
 import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { FrequencyUnitsModule } from './frequency-units/frequency-units.module';
+import { ReminderFrequenciesModule } from './reminder-frequencies/reminder-frequencies.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { FrequencyUnitsModule } from './frequency-units/frequency-units.module';
     ReminderWeekDaysModule,
     SchedulesModule,
     FrequencyUnitsModule,
+    ReminderFrequenciesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
