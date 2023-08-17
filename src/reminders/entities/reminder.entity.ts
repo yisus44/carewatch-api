@@ -1,6 +1,7 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
@@ -28,6 +29,16 @@ export class Reminder extends CoreEntity {
     },
   )
   reminderFiles: ReminderFile;
+
+  @OneToMany(
+    () => ReminderActivationTime,
+    (reminderActivationTime: ReminderActivationTime) =>
+      reminderActivationTime.reminder,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  remindersActivationTime: ReminderActivationTime;
 
   @Column()
   name: string;
