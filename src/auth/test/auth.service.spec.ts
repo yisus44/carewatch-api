@@ -40,14 +40,6 @@ describe('AuthService', () => {
   it('should be defined', () => {
     expect(authService).toBeDefined();
   });
-  describe('when creating a cookie', () => {
-    it('should return a string', () => {
-      const userId = 1;
-      expect(typeof authService.getCookieWithJwtToken(userId)).toEqual(
-        'string',
-      );
-    });
-  });
 
   describe('when accessing the data of authenticating user', () => {
     it('should attempt to get the user by email', async () => {

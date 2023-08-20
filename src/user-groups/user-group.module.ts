@@ -8,6 +8,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './guards/permission.guard';
 import { RemindersModule } from 'src/reminders/reminders.module';
 import { MedicinesModule } from 'src/medicines/medicines.module';
+import { WhatsappModule } from 'src/whatsapp/whatsapp.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   providers: [
@@ -23,6 +25,8 @@ import { MedicinesModule } from 'src/medicines/medicines.module';
     CacheModule.register(),
     RemindersModule,
     MedicinesModule,
+    WhatsappModule,
+    MailModule,
   ],
   controllers: [UserGroupsController],
 })

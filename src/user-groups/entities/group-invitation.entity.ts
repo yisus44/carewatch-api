@@ -70,10 +70,11 @@ export class UserGroup extends CoreEntity {
   guestEmail: string;
 
   @Column({ nullable: true })
-  guestPhone: string;
+  guestPhone: number;
 
   @Column({ nullable: true })
   token: string;
+
   @Column({ default: false })
   isAdmin: boolean;
 }

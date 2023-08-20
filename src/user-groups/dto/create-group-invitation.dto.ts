@@ -31,7 +31,7 @@ export class CreateUserGroupDto {
 
   @IsOptional()
   @IsString()
-  guestPhone?: string;
+  guestPhone?: number;
 
   isAdmin?: boolean = false;
 }

@@ -7,12 +7,16 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
 import { InvitateUsersToGroup } from './dto/invitate-users-to-group.dto';
+import { WhatsappService } from 'src/whatsapp/whatsapp.service';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserGroupService extends CoreService<UserGroup> {
   constructor(
     @InjectRepository(UserGroup)
     private readonly fileRepository: Repository<UserGroup>,
+    private readonly whatsAppService: WhatsappService,
+    private readonly mailService: MailService,
   ) {
     super(fileRepository);
   }
@@ -30,6 +34,7 @@ export class UserGroupService extends CoreService<UserGroup> {
       });
       if (match) return match;
     }
+
     return await super.create({ ...createUserGroupDto, token });
   }
 
@@ -40,6 +45,26 @@ export class UserGroupService extends CoreService<UserGroup> {
         this.create({
           groupId: invitateUsersToGroup.groupId,
           userId: careWatchInvitation.userId,
+        }),
+      );
+    }
+
+    for (const emailInvitation of invitateUsersToGroup.emailInvitation) {
+      careWatchInvitationsPromise.push(
+        this.create({
+          groupId: invitateUsersToGroup.groupId,
+          guestEmail: emailInvitation.email,
+          guestName: emailInvitation.name,
+        }),
+      );
+    }
+
+    for (const whatsappInvitation of invitateUsersToGroup.whatsappInvitation) {
+      careWatchInvitationsPromise.push(
+        this.create({
+          groupId: invitateUsersToGroup.groupId,
+          guestPhone: whatsappInvitation.phone,
+          guestName: whatsappInvitation.name,
         }),
       );
     }

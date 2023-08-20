@@ -7,5 +7,6 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [WhatsappController],
   providers: [WhatsappService],
   imports: [HttpModule],
+  exports: [WhatsappService],
 })
 export class WhatsappModule {}
