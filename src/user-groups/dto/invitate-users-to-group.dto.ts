@@ -15,15 +15,15 @@ export class InvitateUsersToGroup {
 
   @IsOptional()
   @IsArray()
-  careWatchInvitation: CareWatchInvitation[];
+  careWatchInvitation: CareWatchInvitation[] = [];
 
   @IsOptional()
   @IsArray()
-  whatsappInvitation: WhatsAppInvitation[];
+  whatsappInvitation: WhatsAppInvitation[] = [];
 
   @IsOptional()
   @IsArray()
-  emailInvitation: EmailInvitation[];
+  emailInvitation: EmailInvitation[] = [];
 }
 
 class EmailInvitation {

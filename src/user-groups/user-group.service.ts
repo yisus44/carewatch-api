@@ -35,6 +35,26 @@ export class UserGroupService extends CoreService<UserGroup> {
       if (match) return match;
     }
 
+    if (createUserGroupDto.guestPhone) {
+      const match = await this.listOne({
+        guestPhone: createUserGroupDto.guestPhone,
+        groupId: createUserGroupDto.groupId,
+      });
+      if (match) return match;
+      await this.whatsAppService.sendWhatsAppInvitation(
+        token,
+        +createUserGroupDto.guestPhone,
+      );
+    }
+
+    if (createUserGroupDto.guestEmail) {
+      const match = await this.listOne({
+        guestEmail: createUserGroupDto.guestEmail,
+        groupId: createUserGroupDto.groupId,
+      });
+      if (match) return match;
+    }
+
     return await super.create({ ...createUserGroupDto, token });
   }
 
@@ -63,7 +83,7 @@ export class UserGroupService extends CoreService<UserGroup> {
       careWatchInvitationsPromise.push(
         this.create({
           groupId: invitateUsersToGroup.groupId,
-          guestPhone: whatsappInvitation.phone,
+          guestPhone: whatsappInvitation.phone.toString(),
           guestName: whatsappInvitation.name,
         }),
       );
@@ -72,6 +92,7 @@ export class UserGroupService extends CoreService<UserGroup> {
     try {
       console.log(await Promise.all(careWatchInvitationsPromise));
     } catch (ex) {
+      console.log(ex);
       const modifiedError = new BadRequestException(
         'Not all invitation could be sent correctly. Make sure you specified valid id',
       );

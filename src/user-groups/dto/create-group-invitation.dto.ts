@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserGroupDto {
   @IsNotEmpty()
@@ -30,8 +36,8 @@ export class CreateUserGroupDto {
   guestEmail?: string;
 
   @IsOptional()
-  @IsString()
-  guestPhone?: number;
+  @IsNumberString()
+  guestPhone?: string;
 
   isAdmin?: boolean = false;
 }

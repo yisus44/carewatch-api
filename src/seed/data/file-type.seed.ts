@@ -10,6 +10,9 @@ export const fileTypeData: CreateFileTypeDto[] = [
     type: 'JPEG',
   },
   {
+    type: 'JPG',
+  },
+  {
     type: 'MP3',
   },
   {

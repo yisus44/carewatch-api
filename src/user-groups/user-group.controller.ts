@@ -39,7 +39,7 @@ export class UserGroupsController {
       groupId: paginateGroupDto.groupId,
     });
   }
-  @UseGuards(AuthGuard, AdminGuard)
+  @UseGuards(AdminGuard)
   @Post('invite')
   inviteUsersToGroup(@Body() invitateUsersToGroup: InvitateUsersToGroup) {
     return this.userGroupService.inviteUsersToGroup(invitateUsersToGroup);

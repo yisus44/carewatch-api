@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
+import { WhatsAppTemplates } from './enums/whatsapp-templates.enum';
 
 @Injectable()
 export class WhatsappService {
   constructor(private readonly httpService: HttpService) {}
 
-  async create(
-    senderIdPhone: string = '100482656429227',
+  async sendWhatsapp(
     templateName = 'hello_world',
     toPhoneNumber: number = 523325615651,
     language: string = 'en_US',
+    senderIdPhone: string = '100482656429227',
   ) {
     const token = process.env.WHATSAPP_TOKEN;
     try {
@@ -38,5 +39,9 @@ export class WhatsappService {
       console.log({ error: error.request });
       throw error;
     }
+  }
+
+  async sendWhatsAppInvitation(token: string, toPhoneNumber: number) {
+    return this.sendWhatsapp(WhatsAppTemplates.INVITE_TO_GROUP, toPhoneNumber);
   }
 }

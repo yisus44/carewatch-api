@@ -15,6 +15,6 @@ export class WhatsappController {
 
   @Post()
   create() {
-    return this.whatsappService.create();
+    return this.whatsappService.sendWhatsapp();
   }
 }
