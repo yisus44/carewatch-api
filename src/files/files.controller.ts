@@ -16,7 +16,7 @@ import { UpdateFileDto } from './dto/update-file.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
-@UseGuards(AuthGuard)
+
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
