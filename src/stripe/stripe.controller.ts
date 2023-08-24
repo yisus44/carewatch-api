@@ -18,7 +18,7 @@ export class StripeController {
 
   @Post('add-client')
   createCustomer(@Body() createStripeClientDto: CreateStripeClientDto) {
-    return this.stripeService.createCustomer(createStripeClientDto);
+    return this.stripeService.createOrFindCustomer(createStripeClientDto);
   }
 
   @Post('create-subscription')

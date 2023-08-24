@@ -5,11 +5,13 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UserSubscriber } from './subscribers/user.subscriber';
 import { SubscriptionsUserService } from 'src/subscriptions-user/subscriptions-user.service';
 import { SubscriptionsUserModule } from 'src/subscriptions-user/subscriptions-user.module';
+import { StripeModule } from 'src/stripe/stripe.module';
 
 @Module({
   providers: [UserSubscriber],
   imports: [
     SubscriptionsUserModule,
+    StripeModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

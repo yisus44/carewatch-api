@@ -13,7 +13,7 @@ import { StripeSubscriptionAlreadyCancelledException } from 'src/common/exceptio
 @Injectable()
 export class StripeService {
   constructor(private readonly stripe: Stripe) {}
-  async createCustomer(createStripeClientDto: CreateStripeClientDto) {
+  async createOrFindCustomer(createStripeClientDto: CreateStripeClientDto) {
     const { email } = createStripeClientDto;
     const client = await this.stripe.customers.list({
       email,
@@ -50,6 +50,12 @@ export class StripeService {
     return await this.stripe.customers.retrieve(stripeCustomerId);
   }
 
+  async findPaymentMethod(stripeCustomerId: string) {
+    return await this.stripe.paymentMethods.list({
+      customer: stripeCustomerId,
+    });
+  }
+
   async createSubscription(
     createStripeSubscriptiontDto: CreateStripeSubscriptiontDto,
   ) {
@@ -79,7 +85,6 @@ export class StripeService {
       customer: stripeCustomerId,
       price,
     });
-    console.log(subscription);
     if (subscription.data.length > 0) return subscription.data[0];
   }
 

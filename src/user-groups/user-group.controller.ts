@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { AdminGuard } from './guards/admin.guard';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { InvitateUsersToGroup } from './dto/invitate-users-to-group.dto';
 import { UserGroupService } from './user-group.service';
 import { Permissions } from './decorators/permission.decorator';
 import { Permission } from './enums/permission.enum';

@@ -21,7 +21,7 @@ export class SubscriptionsService extends CoreService<Subscription> {
     return await this.subscriptionsRepository.findOneBy(query);
   }
   async create(user: User) {
-    const customer = await this.stripeService.createCustomer({
+    const customer = await this.stripeService.createOrFindCustomer({
       email: user.email,
     });
 

@@ -44,22 +44,19 @@ export class GroupsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number, @GetCurrentUser() currentUser: User) {
+  findOne(@Param('id') id: number) {
     return this.groupsService.findOneById(id);
   }
 
   @UseGuards(AdminGuard)
-  @Patch(':id')
-  update(
-    @Query('id') id: number,
-    @Body() updateGroupDto: UpdateGroupDto,
-    @GetCurrentUser() currentUser: User,
-  ) {
+  @Patch()
+  update(@Query('groupId') id: number, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupsService.update(id, updateGroupDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number, @GetCurrentUser() currentUser: User) {
+  @UseGuards(AdminGuard)
+  @Delete()
+  remove(@Query('groupId') id: number) {
     return this.groupsService.remove(+id);
   }
 
@@ -67,10 +64,14 @@ export class GroupsController {
   @Post('invite')
   inviteUsersToGroup(
     @Body() invitateUsersToGroup: InvitateUsersToGroup,
+    @Query('groupId') id: number,
     @GetCurrentUser() currentUser: User,
   ) {
     return this.groupsService.inviteUsersToGroup(
-      invitateUsersToGroup,
+      {
+        ...invitateUsersToGroup,
+        groupId: id,
+      },
       currentUser,
     );
   }

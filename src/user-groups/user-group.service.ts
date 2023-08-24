@@ -6,9 +6,6 @@ import { UserGroup } from './entities/group-invitation.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
-import { InvitateUsersToGroup } from './dto/invitate-users-to-group.dto';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserGroupService extends CoreService<UserGroup> {

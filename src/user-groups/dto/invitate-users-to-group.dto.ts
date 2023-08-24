@@ -6,11 +6,11 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  ValidateIf,
 } from 'class-validator';
 
 export class InvitateUsersToGroup {
-  @IsNotEmpty()
-  @IsNumber()
+  @ValidateIf(() => false)
   groupId: number;
 
   @IsOptional()

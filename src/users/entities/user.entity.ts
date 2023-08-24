@@ -54,6 +54,8 @@ export class User extends CoreEntity {
   )
   subscription: Subscription;
 
-  //Virtual field calculated on runtime
+  //Virtual fields calculated on runtime
   isPremium: boolean;
+
+  hasPaymentMethod: boolean;
 }
