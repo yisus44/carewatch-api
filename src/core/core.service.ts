@@ -60,7 +60,11 @@ export abstract class CoreService<T extends CoreEntity> {
     if (!match) throw new NotFoundException();
     return match;
   }
-
+  async findOneBy(query: FindOptionsWhere<T>) {
+    const match = await this.repository.findOneBy(query);
+    if (!match) throw new NotFoundException();
+    return match;
+  }
   async list(
     findOptionsWhere: FindOptionsWhere<T> = {},
     findOptionsOrder: FindOptionsOrder<T> = {},
@@ -111,6 +115,12 @@ export abstract class CoreService<T extends CoreEntity> {
   }
   async remove(id: number): Promise<DeleteResult> {
     return await this.repository.delete(id);
+  }
+
+  async removeBy(query: FindOptionsWhere<T>): Promise<DeleteResult> {
+    if (!query)
+      throw new BadRequestException('YOU CANNOT DELETE THE WHOLE TABLE');
+    return await this.repository.delete(query);
   }
 
   getQueryBuilder(alias: string) {

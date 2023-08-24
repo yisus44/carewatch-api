@@ -15,37 +15,54 @@ import { CreateGroupFileDto } from './dto/create-group-file.dto';
 import { UpdateGroupFileDto } from './dto/update-group-file.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Permissions } from 'src/user-groups/decorators/permission.decorator';
+import { Permission } from 'src/user-groups/enums/permission.enum';
+import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
 
 @UseGuards(AuthGuard)
 @Controller('group-files')
 export class GroupFilesController {
   constructor(private readonly groupFilesService: GroupFilesService) {}
 
+  @Permissions(Permission.uploadPermissionFile)
   @Post()
   create(@Body() createGroupFileDto: CreateGroupFileDto) {
     return this.groupFilesService.create(createGroupFileDto);
   }
 
+  @Permissions(Permission.readPermissionFile)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.groupFilesService.findPaginated(paginationDto);
+  findAll(@Query() paginateGroupDto: PaginateGroupDto) {
+    return this.groupFilesService.findPaginated(paginateGroupDto, {
+      groupId: paginateGroupDto.groupId,
+    });
   }
 
+  @Permissions(Permission.readPermissionFile)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.groupFilesService.findOneById(id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('groupId') groupId: number,
+  ) {
+    return this.groupFilesService.findOneBy({ id, groupId });
   }
 
+  @Permissions(Permission.uploadPermissionFile)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateGroupFileDto: UpdateGroupFileDto,
+    @Query('groupId') groupId: number,
   ) {
-    return this.groupFilesService.update(id, updateGroupFileDto);
+    return this.groupFilesService.updateBy({ id, groupId }, updateGroupFileDto);
   }
 
+  @Permissions(Permission.deletePermissionFile)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.groupFilesService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('groupId') groupId: number,
+  ) {
+    return this.groupFilesService.removeBy({ id, groupId });
   }
 }

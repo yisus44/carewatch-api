@@ -1,4 +1,5 @@
 import { CoreEntity } from 'src/core/entities/core-entity';
+import { File } from 'src/files/entities/file.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
@@ -13,10 +14,10 @@ export class GroupFile extends CoreEntity {
   })
   group: Group;
 
-  @ManyToOne(() => Reminder, (reminder: Reminder) => reminder.group, {
+  @ManyToOne(() => File, (file: File) => file.groupFiles, {
     onDelete: 'CASCADE',
   })
-  file: Reminder;
+  file: File;
 
   @Column()
   fileId: number;

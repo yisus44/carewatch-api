@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { RemindersService } from './reminders.service';
 import { CreateReminderDto } from './dto/create-reminder.dto';
@@ -16,6 +17,8 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Permission } from 'src/user-groups/enums/permission.enum';
 import { Permissions } from 'src/user-groups/decorators/permission.decorator';
+import { GetCurrentUser } from 'src/auth/decorators/current-user';
+import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
 
 @UseGuards(AuthGuard)
 @Controller('reminders')
@@ -30,28 +33,37 @@ export class RemindersController {
 
   @Permissions(Permission.readPermissionReminder)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.remindersService.findPaginated(paginationDto);
+  findAll(@Query() paginateGroupDto: PaginateGroupDto) {
+    return this.remindersService.findPaginated(paginateGroupDto, {
+      groupId: paginateGroupDto.groupId,
+    });
   }
 
   @Permissions(Permission.readPermissionReminder)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.remindersService.findOneById(+id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('groupId') groupId: number,
+  ) {
+    return this.remindersService.findOneBy({ id, groupId });
   }
 
   @Permissions(Permission.editPermissionReminder)
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateReminderDto: UpdateReminderDto,
+    @Query('groupId') groupId: number,
   ) {
-    return this.remindersService.update(+id, updateReminderDto);
+    return this.remindersService.updateBy({ id, groupId }, updateReminderDto);
   }
 
   @Permissions(Permission.deletePermissionReminder)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.remindersService.remove(+id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('groupId') groupId: number,
+  ) {
+    return this.remindersService.removeBy({ id, groupId });
   }
 }
