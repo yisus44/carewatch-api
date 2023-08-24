@@ -19,7 +19,7 @@ export class CreateMedicineDto {
 
   @IsInt()
   @IsNotEmpty()
-  quantity: string;
+  quantity: number;
 
   @IsInt()
   @IsNotEmpty()

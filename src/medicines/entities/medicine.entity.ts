@@ -38,7 +38,7 @@ export class Medicine extends CoreEntity {
   description: string;
 
   @Column()
-  quantity: string;
+  quantity: number;
 
   @Column()
   currentQuantity: number;
