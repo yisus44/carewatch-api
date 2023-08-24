@@ -93,12 +93,21 @@ export abstract class CoreService<T extends CoreEntity> {
     }
   }
 
-  async update(id: any, updateDto: Partial<T>) {
-    const file = await this.repository.update(
-      { id },
+  async update(id: number, updateDto: Partial<T>) {
+    const query = { id } as unknown as any;
+    const entity = await this.repository.update(
+      query,
       updateDto as unknown as QueryDeepPartialEntity<T>,
     );
-    return file;
+    return entity;
+  }
+
+  async updateBy(query: any, updateDto: Partial<T>) {
+    const entity = await this.repository.update(
+      query,
+      updateDto as unknown as QueryDeepPartialEntity<T>,
+    );
+    return entity;
   }
   async remove(id: number): Promise<DeleteResult> {
     return await this.repository.delete(id);

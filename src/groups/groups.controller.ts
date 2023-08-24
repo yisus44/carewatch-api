@@ -19,6 +19,9 @@ import { GetCurrentUser } from 'src/auth/decorators/current-user';
 import { User } from 'src/users/entities/user.entity';
 import { MailInvitation } from './dto/mail-invitation.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AdminGuard } from 'src/user-groups/guards/admin.guard';
+import { InvitateUsersToGroup } from 'src/user-groups/dto/invitate-users-to-group.dto';
+
 @UseGuards(AuthGuard)
 @Controller('groups')
 export class GroupsController {
@@ -30,14 +33,6 @@ export class GroupsController {
     @GetCurrentUser() currentUser: User,
   ) {
     return this.groupsService.add(createGroupDto, currentUser);
-  }
-
-  @Post(':id/invitation-mail')
-  inviteByMail(
-    @Param('id', ParseIntPipe) groupId: number,
-    @Body() mailInvitation: MailInvitation,
-  ) {
-    return this.groupsService.inviteByMail(mailInvitation.guestEmail, groupId);
   }
 
   @Get()
@@ -53,9 +48,10 @@ export class GroupsController {
     return this.groupsService.findOneById(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id')
   update(
-    @Param('id') id: number,
+    @Query('id') id: number,
     @Body() updateGroupDto: UpdateGroupDto,
     @GetCurrentUser() currentUser: User,
   ) {
@@ -65,5 +61,17 @@ export class GroupsController {
   @Delete(':id')
   remove(@Param('id') id: number, @GetCurrentUser() currentUser: User) {
     return this.groupsService.remove(+id);
+  }
+
+  @UseGuards(AdminGuard)
+  @Post('invite')
+  inviteUsersToGroup(
+    @Body() invitateUsersToGroup: InvitateUsersToGroup,
+    @GetCurrentUser() currentUser: User,
+  ) {
+    return this.groupsService.inviteUsersToGroup(
+      invitateUsersToGroup,
+      currentUser,
+    );
   }
 }

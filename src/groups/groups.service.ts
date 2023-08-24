@@ -15,6 +15,9 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { FreePlanReachedException } from 'src/common/exceptions/free-plan-reached.exception';
 import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
 import { UserGroupService } from 'src/user-groups/user-group.service';
+import { InvitateUsersToGroup } from 'src/user-groups/dto/invitate-users-to-group.dto';
+import { WhatsappService } from 'src/whatsapp/whatsapp.service';
+import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
 
 @Injectable()
 export class GroupsService extends CoreService<Group> {
@@ -23,6 +26,7 @@ export class GroupsService extends CoreService<Group> {
     private groupRepository: Repository<Group>,
     private readonly userGroupService: UserGroupService,
     private readonly mailService: MailService,
+    private readonly whatsAppService: WhatsappService,
   ) {
     super(groupRepository);
   }
@@ -51,34 +55,6 @@ export class GroupsService extends CoreService<Group> {
     return this.calculatePagination(data, totalCount, page, perPage);
   }
 
-  async inviteByMail(guestEmail: string, groupId: number) {
-    const group = await this.findOneById(groupId);
-    if (!group) throw new GroupNotFoundException();
-    const match = await this.userGroupService.listOne({
-      groupId,
-      guestEmail,
-    });
-    let link;
-    if (match) {
-      link = `${process.env.DOMAIN}/invitation/${match.token}`;
-      return await this.mailService.sendEmailInvitation(
-        guestEmail,
-        group.name,
-        link,
-      );
-    }
-    const invitation = await this.userGroupService.create({
-      groupId,
-      guestEmail,
-    });
-    link = `${process.env.DOMAIN}/invitation/${invitation.token}`;
-    return await this.mailService.sendEmailInvitation(
-      guestEmail,
-      group.name,
-      link,
-    );
-  }
-
   async canCreateMoreGroups(user: User) {
     const usersGroup = await this.userGroupService.list({
       isAdmin: true,
@@ -87,5 +63,62 @@ export class GroupsService extends CoreService<Group> {
 
     if (usersGroup.length > 2 && !user.isPremium) return false;
     return true;
+  }
+
+  async inviteUsersToGroup(
+    invitateUsersToGroup: InvitateUsersToGroup,
+    user: User,
+  ) {
+    const careWatchInvitationsPromise: Promise<UserGroup | void>[] = [];
+    const group = await this.findOneById(invitateUsersToGroup.groupId);
+    if (!group) throw new GroupNotFoundException();
+
+    for (const careWatchInvitation of invitateUsersToGroup.careWatchInvitation) {
+      careWatchInvitationsPromise.push(
+        this.userGroupService.create({
+          groupId: invitateUsersToGroup.groupId,
+          userId: careWatchInvitation.userId,
+        }),
+      );
+    }
+
+    for (const emailInvitation of invitateUsersToGroup.emailInvitation) {
+      const userGroup = await this.userGroupService.create({
+        groupId: invitateUsersToGroup.groupId,
+        guestEmail: emailInvitation.email,
+        guestName: emailInvitation.name,
+      });
+
+      careWatchInvitationsPromise.push(
+        this.mailService.sendEmailInvitation(
+          emailInvitation.email,
+          emailInvitation.name,
+          user,
+          group.name,
+          `${process.env.DOMAIN}/join/${userGroup.token}`,
+        ),
+      );
+    }
+
+    for (const whatsappInvitation of invitateUsersToGroup.whatsappInvitation) {
+      careWatchInvitationsPromise.push(
+        this.userGroupService.create({
+          groupId: invitateUsersToGroup.groupId,
+          guestPhone: whatsappInvitation.phone.toString(),
+          guestName: whatsappInvitation.name,
+        }),
+      );
+    }
+
+    try {
+      console.log(await Promise.all(careWatchInvitationsPromise));
+    } catch (ex) {
+      console.log(ex);
+      const modifiedError = new BadRequestException(
+        'Not all invitation could be sent correctly. Make sure you specified valid id',
+      );
+      modifiedError.stack = modifiedError.stack;
+      throw modifiedError;
+    }
   }
 }

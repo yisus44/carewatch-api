@@ -4,6 +4,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateUserGroupDto {
@@ -38,6 +39,6 @@ export class CreateUserGroupDto {
   @IsOptional()
   @IsNumberString()
   guestPhone?: string;
-
+  @ValidateIf(() => false)
   isAdmin?: boolean = false;
 }

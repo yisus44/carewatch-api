@@ -25,8 +25,6 @@ import { MailModule } from 'src/mail/mail.module';
     CacheModule.register(),
     RemindersModule,
     MedicinesModule,
-    WhatsappModule,
-    MailModule,
   ],
   controllers: [UserGroupsController],
 })

@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -15,21 +17,23 @@ import { Permissions } from './decorators/permission.decorator';
 import { Permission } from './enums/permission.enum';
 import { MemberGuard } from './guards/member.guard';
 import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { User } from 'aws-sdk/clients/budgets';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { PaginateGroupDto } from './dto/paginate-group.dto';
-@UseGuards(AuthGuard)
+import { UpdateUserGroupDto } from './dto/update-group-invitation.dto';
+import { User } from 'src/users/entities/user.entity';
+
 @Controller('user-groups')
 export class UserGroupsController {
   constructor(private readonly userGroupService: UserGroupService) {}
 
+  @UseGuards(AuthGuard)
   @Permissions(Permission.writePermissionMedicine)
   @Post('demo')
   demo() {
     return 'executed';
   }
 
-  @UseGuards(MemberGuard)
+  @UseGuards(AuthGuard, MemberGuard)
   @Get('members')
   async getMemembers(
     @GetCurrentUser() user: User,
@@ -39,9 +43,38 @@ export class UserGroupsController {
       groupId: paginateGroupDto.groupId,
     });
   }
-  @UseGuards(AdminGuard)
-  @Post('invite')
-  inviteUsersToGroup(@Body() invitateUsersToGroup: InvitateUsersToGroup) {
-    return this.userGroupService.inviteUsersToGroup(invitateUsersToGroup);
+
+  @UseGuards(AuthGuard)
+  @Get('members')
+  async getMyInvitations(
+    @GetCurrentUser() user: User,
+    @Query() paginateGroupDto: PaginateGroupDto,
+  ) {
+    return await this.userGroupService.findPaginated(paginateGroupDto, {
+      userId: user.id,
+      isActive: false,
+    });
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(':id')
+  async update(
+    @Param() id: number,
+    @Body() updateUserGroupDto: UpdateUserGroupDto,
+  ) {
+    return await this.userGroupService.update(id, updateUserGroupDto);
+  }
+
+  @Patch(':token/accept')
+  async acceptInvitation(
+    @Param('token') token: string,
+    @Body() updateUserGroupDto: UpdateUserGroupDto,
+  ) {
+    delete updateUserGroupDto.groupId;
+
+    return await this.userGroupService.updateBy(
+      { token },
+      { ...updateUserGroupDto, isActive: true },
+    );
   }
 }
