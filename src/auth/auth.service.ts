@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -7,7 +8,6 @@ import { SignUpDto } from './dto/signup.dto';
 import { UsersService } from '../users/users.service';
 import { SignInDto } from './dto/signin.dto';
 
-import * as bcrypt from 'bcrypt';
 import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
 import { sign } from 'jsonwebtoken';
 import { User } from '../users/entities/user.entity';
@@ -17,6 +17,7 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 import { UserNotFoundException } from '../common/exceptions/user-not-found.excepction';
 import { InvalidCredentialsException } from '../common/exceptions/invalid-credentails.exception';
 import { EmailInUseException } from '../common/exceptions/email-in-use.exception';
+import { BcryptType } from './types/bcrypt.type';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +26,10 @@ export class AuthService {
     private readonly commonService: CommonService,
     private readonly mailService: MailService,
     private readonly subscriptionsService: SubscriptionsService,
+    @Inject('BcryptType') private readonly bcrypt: BcryptType,
   ) {}
   async signUp(registerDto: SignUpDto) {
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+    const hashedPassword = await this.bcrypt.hash(registerDto.password, 10);
     try {
       const createdUser = await this.usersService.create({
         ...registerDto,
@@ -60,7 +62,7 @@ export class AuthService {
     }
   }
   async getAuthInfo(user: User) {
-    const expirationTime = process.env.JWT_EXPIRATION_TIME; // Example: "48h"
+    const expirationTime = process.env.JWT_EXPIRATION_TIME || '48h'; // Example:
     const token = await this.signPayload(user, expirationTime);
     const expiresInMilliseconds =
       this.commonService.parseDurationToMilliseconds(expirationTime);
@@ -75,7 +77,7 @@ export class AuthService {
       isActive: user.isActive,
     };
 
-    return sign(payload, process.env.JWT_SECRET, {
+    return sign(payload, process.env.JWT_SECRET || 'developmentesecret<', {
       expiresIn: expirationTime,
     });
   }
@@ -95,7 +97,7 @@ export class AuthService {
     plainTextPassword: string,
     hashedPassword: string,
   ) {
-    return await bcrypt.compare(plainTextPassword, hashedPassword);
+    return await this.bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
   public getCookieForLogOut() {

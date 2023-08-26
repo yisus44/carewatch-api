@@ -8,10 +8,18 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { MailModule } from '../mail/mail.module';
 import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
 import { SubscriptionsHistory } from '../subscriptions_history/entities/subscriptions_history.entity';
+import * as bcrypt from 'bcrypt';
+
 @Global()
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {
+      provide: 'BcryptType',
+      useValue: bcrypt,
+    },
+  ],
   imports: [
     SubscriptionsModule,
     SubscriptionsHistory,
