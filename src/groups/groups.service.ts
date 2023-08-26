@@ -61,7 +61,7 @@ export class GroupsService extends CoreService<Group> {
       userId: user.id,
     });
 
-    if (usersGroup.length > 2 && !user.isPremium) return false;
+    if (usersGroup.length > process.env.FREE_PREMIUM_MAX_GROUPS && !user.isPremium) return false;
     return true;
   }
 
