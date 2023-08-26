@@ -34,7 +34,7 @@ export class MedicinesController {
       groupId: paginateGroupDto.groupId,
     });
   }
-
+  @Permissions(Permission.readPermissionMedicine)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.medicinesService.findOneById(+id);
