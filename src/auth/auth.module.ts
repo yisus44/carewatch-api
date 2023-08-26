@@ -1,13 +1,13 @@
 import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { MailModule } from 'src/mail/mail.module';
-import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
-import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
+import { MailModule } from '../mail/mail.module';
+import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
+import { SubscriptionsHistory } from '../subscriptions_history/entities/subscriptions_history.entity';
 @Global()
 @Module({
   controllers: [AuthController],

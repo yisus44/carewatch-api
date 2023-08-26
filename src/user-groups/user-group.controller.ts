@@ -10,16 +10,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AdminGuard } from './guards/admin.guard';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 import { UserGroupService } from './user-group.service';
 import { Permissions } from './decorators/permission.decorator';
 import { Permission } from './enums/permission.enum';
 import { MemberGuard } from './guards/member.guard';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { GetCurrentUser } from '../auth/decorators/current-user';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { PaginateGroupDto } from './dto/paginate-group.dto';
 import { UpdateUserGroupDto } from './dto/update-group-invitation.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Controller('user-groups')
 export class UserGroupsController {

@@ -13,9 +13,8 @@ import {
 import { FileTypeService } from './file-type.service';
 import { CreateFileTypeDto } from './dto/create-file-type.dto';
 import { UpdateFileTypeDto } from './dto/update-file-type.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('file-type')
 export class FileTypeController {

@@ -8,7 +8,7 @@ import { CreateStripeClientDto } from './dto/create-stripe-client.dto';
 import { UpdateStripeDto } from './dto/update-stripe.dto';
 import Stripe from 'stripe';
 import { CreateStripeSubscriptiontDto } from './dto/create-stripe-subscription-.dto';
-import { StripeSubscriptionAlreadyCancelledException } from 'src/common/exceptions/stripe-subscription-already-cancelled';
+import { StripeSubscriptionAlreadyCancelledException } from '../common/exceptions/stripe-subscription-already-cancelled';
 
 @Injectable()
 export class StripeService {

@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { Group } from 'src/groups/entities/group.entity';
-import { MedicineUnit } from 'src/medicine-units/entities/medicine-unit.entity';
-import { Reminder } from 'src/reminders/entities/reminder.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { Group } from '../../groups/entities/group.entity';
+import { MedicineUnit } from '../../medicine-units/entities/medicine-unit.entity';
+import { Reminder } from '../../reminders/entities/reminder.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()

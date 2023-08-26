@@ -6,10 +6,10 @@ import { UserGroupsController } from './user-group.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionGuard } from './guards/permission.guard';
-import { RemindersModule } from 'src/reminders/reminders.module';
-import { MedicinesModule } from 'src/medicines/medicines.module';
-import { WhatsappModule } from 'src/whatsapp/whatsapp.module';
-import { MailModule } from 'src/mail/mail.module';
+import { RemindersModule } from '../reminders/reminders.module';
+import { MedicinesModule } from '../medicines/medicines.module';
+import { WhatsappModule } from '../whatsapp/whatsapp.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   providers: [

@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { FileTypeService } from 'src/file-type/file-type.service';
-import { FilesService } from 'src/files/files.service';
-import { UsersService } from 'src/users/users.service';
+import { FileTypeService } from '../file-type/file-type.service';
+import { FilesService } from '../files/files.service';
+import { UsersService } from '../users/users.service';
 import { fileTypeData } from './data/file-type.seed';
-import { CreateFileTypeDto } from 'src/file-type/dto/create-file-type.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateFileTypeDto } from '../file-type/dto/create-file-type.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { userSeed } from './data/user.seed';
-import { SignUpDto } from 'src/auth/dto/signup.dto';
-import { AuthService } from 'src/auth/auth.service';
-import { CreateMedicineUnitDto } from 'src/medicine-units/dto/create-medicine-unit.dto';
+import { SignUpDto } from '../auth/dto/signup.dto';
+import { AuthService } from '../auth/auth.service';
+import { CreateMedicineUnitDto } from '../medicine-units/dto/create-medicine-unit.dto';
 import { MediceUnitsSeed } from './data/medicine-units.seed';
-import { MedicineUnitsService } from 'src/medicine-units/medicine-units.service';
-import { CreateWeekDayDto } from 'src/week-days/dto/create-week-day.dto';
+import { MedicineUnitsService } from '../medicine-units/medicine-units.service';
+import { CreateWeekDayDto } from '../week-days/dto/create-week-day.dto';
 import { weekDaysSeed } from './data/week-days.seed';
-import { WeekDaysService } from 'src/week-days/week-days.service';
+import { WeekDaysService } from '../week-days/week-days.service';
 import { frequencyUnitSeed } from './data/frequency-unit.seed';
-import { FrequencyUnitsService } from 'src/frequency-units/frequency-units.service';
-import { CreateFrequencyUnitDto } from 'src/frequency-units/dto/create-frequency-unit.dto';
+import { FrequencyUnitsService } from '../frequency-units/frequency-units.service';
+import { CreateFrequencyUnitDto } from '../frequency-units/dto/create-frequency-unit.dto';
 @Injectable()
 export class SeedService {
   constructor(

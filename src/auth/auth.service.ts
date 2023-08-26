@@ -8,17 +8,15 @@ import { UsersService } from '../users/users.service';
 import { SignInDto } from './dto/signin.dto';
 
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
 import { sign } from 'jsonwebtoken';
-import { User } from 'src/users/entities/user.entity';
-import { CommonService } from 'src/common/common.service';
-import { MailService } from 'src/mail/mail.service';
-import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
-import { UserNotFoundException } from 'src/common/exceptions/user-not-found.excepction';
-import { InvalidCredentialsException } from 'src/common/exceptions/invalid-credentails.exception';
-import { EmailInUseException } from 'src/common/exceptions/email-in-use.exception';
+import { User } from '../users/entities/user.entity';
+import { CommonService } from '../common/common.service';
+import { MailService } from '../mail/mail.service';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
+import { UserNotFoundException } from '../common/exceptions/user-not-found.excepction';
+import { InvalidCredentialsException } from '../common/exceptions/invalid-credentails.exception';
+import { EmailInUseException } from '../common/exceptions/email-in-use.exception';
 
 @Injectable()
 export class AuthService {

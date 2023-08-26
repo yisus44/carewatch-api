@@ -8,10 +8,10 @@ import { DeleteResult, Repository } from 'typeorm';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { File } from './entities/file.entity';
-import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PageDto } from 'src/common/dto/page.dto';
-import { CoreService } from 'src/core/core.service';
+import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PageDto } from '../common/dto/page.dto';
+import { CoreService } from '../core/core.service';
 
 @Injectable()
 export class FilesService extends CoreService<File> {

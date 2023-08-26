@@ -13,8 +13,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { generateUserGroupCache } from '../utils/generate-user-invitation-cache-key.util';
 import { UserGroup } from '../entities/group-invitation.entity';
-import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
-import { UserNotInGroupException } from 'src/common/exceptions/user-not-in-group.exception';
+import { GroupNotFoundException } from '../../common/exceptions/group-not-found.exception';
+import { UserNotInGroupException } from '../../common/exceptions/user-not-in-group.exception';
 
 @Injectable()
 export class MemberGuard implements CanActivate {

@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { User } from 'src/users/entities/user.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { User } from '../../users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

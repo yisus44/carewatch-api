@@ -11,9 +11,9 @@ import {
 } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { User } from 'src/users/entities/user.entity';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { GetCurrentUser } from '../auth/decorators/current-user';
+import { User } from '../users/entities/user.entity';
+import { AuthGuard } from '../auth/guards/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('subscriptions')
 export class SubscriptionsController {

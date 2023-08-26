@@ -1,8 +1,8 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { Group } from 'src/groups/entities/group.entity';
-import { Medicine } from 'src/medicines/entities/medicine.entity';
-import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
-import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { Group } from '../../groups/entities/group.entity';
+import { Medicine } from '../../medicines/entities/medicine.entity';
+import { ReminderActivationTime } from '../../reminder-activation-time/entities/reminder-activation-time.entity';
+import { ReminderFile } from '../../reminder-files/entities/reminder-file.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()

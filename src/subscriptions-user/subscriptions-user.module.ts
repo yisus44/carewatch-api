@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SubscriptionsUserService } from './subscriptions-user.service';
-import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
-import { SubscriptionsHistoryModule } from 'src/subscriptions_history/subscriptions_history.module';
+import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
+import { SubscriptionsHistoryModule } from '../subscriptions_history/subscriptions_history.module';
 
 @Module({
   providers: [SubscriptionsUserService],

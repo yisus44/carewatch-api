@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { SES } from 'aws-sdk';
-import { AssetsService } from 'src/assets/assets.service';
+import { AssetsService } from '../assets/assets.service';
 import { CreateTemplateRequest } from 'aws-sdk/clients/ses';
 
-import { EmailTemplates } from 'src/aws/enums/email-templates.enum';
+import { EmailTemplates } from '../aws/enums/email-templates.enum';
 
 @Injectable()
 export class AwsSesService {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { StripeService } from 'src/stripe/stripe.service';
-import { SubscriptionsUserService } from 'src/subscriptions-user/subscriptions-user.service';
-import { User } from 'src/users/entities/user.entity';
+import { StripeService } from '../../stripe/stripe.service';
+import { SubscriptionsUserService } from '../../subscriptions-user/subscriptions-user.service';
+import { User } from '../../users/entities/user.entity';
 import Stripe from 'stripe';
 import {
   EntitySubscriberInterface,

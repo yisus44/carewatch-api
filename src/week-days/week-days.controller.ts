@@ -12,7 +12,7 @@ import {
 import { WeekDaysService } from './week-days.service';
 import { CreateWeekDayDto } from './dto/create-week-day.dto';
 import { UpdateWeekDayDto } from './dto/update-week-day.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('week-days')
 export class WeekDaysController {

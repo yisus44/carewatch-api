@@ -1,4 +1,4 @@
-import { CreateWeekDayDto } from 'src/week-days/dto/create-week-day.dto';
+import { CreateWeekDayDto } from '../../week-days/dto/create-week-day.dto';
 
 export const weekDaysSeed: CreateWeekDayDto[] = [
   {

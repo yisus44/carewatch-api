@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { UserSubscriber } from './subscribers/user.subscriber';
-import { SubscriptionsUserService } from 'src/subscriptions-user/subscriptions-user.service';
-import { SubscriptionsUserModule } from 'src/subscriptions-user/subscriptions-user.module';
-import { StripeModule } from 'src/stripe/stripe.module';
+import { SubscriptionsUserService } from '../subscriptions-user/subscriptions-user.service';
+import { SubscriptionsUserModule } from '../subscriptions-user/subscriptions-user.module';
+import { StripeModule } from '../stripe/stripe.module';
 
 @Module({
   providers: [UserSubscriber],

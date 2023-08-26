@@ -13,8 +13,8 @@ import {
 import { ReminderWeekDaysService } from './reminder-week-days.service';
 import { CreateReminderWeekDayDto } from './dto/create-reminder-week-day.dto';
 import { UpdateReminderWeekDayDto } from './dto/update-reminder-week-day.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @UseGuards(AuthGuard)
 @Controller('reminder-week-days')

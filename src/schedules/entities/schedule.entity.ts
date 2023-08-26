@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { UserGroup } from '../../user-groups/entities/group-invitation.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 @Entity()
 export class Schedule extends CoreEntity {

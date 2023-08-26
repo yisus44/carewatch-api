@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import { EmailTemplates } from './enums/email-templates.enum';
-import { AssetsService } from 'src/assets/assets.service';
+import { AssetsService } from '../assets/assets.service';
 import { CreateTemplateRequest } from 'aws-sdk/clients/ses';
 @Injectable()
 export class AwsService {

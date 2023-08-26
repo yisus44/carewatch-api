@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CoreService } from 'src/core/core.service';
+import { CoreService } from '../core/core.service';
 import { Reminder } from './entities/reminder.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';

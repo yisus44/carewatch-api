@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
-import { SubscriptionsHistoryService } from 'src/subscriptions_history/subscriptions_history.service';
-import { User } from 'src/users/entities/user.entity';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
+import { SubscriptionsHistoryService } from '../subscriptions_history/subscriptions_history.service';
+import { User } from '../users/entities/user.entity';
 @Injectable()
 export class SubscriptionsUserService {
   constructor(

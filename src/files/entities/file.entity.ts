@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { FileType } from 'src/file-type/entities/file-type.entity';
-import { GroupFile } from 'src/group-files/entities/group-file.entity';
-import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { FileType } from '../../file-type/entities/file-type.entity';
+import { GroupFile } from '../../group-files/entities/group-file.entity';
+import { ReminderFile } from '../../reminder-files/entities/reminder-file.entity';
 import {
   Column,
   CreateDateColumn,

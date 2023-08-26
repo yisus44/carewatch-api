@@ -13,11 +13,11 @@ import {
 import { GroupFilesService } from './group-files.service';
 import { CreateGroupFileDto } from './dto/create-group-file.dto';
 import { UpdateGroupFileDto } from './dto/update-group-file.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { Permissions } from 'src/user-groups/decorators/permission.decorator';
-import { Permission } from 'src/user-groups/enums/permission.enum';
-import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { Permissions } from '../user-groups/decorators/permission.decorator';
+import { Permission } from '../user-groups/enums/permission.enum';
+import { PaginateGroupDto } from '../user-groups/dto/paginate-group.dto';
 
 @UseGuards(AuthGuard)
 @Controller('group-files')

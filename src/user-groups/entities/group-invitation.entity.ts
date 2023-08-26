@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { Group } from 'src/groups/entities/group.entity';
-import { Schedule } from 'src/schedules/entities/schedule.entity';
-import { User } from 'src/users/entities/user.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { Group } from '../../groups/entities/group.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
+import { User } from '../../users/entities/user.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 @Entity()
 export class UserGroup extends CoreEntity {

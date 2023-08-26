@@ -1,6 +1,6 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
-import { WeekDay } from 'src/week-days/entities/week-day.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { ReminderActivationTime } from '../../reminder-activation-time/entities/reminder-activation-time.entity';
+import { WeekDay } from '../../week-days/entities/week-day.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { UserGroupService } from 'src/user-groups/user-group.service';
-import { UsersService } from 'src/users/users.service';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { UserGroupService } from '../user-groups/user-group.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class GroupInvitationsUserService {

@@ -12,7 +12,7 @@ import {
 import { ReminderFrequenciesService } from './reminder-frequencies.service';
 import { CreateReminderFrequencyDto } from './dto/create-reminder-frequency.dto';
 import { UpdateReminderFrequencyDto } from './dto/update-reminder-frequency.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('reminder-frequencies')
 export class ReminderFrequenciesController {

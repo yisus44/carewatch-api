@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { StripeService } from 'src/stripe/stripe.service';
-import { User } from 'src/users/entities/user.entity';
+import { StripeService } from '../stripe/stripe.service';
+import { User } from '../users/entities/user.entity';
 import { Subscription } from './entities/subscription.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CoreService } from 'src/core/core.service';
-import { StripeSubscriptionAlreadyCancelledException } from 'src/common/exceptions/stripe-subscription-already-cancelled';
+import { CoreService } from '../core/core.service';
+import { StripeSubscriptionAlreadyCancelledException } from '../common/exceptions/stripe-subscription-already-cancelled';
 
 @Injectable()
 export class SubscriptionsService extends CoreService<Subscription> {

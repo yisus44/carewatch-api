@@ -12,7 +12,7 @@ import {
 import { ReminderActivationTimeService } from './reminder-activation-time.service';
 import { CreateReminderActivationTimeDto } from './dto/create-reminder-activation-time.dto';
 import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activation-time.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('reminder-activation-time')
 export class ReminderActivationTimeController {

@@ -13,11 +13,11 @@ import {
 import { ReminderFilesService } from './reminder-files.service';
 import { CreateReminderFileDto } from './dto/create-reminder-file.dto';
 import { UpdateReminderFileDto } from './dto/update-reminder-file.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { Permissions } from 'src/user-groups/decorators/permission.decorator';
-import { Permission } from 'src/user-groups/enums/permission.enum';
-import { PaginateReminderDto } from 'src/reminders/dto/paginate-reminder.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { Permissions } from '../user-groups/decorators/permission.decorator';
+import { Permission } from '../user-groups/enums/permission.enum';
+import { PaginateReminderDto } from '../reminders/dto/paginate-reminder.dto';
 
 @UseGuards(AuthGuard)
 @Controller('reminder-files')

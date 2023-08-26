@@ -13,10 +13,10 @@ import {
 import { UserSettingsService } from './user-settings.service';
 import { CreateUserSettingDto } from './dto/create-user-setting.dto';
 import { UpdateUserSettingDto } from './dto/update-user-setting.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { User } from 'src/users/entities/user.entity';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { User } from '../users/entities/user.entity';
+import { GetCurrentUser } from '../auth/decorators/current-user';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Controller('user-settings')
 export class UserSettingsController {

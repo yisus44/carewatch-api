@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AwsSesService } from './aws-ses.service';
 import { AwsSesController } from './aws-ses.controller';
-import { AssetsModule } from 'src/assets/assets.module';
+import { AssetsModule } from '../assets/assets.module';
 import { SES } from 'aws-sdk';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 

@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { Medicine } from '../../medicines/entities/medicine.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()

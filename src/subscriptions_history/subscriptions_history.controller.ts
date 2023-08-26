@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { SubscriptionsHistoryService } from './subscriptions_history.service';
 import { CreateSubscriptionsHistoryDto } from './dto/create-subscriptions_history.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from 'aws-sdk/clients/budgets';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
+import { GetCurrentUser } from '../auth/decorators/current-user';
 
 @Controller('subscriptions-history')
 export class SubscriptionsHistoryController {

@@ -4,7 +4,7 @@ import { SubscriptionsController } from './subscriptions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Subscription } from './entities/subscription.entity';
 import { JwtService } from '@nestjs/jwt';
-import { StripeModule } from 'src/stripe/stripe.module';
+import { StripeModule } from '../stripe/stripe.module';
 
 @Module({
   controllers: [SubscriptionsController],

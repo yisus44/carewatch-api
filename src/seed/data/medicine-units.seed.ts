@@ -1,4 +1,4 @@
-import { CreateMedicineUnitDto } from 'src/medicine-units/dto/create-medicine-unit.dto';
+import { CreateMedicineUnitDto } from '../../medicine-units/dto/create-medicine-unit.dto';
 
 export const MediceUnitsSeed: CreateMedicineUnitDto[] = [
   {
