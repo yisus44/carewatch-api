@@ -1,0 +1,16 @@
+name: tests
+on: [workflow_call] # allow this workflow to be called from other workflows
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: install dependencies
+          run: |
+          npm install
+        - name: test proyect
+          run: |
+          npm run test
