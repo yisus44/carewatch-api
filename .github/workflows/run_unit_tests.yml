@@ -3,7 +3,7 @@ name: Run unit tests
 on:
   push:
     branches:
-      - '!main'
+      - 'yisus44/refactor/testing'
 jobs:
   test:
     runs-on: ubuntu-latest
