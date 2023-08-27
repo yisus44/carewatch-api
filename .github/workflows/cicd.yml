@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'yisus44/refactor/testing'
 permissions:
   id-token: write
   contents: read

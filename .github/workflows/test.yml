@@ -1,5 +1,5 @@
 name: tests
-on: [workflow_call] # allow this workflow to be called from other workflows
+on: [cicd] # allow this workflow to be called from other workflows
 jobs:
   deploy:
     runs-on: ubuntu-latest
