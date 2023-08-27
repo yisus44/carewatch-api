@@ -1,4 +1,4 @@
-name: Run tests in all branches except main
+name: Run unit tests in all branches except main
 
 on:
   push:
