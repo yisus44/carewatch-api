@@ -9,8 +9,6 @@ permissions:
   id-token: write
   contents: read
 jobs:
-  test:
-    uses: ./test.yml
   deploy:
     runs-on: ubuntu-latest
     strategy:
@@ -18,6 +16,8 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
+      - name: Run tests
+        uses: ./.github/workflows/test.yml
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
