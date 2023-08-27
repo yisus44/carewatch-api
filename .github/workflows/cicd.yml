@@ -16,8 +16,12 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
-      - name: Run tests
-        uses: ./.github/workflows/test.yml
+      - name: install dependencies
+          run: |
+          npm install
+      - name: test proyect
+          run: |
+          npm run test
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
