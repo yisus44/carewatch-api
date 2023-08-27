@@ -3,7 +3,7 @@ name: Run unit tests in all branches except main
 on:
   push:
     branches:
-      - 'yisus44/refactor/testing'
+      - '!main'
 jobs:
   test:
     runs-on: ubuntu-latest
