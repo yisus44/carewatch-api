@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run units tests
-        uses: ./.github/actions/run-unit-tests
+        uses: ./.github/actions/run-unit-tests/action
