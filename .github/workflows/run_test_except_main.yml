@@ -1,0 +1,16 @@
+name: Run tests in all branches except main
+
+on:
+  push:
+    branches:
+      - '!main'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run test
+        uses: ./.github/workflows/run-unit-tests

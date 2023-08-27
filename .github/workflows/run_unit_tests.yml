@@ -1,14 +1,11 @@
-name: Run tests in all branches except main
+name: Run unit tests
 
 on:
   push:
     branches:
       - '!main'
-permissions:
-  id-token: write
-  contents: read
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
