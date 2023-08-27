@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      # - 'yisus44/refactor/testing'
 permissions:
   id-token: write
   contents: read
@@ -16,10 +15,8 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
-      - name: install dependencies
-        run: npm install
-      - name: test proyect
-        run: npm run test
+      - name: Run units tests
+        uses: ./.github/actions/run_unit_tests
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
