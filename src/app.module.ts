@@ -16,7 +16,6 @@ import { AwsModule } from './aws/aws.module';
 import { AssetsService } from './assets/assets.service';
 import { AssetsModule } from './assets/assets.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
-import { AwsSesModule } from './aws-ses/aws-ses.module';
 import { StripeModule } from './stripe/stripe.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { SubscriptionsHistoryModule } from './subscriptions_history/subscriptions_history.module';
@@ -54,7 +53,6 @@ import { ReminderActivationTimeModule } from './reminder-activation-time/reminde
     AssetsModule,
     CacheModule.register(),
     AwsS3Module,
-    AwsSesModule,
     StripeModule,
     SubscriptionsModule,
     SubscriptionsHistoryModule,

@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import rawBodyMiddleware from './common/middleware/rawBody.middleware';
-import * as AWS from 'aws-sdk';
+
 import { mapSSMtoEnv } from './map-ssm-to-env';
 
 async function bootstrap() {

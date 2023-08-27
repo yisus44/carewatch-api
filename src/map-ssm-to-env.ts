@@ -1,11 +1,15 @@
-import { SSM } from 'aws-sdk';
-import { ParameterList } from 'aws-sdk/clients/ssm';
-
+import {
+  SSMClient,
+  GetParametersByPathCommand,
+  GetParametersByPathCommandInput,
+  Parameter,
+} from '@aws-sdk/client-ssm';
 export async function mapSSMtoEnv(awsRegion = 'us-east-2') {
-  const ssm = new SSM({
+  const ssm = new SSMClient({
     region: 'us-east-2',
   });
   const ssmParams = await getSSMParameters(ssm);
+
   ssmParams.forEach((param) => {
     const paramName = param.Name?.split('/').pop();
     if (paramName) {
@@ -14,21 +18,21 @@ export async function mapSSMtoEnv(awsRegion = 'us-east-2') {
   });
 }
 
-async function getSSMParameters(ssm: SSM, ssmPath = '/dev') {
+async function getSSMParameters(ssm: SSMClient, ssmPath = '/dev') {
   let nextToken = null;
-  let ssmParams: ParameterList = [];
-  do {
-    const newParams: any = await ssm
-      .getParametersByPath({
-        Path: ssmPath,
-        Recursive: true,
-        WithDecryption: true,
-        NextToken: nextToken,
-      })
-      .promise();
+  let ssmParams: Parameter[] = [];
 
-    ssmParams = ssmParams.concat(newParams.Parameters);
-    nextToken = newParams.NextToken;
+  do {
+    const params: GetParametersByPathCommandInput = {
+      Path: '/dev',
+      Recursive: true,
+      NextToken: nextToken,
+      WithDecryption: true,
+    };
+    const command = new GetParametersByPathCommand(params);
+    const response = await ssm.send(command);
+    nextToken = response.NextToken;
+    ssmParams.push(...response.Parameters);
   } while (nextToken);
 
   return ssmParams;

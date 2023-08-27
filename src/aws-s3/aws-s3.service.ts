@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { S3 } from 'aws-sdk';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 
 @Injectable()
 export class AwsS3Service {
-  constructor(private readonly awsS3Client: S3) {}
-  findAll() {
-    return `This action returns all awsS3`;
-  }
+  constructor(private readonly awsS3Client: S3Client) {}
+
   async upload(
     file: Express.Multer.File,
     bucket = process.env.AWS_S3_BUCKET_FILES,
@@ -18,9 +20,23 @@ export class AwsS3Service {
       ContentType: file.mimetype,
     };
     try {
-      return await this.awsS3Client.upload(params).promise();
+      const command = new PutObjectCommand(params);
+      const response = await this.awsS3Client.send(command);
+
+      const responseData = {
+        ETag: response.ETag,
+        ServerSideEncryption: response.ServerSideEncryption,
+        Location: `https://${
+          params.Bucket
+        }.s3.amazonaws.com/${encodeURIComponent(params.Key)}`,
+        key: params.Key,
+        Key: params.Key,
+        Bucket: params.Bucket,
+      };
+
+      return responseData;
     } catch (e) {
-      console.log(e);
+      console.error('Error uploading file:', e);
     }
   }
 
@@ -29,6 +45,11 @@ export class AwsS3Service {
       Bucket: bucket,
       Key: key,
     };
-    return await this.awsS3Client.deleteObject(params).promise();
+    try {
+      const command = new DeleteObjectCommand(params);
+      return await this.awsS3Client.send(command);
+    } catch (e) {
+      console.error('Error deleting file:', e);
+    }
   }
 }

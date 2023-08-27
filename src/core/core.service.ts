@@ -1,4 +1,3 @@
-import { User } from 'aws-sdk/clients/budgets';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import {
   DeepPartial,

@@ -4,7 +4,6 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 import { SubscriptionsHistory } from './entities/subscriptions_history.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
-import { User } from 'aws-sdk/clients/budgets';
 import { CoreService } from '../core/core.service';
 
 @Injectable()
