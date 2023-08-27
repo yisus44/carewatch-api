@@ -9,8 +9,8 @@ permissions:
   id-token: write
   contents: read
 jobs:
-  # tests:
-  #   uses: ./.github/workflows/test.yml
+  test:
+    uses: ./test.yml
   deploy:
     runs-on: ubuntu-latest
     strategy:
