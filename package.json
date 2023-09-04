@@ -60,6 +60,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "stripe": "^12.11.0",
+    "twilio": "^4.16.0",
     "typeorm": "^0.3.15",
     "typeorm-naming-strategies": "^4.1.0"
   },

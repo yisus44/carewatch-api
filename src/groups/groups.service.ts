@@ -104,12 +104,19 @@ export class GroupsService extends CoreService<Group> {
     }
 
     for (const whatsappInvitation of invitateUsersToGroup.whatsappInvitation) {
+      const userGroup = await this.userGroupService.create({
+        groupId: invitateUsersToGroup.groupId,
+        guestPhone: whatsappInvitation.phone.toString(),
+        guestName: whatsappInvitation.name,
+      });
       careWatchInvitationsPromise.push(
-        this.userGroupService.create({
-          groupId: invitateUsersToGroup.groupId,
-          guestPhone: whatsappInvitation.phone.toString(),
-          guestName: whatsappInvitation.name,
-        }),
+        this.whatsAppService.sendWhatsAppInvitation(
+          whatsappInvitation.phone,
+          whatsappInvitation.name,
+          user,
+          group.name,
+          `${process.env.DOMAIN}/join/${userGroup.token}`,
+        ),
       );
     }
 
