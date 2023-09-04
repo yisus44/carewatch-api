@@ -8,8 +8,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
-import { CoreService } from 'src/core/core.service';
+import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
+import { CoreService } from '../core/core.service';
 
 @Injectable()
 export class UsersService extends CoreService<User> {

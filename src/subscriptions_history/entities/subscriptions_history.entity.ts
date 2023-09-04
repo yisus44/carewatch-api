@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { Subscription } from 'src/subscriptions/entities/subscription.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { Subscription } from '../../subscriptions/entities/subscription.entity';
 
 import {
   Column,

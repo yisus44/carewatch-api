@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { ReminderFrequency } from 'src/reminder-frequencies/entities/reminder-frequency.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { ReminderFrequency } from '../../reminder-frequencies/entities/reminder-frequency.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()

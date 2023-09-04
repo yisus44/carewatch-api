@@ -13,12 +13,12 @@ import {
 import { RemindersService } from './reminders.service';
 import { CreateReminderDto } from './dto/create-reminder.dto';
 import { UpdateReminderDto } from './dto/update-reminder.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { Permission } from 'src/user-groups/enums/permission.enum';
-import { Permissions } from 'src/user-groups/decorators/permission.decorator';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { Permission } from '../user-groups/enums/permission.enum';
+import { Permissions } from '../user-groups/decorators/permission.decorator';
+import { GetCurrentUser } from '../auth/decorators/current-user';
+import { PaginateGroupDto } from '../user-groups/dto/paginate-group.dto';
 
 @UseGuards(AuthGuard)
 @Controller('reminders')

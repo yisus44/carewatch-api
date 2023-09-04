@@ -14,13 +14,13 @@ import {
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { GetCurrentUser } from 'src/auth/decorators/current-user';
-import { User } from 'src/users/entities/user.entity';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { GetCurrentUser } from '../auth/decorators/current-user';
+import { User } from '../users/entities/user.entity';
 import { MailInvitation } from './dto/mail-invitation.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AdminGuard } from 'src/user-groups/guards/admin.guard';
-import { InvitateUsersToGroup } from 'src/user-groups/dto/invitate-users-to-group.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AdminGuard } from '../user-groups/guards/admin.guard';
+import { InvitateUsersToGroup } from '../user-groups/dto/invitate-users-to-group.dto';
 
 @UseGuards(AuthGuard)
 @Controller('groups')

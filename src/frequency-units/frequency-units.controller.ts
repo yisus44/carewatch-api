@@ -12,7 +12,7 @@ import {
 import { FrequencyUnitsService } from './frequency-units.service';
 import { CreateFrequencyUnitDto } from './dto/create-frequency-unit.dto';
 import { UpdateFrequencyUnitDto } from './dto/update-frequency-unit.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('frequency-units')
 export class FrequencyUnitsController {

@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
-import { Subscription } from 'src/subscriptions/entities/subscription.entity';
-import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { UserGroup } from '../../user-groups/entities/group-invitation.entity';
+import { Subscription } from '../../subscriptions/entities/subscription.entity';
+import { UserSetting } from '../../user-settings/entities/user-setting.entity';
 import {
   Column,
   CreateDateColumn,

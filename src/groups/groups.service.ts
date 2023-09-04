@@ -4,21 +4,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { CoreService } from 'src/core/core.service';
+import { CoreService } from '../core/core.service';
 import { Group } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
-import { User } from 'src/users/entities/user.entity';
-import { MailService } from 'src/mail/mail.service';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { FreePlanReachedException } from 'src/common/exceptions/free-plan-reached.exception';
-import { GroupNotFoundException } from 'src/common/exceptions/group-not-found.exception';
-import { UserGroupService } from 'src/user-groups/user-group.service';
-import { InvitateUsersToGroup } from 'src/user-groups/dto/invitate-users-to-group.dto';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
-
+import { User } from '../users/entities/user.entity';
+import { MailService } from '../mail/mail.service';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { FreePlanReachedException } from '../common/exceptions/free-plan-reached.exception';
+import { GroupNotFoundException } from '../common/exceptions/group-not-found.exception';
+import { UserGroupService } from '../user-groups/user-group.service';
+import { InvitateUsersToGroup } from '../user-groups/dto/invitate-users-to-group.dto';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { UserGroup } from '../user-groups/entities/group-invitation.entity';
 @Injectable()
 export class GroupsService extends CoreService<Group> {
   constructor(
@@ -61,7 +60,11 @@ export class GroupsService extends CoreService<Group> {
       userId: user.id,
     });
 
-    if (usersGroup.length > 2 && !user.isPremium) return false;
+    if (
+      usersGroup.length > +process.env.FREE_PREMIUM_MAX_GROUPS &&
+      !user.isPremium
+    )
+      return false;
     return true;
   }
 

@@ -1,4 +1,3 @@
-import { bool } from 'aws-sdk/clients/signer';
 import { IsNotEmpty, IsPositive } from 'class-validator';
 
 export class CreateReminderFileDto {

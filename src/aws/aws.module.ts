@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AwsService } from './aws.service';
-import { AssetsModule } from 'src/assets/assets.module';
+import { AssetsModule } from '../assets/assets.module';
 
 @Module({
   providers: [AwsService],

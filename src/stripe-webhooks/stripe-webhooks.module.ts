@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { StripeWebhooksService } from './stripe-webhooks.service';
 import { StripeWebhooksController } from './stripe-webhooks.controller';
-import { SubscriptionsHistoryModule } from 'src/subscriptions_history/subscriptions_history.module';
+import { SubscriptionsHistoryModule } from '../subscriptions_history/subscriptions_history.module';
 import Stripe from 'stripe';
-import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
-import { UsersModule } from 'src/users/users.module';
+import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
+import { UsersModule } from '../users/users.module';
 import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({

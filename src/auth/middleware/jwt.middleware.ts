@@ -3,8 +3,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/entities/user.entity';
+import { UsersService } from '../../users/users.service';
+import { User } from '../../users/entities/user.entity';
 import { generateUserCache } from '../utils/generateUserCachKey';
 
 interface AuthenticatedRequest extends Request {

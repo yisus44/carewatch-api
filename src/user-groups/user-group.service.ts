@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserGroupDto } from './dto/create-group-invitation.dto';
 import { UpdateUserGroupDto } from './dto/update-group-invitation.dto';
-import { CoreService } from 'src/core/core.service';
+import { CoreService } from '../core/core.service';
 import { UserGroup } from './entities/group-invitation.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';

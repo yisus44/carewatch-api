@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
+import {
+  SESClient,
+  CreateTemplateCommand,
+  UpdateTemplateCommand,
+  SendTemplatedEmailCommand,
+  GetTemplateCommand,
+} from '@aws-sdk/client-ses';
 import { EmailTemplates } from './enums/email-templates.enum';
-import { AssetsService } from 'src/assets/assets.service';
-import { CreateTemplateRequest } from 'aws-sdk/clients/ses';
+import { AssetsService } from '../assets/assets.service';
+
 @Injectable()
 export class AwsService {
   private readonly awsSesClient;
+
   constructor(private readonly assetsService: AssetsService) {
-    AWS.config.update({ region: process.env.AWS_REGION });
-    this.awsSesClient = new AWS.SES({ apiVersion: '2010-12-01' });
+    this.awsSesClient = new SESClient({ region: process.env.AWS_REGION });
   }
 
   async generateAuthTemplate() {
@@ -45,14 +51,14 @@ export class AwsService {
       this.assetsService.convertFileToString(templateHtmlFilePath);
     let match: boolean;
     try {
-      await this.awsSesClient
-        .getTemplate({ TemplateName: templateName })
-        .promise();
+      await this.awsSesClient.send(
+        new GetTemplateCommand({ TemplateName: templateName }),
+      );
       match = true;
     } catch (ex) {
       match = false;
     }
-    const params: CreateTemplateRequest = {
+    const params = {
       Template: {
         TemplateName: templateName,
         HtmlPart: templateHtmlInString,
@@ -61,9 +67,9 @@ export class AwsService {
       },
     };
     if (match) {
-      return await this.awsSesClient.updateTemplate(params).promise();
+      return await this.awsSesClient.send(new UpdateTemplateCommand(params));
     }
-    return await this.awsSesClient.createTemplate(params).promise();
+    return await this.awsSesClient.send(new CreateTemplateCommand(params));
   }
 
   async sendEmail(
@@ -84,7 +90,6 @@ export class AwsService {
           /* more items */
         ],
       },
-
       Source: sendEmailFrom /* required */,
       ReplyToAddresses: [
         sendEmailFrom,
@@ -93,9 +98,13 @@ export class AwsService {
       Template: template,
       TemplateData: templateData /* required */,
     };
-    // Create the promise and SES service object
-    const sendPromise = this.awsSesClient.sendTemplatedEmail(params).promise();
-    const sendResult = await sendPromise;
-    console.log(sendResult);
+    // Create the command and SES service object
+    const sendCommand = new SendTemplatedEmailCommand(params);
+    try {
+      const sendResult = await this.awsSesClient.send(sendCommand);
+      console.log(sendResult);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
   }
 }

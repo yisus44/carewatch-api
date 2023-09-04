@@ -1,13 +1,13 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { StripeWebHookEvents } from './enum/stripe-webook-events.enum';
-import { SubscriptionsHistoryService } from 'src/subscriptions_history/subscriptions_history.service';
+import { SubscriptionsHistoryService } from '../subscriptions_history/subscriptions_history.service';
 import Stripe from 'stripe';
-import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { generateUserCache } from 'src/auth/utils/generateUserCachKey';
-import { UsersService } from 'src/users/users.service';
+import { generateUserCache } from '../auth/utils/generateUserCachKey';
+import { UsersService } from '../users/users.service';
 @Injectable()
 export class StripeWebhooksService {
   constructor(

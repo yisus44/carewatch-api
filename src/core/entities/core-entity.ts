@@ -1,5 +1,3 @@
-import { Subscription } from 'src/subscriptions/entities/subscription.entity';
-
 import {
   Column,
   CreateDateColumn,

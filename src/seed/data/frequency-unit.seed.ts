@@ -1,4 +1,4 @@
-import { CreateFrequencyUnitDto } from 'src/frequency-units/dto/create-frequency-unit.dto';
+import { CreateFrequencyUnitDto } from '../../frequency-units/dto/create-frequency-unit.dto';
 
 export const frequencyUnitSeed: CreateFrequencyUnitDto[] = [
   {

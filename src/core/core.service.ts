@@ -1,4 +1,3 @@
-import { User } from 'aws-sdk/clients/budgets';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import {
   DeepPartial,
@@ -10,9 +9,9 @@ import {
 import { PageDto } from '../common/dto/page.dto';
 import { CoreEntity } from './entities/core-entity';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { RelationDoNotExistsException } from 'src/common/exceptions/relation-do-not-exists.exception';
+import { RelationDoNotExistsException } from '../common/exceptions/relation-do-not-exists.exception';
 
 export abstract class CoreService<T extends CoreEntity> {
   constructor(private readonly repository: Repository<T>) {}

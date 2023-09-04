@@ -1,6 +1,6 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
-import { User } from 'src/users/entities/user.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { SubscriptionsHistory } from '../../subscriptions_history/entities/subscriptions_history.entity';
+import { User } from '../../users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

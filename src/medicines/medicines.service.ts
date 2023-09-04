@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
-import { CoreService } from 'src/core/core.service';
+import { CoreService } from '../core/core.service';
 import { Medicine } from './entities/medicine.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

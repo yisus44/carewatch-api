@@ -1,5 +1,4 @@
-import { SignUpDto } from 'src/auth/dto/signup.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { SignUpDto } from '../../auth/dto/signup.dto';
 
 export const userSeed: SignUpDto[] = [
   {

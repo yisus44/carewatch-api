@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { ReminderFrequency } from 'src/reminder-frequencies/entities/reminder-frequency.entity';
-import { ReminderWeekDay } from 'src/reminder-week-days/entities/reminder-week-day.entity';
-import { Reminder } from 'src/reminders/entities/reminder.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { ReminderFrequency } from '../../reminder-frequencies/entities/reminder-frequency.entity';
+import { ReminderWeekDay } from '../../reminder-week-days/entities/reminder-week-day.entity';
+import { Reminder } from '../../reminders/entities/reminder.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()

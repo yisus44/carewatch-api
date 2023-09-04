@@ -5,8 +5,8 @@ on:
     branches:
       - 'main'
 permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
+  id-token: write
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,6 +15,8 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
+      - name: Run units tests
+        uses: ./.github/actions/run_unit_tests
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:

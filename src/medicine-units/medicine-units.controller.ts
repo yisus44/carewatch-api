@@ -12,8 +12,8 @@ import {
 import { MedicineUnitsService } from './medicine-units.service';
 import { CreateMedicineUnitDto } from './dto/create-medicine-unit.dto';
 import { UpdateMedicineUnitDto } from './dto/update-medicine-unit.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('medicine-units')
 export class MedicineUnitsController {

@@ -15,7 +15,7 @@ import { SignUpDto } from './dto/signup.dto';
 
 import { SignInDto } from './dto/signin.dto';
 import { GetCurrentUser } from './decorators/current-user';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { AuthGuard } from './guards/auth.guard';
 @Controller('auth')
 export class AuthController {

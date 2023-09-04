@@ -7,13 +7,13 @@ import { CreateUserSettingDto } from './dto/create-user-setting.dto';
 import { UpdateUserSettingDto } from './dto/update-user-setting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserSetting } from './entities/user-setting.entity';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { DeleteResult, Repository } from 'typeorm';
-import { PageDto } from 'src/common/dto/page.dto';
-import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
-import { User } from 'src/users/entities/user.entity';
-import { CoreService } from 'src/core/core.service';
-import { UserNotFoundException } from 'src/common/exceptions/user-not-found.excepction';
+import { PageDto } from '../common/dto/page.dto';
+import { PostgresErrorCode } from '../database/postgresErrorCodes.enum';
+import { User } from '../users/entities/user.entity';
+import { CoreService } from '../core/core.service';
+import { UserNotFoundException } from '../common/exceptions/user-not-found.excepction';
 
 @Injectable()
 export class UserSettingsService extends CoreService<UserSetting> {

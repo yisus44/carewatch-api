@@ -1,5 +1,5 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { ReminderWeekDay } from 'src/reminder-week-days/entities/reminder-week-day.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { ReminderWeekDay } from '../../reminder-week-days/entities/reminder-week-day.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { GroupInvitationsUserService } from './group-invitations-user.service';
 import { SearchGroupInvitationDto } from './dto/search-group-invitation.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('group-invitations-user')
 export class GroupInvitationsUserController {

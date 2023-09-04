@@ -1,7 +1,7 @@
-import { CoreEntity } from 'src/core/entities/core-entity';
-import { File } from 'src/files/entities/file.entity';
-import { Group } from 'src/groups/entities/group.entity';
-import { Reminder } from 'src/reminders/entities/reminder.entity';
+import { CoreEntity } from '../../core/entities/core-entity';
+import { File } from '../../files/entities/file.entity';
+import { Group } from '../../groups/entities/group.entity';
+import { Reminder } from '../../reminders/entities/reminder.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
