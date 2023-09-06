@@ -1,3 +1,4 @@
+import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { CoreEntity } from '../../core/entities/core-entity';
 import { FileType } from '../../file-type/entities/file-type.entity';
 import { GroupFile } from '../../group-files/entities/group-file.entity';
@@ -44,4 +45,9 @@ export class File extends CoreEntity {
     },
   )
   reminderFiles: ReminderFile;
+
+  @OneToMany(() => Medicine, (medicine: Medicine) => medicine.photo, {
+    onDelete: 'CASCADE',
+  })
+  medicines: Medicine;
 }

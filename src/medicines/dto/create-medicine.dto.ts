@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMedicineDto {
   @IsNotEmpty()
@@ -8,6 +8,10 @@ export class CreateMedicineDto {
   @IsInt()
   @IsNotEmpty()
   groupId: number;
+
+  @IsInt()
+  @IsOptional()
+  photoId: number;
 
   @IsString()
   @IsNotEmpty()
