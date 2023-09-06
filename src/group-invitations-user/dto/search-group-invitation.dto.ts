@@ -2,6 +2,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumberString,
+  IsOptional,
   IsString,
   Min,
 } from 'class-validator';
@@ -12,7 +13,7 @@ export class SearchGroupInvitationDto extends PaginationDto {
   @IsNumberString()
   groupId: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  term: string;
+  term: string = '';
 }

@@ -27,6 +27,9 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
 
   async afterLoad(user: User): Promise<void> {
+    user.isPremium = true;
+    user.hasPaymentMethod = true;
+    return;
     const stripeCustomer = await this.stripeService.createOrFindCustomer({
       email: user.email,
     });
