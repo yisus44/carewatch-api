@@ -26,7 +26,9 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     return User;
   }
 
-  async afterLoad(user: User): Promise<void> {
+  async fetchInfo(user: User): Promise<User> {
+    user.isPremium = true;
+    user.hasPaymentMethod = true;
     const stripeCustomer = await this.stripeService.createOrFindCustomer({
       email: user.email,
     });
@@ -40,5 +42,32 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
       paymentMethods as any as Stripe.ApiList<Stripe.PaymentMethod>;
     user.isPremium = subscription ? true : false;
     user.hasPaymentMethod = castedPaymentMethod.data.length > 0;
+    console.log({
+      user: user.id,
+      premium: user.isPremium,
+      pay: user.hasPaymentMethod,
+    });
+    return user;
+  }
+
+  async afterLoad(user: User): Promise<void> {
+    let attempts = 0;
+    while (attempts < 5) {
+      attempts++;
+      try {
+        await this.fetchInfo(user);
+        continue;
+      } catch (ex) {
+        if (ex.statusCode != 429) continue;
+        await new Promise((resolve) => {
+          setTimeout(resolve, 1000);
+        });
+      }
+      console.log('it didnt work');
+    }
+    try {
+    } catch (ex) {
+      this.fetchInfo(user);
+    }
   }
 }
