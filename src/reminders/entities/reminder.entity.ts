@@ -15,7 +15,9 @@ export class Reminder extends CoreEntity {
   @Column()
   groupId: number;
 
-  @ManyToOne(() => Medicine, (medicine: Medicine) => medicine.reminders, {})
+  @ManyToOne(() => Medicine, (medicine: Medicine) => medicine.reminders, {
+    onDelete: 'CASCADE',
+  })
   medicine: Medicine;
 
   @Column()
