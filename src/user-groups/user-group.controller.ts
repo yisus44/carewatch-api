@@ -43,8 +43,32 @@ export class UserGroupsController {
     });
   }
 
+  @UseGuards(AuthGuard, MemberGuard)
+  @Get('members/pending')
+  async getMemembersPending(
+    @GetCurrentUser() user: User,
+    @Query() paginateGroupDto: PaginateGroupDto,
+  ) {
+    return await this.userGroupService.findPaginated(paginateGroupDto, {
+      groupId: paginateGroupDto.groupId,
+      isActive: false,
+    });
+  }
+
+  @UseGuards(AuthGuard, MemberGuard)
+  @Get('members/confirmed')
+  async getMemembersConfirmed(
+    @GetCurrentUser() user: User,
+    @Query() paginateGroupDto: PaginateGroupDto,
+  ) {
+    return await this.userGroupService.findPaginated(paginateGroupDto, {
+      groupId: paginateGroupDto.groupId,
+      isActive: true,
+    });
+  }
+
   @UseGuards(AuthGuard)
-  @Get('members')
+  @Get('members/me')
   async getMyInvitations(
     @GetCurrentUser() user: User,
     @Query() paginateGroupDto: PaginateGroupDto,
