@@ -41,4 +41,6 @@ export class CreateUserGroupDto {
   guestPhone?: string;
   @ValidateIf(() => false)
   isAdmin?: boolean = false;
+  @ValidateIf(() => false)
+  isActive?: boolean = false;
 }

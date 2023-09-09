@@ -38,6 +38,7 @@ export class GroupsService extends CoreService<Group> {
       userId: user.id,
       groupId: group.id,
       isAdmin: true,
+      isActive: true,
     });
     return group;
   }
