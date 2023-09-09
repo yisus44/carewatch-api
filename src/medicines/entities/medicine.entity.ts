@@ -21,10 +21,11 @@ export class Medicine extends CoreEntity {
 
   @ManyToOne(() => File, (File: File) => File.medicines, {
     eager: true,
+    nullable: true,
   })
   photo: File;
 
-  @Column()
+  @Column({ nullable: true })
   photoId: number;
 
   @ManyToOne(() => Group, (group: Group) => group.medicines, {

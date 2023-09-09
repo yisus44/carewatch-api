@@ -49,16 +49,16 @@ export class PermissionGuard implements CanActivate {
       userId: user.id,
     });
     if (!userGroup) throw new UserNotInGroupException();
-    const reminderId = requestBody.reminderId || requestQuery.reminderId;
-    if (reminderId) {
-      const match = await this.reminderService.listOne({ groupId });
-      if (!match) throw new ResourceNotPartOfGroupException();
-    }
-    const medicineId = requestBody.medicineId || requestQuery.medicineId;
-    if (medicineId) {
-      const match = await this.medicineService.listOne({ groupId });
-      if (!match) throw new ResourceNotPartOfGroupException();
-    }
+    // const reminderId = requestBody.reminderId || requestQuery.reminderId;
+    // if (reminderId) {
+    //   const match = await this.reminderService.listOne({ groupId });
+    //   if (!match) throw new ResourceNotPartOfGroupException();
+    // }
+    // const medicineId = requestBody.medicineId || requestQuery.medicineId;
+    // if (medicineId) {
+    //   const match = await this.medicineService.listOne({ groupId });
+    //   if (!match) throw new ResourceNotPartOfGroupException();
+    // }
     for (const requiredPermission of requiredPermissions) {
       if (!userGroup.isAdmin && !userGroup[requiredPermission]) return false;
     }
