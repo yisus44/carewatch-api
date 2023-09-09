@@ -2,46 +2,46 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 import { WhatsAppTemplates } from './enums/whatsapp-templates.enum';
-
+import { User } from 'src/users/entities/user.entity';
+import { Twilio } from 'twilio';
 @Injectable()
 export class WhatsappService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly client: Twilio) {}
 
   async sendWhatsapp(
-    templateName = 'hello_world',
-    toPhoneNumber: number = 523325615651,
-    language: string = 'en_US',
-    senderIdPhone: string = '100482656429227',
+    body: string,
+    to: string,
+    from: string = 'whatsapp:+14155238886',
   ) {
-    const token = process.env.WHATSAPP_TOKEN;
     try {
-      const data = await axios.post(
-        `https://graph.facebook.com/v17.0/${senderIdPhone}/messages`,
-        {
-          messaging_product: 'whatsapp',
-          to: toPhoneNumber,
-          type: 'template',
-          template: {
-            name: templateName,
-            language: {
-              code: language,
-            },
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      await this.client.messages.create({
+        body,
+        from,
+        to,
+      });
     } catch (error) {
-      console.log({ error: error.request });
+      console.log({ error });
       throw error;
     }
   }
-
-  async sendWhatsAppInvitation(token: string, toPhoneNumber: number) {
-    return this.sendWhatsapp(WhatsAppTemplates.INVITE_TO_GROUP, toPhoneNumber);
+  async sendWhatsAppInvitation(
+    phone: number,
+    invitatedUser: string,
+    adminUser: User,
+    groupName: string,
+    link: string,
+  ) {
+    try {
+      const body = `Hola ${invitatedUser}, ¡${adminUser.name} ${adminUser.lastName} te ha invitado a formar parte de su grupo ${groupName} de Carewatch!  
+  
+      CareWatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
+      
+      Sí deseas unirte al grupo o conocer más acerca de nuestra aplicación sigue el siguiente enlace ${link}`;
+      const from = 'whatsapp:+14155238886';
+      const to = `whatsapp:+${phone}`;
+      await this.sendWhatsapp(body, to, from);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

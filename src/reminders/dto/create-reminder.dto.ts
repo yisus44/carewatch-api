@@ -11,10 +11,6 @@ import {
 export class CreateReminderDto {
   @IsNotEmpty()
   @IsPositive()
-  groupId: number;
-
-  @IsNotEmpty()
-  @IsPositive()
   medicineId: number;
 
   @IsNotEmpty()

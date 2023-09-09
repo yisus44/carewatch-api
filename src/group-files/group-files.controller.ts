@@ -26,8 +26,11 @@ export class GroupFilesController {
 
   @Permissions(Permission.uploadPermissionFile)
   @Post()
-  create(@Body() createGroupFileDto: CreateGroupFileDto) {
-    return this.groupFilesService.create(createGroupFileDto);
+  create(
+    @Body() createGroupFileDto: CreateGroupFileDto,
+    @Query('groupId', ParseIntPipe) groupId: number,
+  ) {
+    return this.groupFilesService.create({ ...createGroupFileDto, groupId });
   }
 
   @Permissions(Permission.readPermissionFile)

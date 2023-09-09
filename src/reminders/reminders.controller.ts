@@ -27,8 +27,14 @@ export class RemindersController {
 
   @Permissions(Permission.writePermissionReminder)
   @Post()
-  create(@Body() createReminderDto: CreateReminderDto) {
-    return this.remindersService.create(createReminderDto);
+  create(
+    @Body() createReminderDto: CreateReminderDto,
+    @Query('groupId', ParseIntPipe) groupId: number,
+  ) {
+    return this.remindersService.create({
+      ...createReminderDto,
+      groupId,
+    });
   }
 
   @Permissions(Permission.readPermissionReminder)
@@ -43,7 +49,7 @@ export class RemindersController {
   @Get(':id')
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @Query('groupId') groupId: number,
+    @Query('groupId', ParseIntPipe) groupId: number,
   ) {
     return this.remindersService.findOneBy({ id, groupId });
   }
@@ -53,7 +59,7 @@ export class RemindersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateReminderDto: UpdateReminderDto,
-    @Query('groupId') groupId: number,
+    @Query('groupId', ParseIntPipe) groupId: number,
   ) {
     return this.remindersService.updateBy({ id, groupId }, updateReminderDto);
   }
@@ -62,7 +68,7 @@ export class RemindersController {
   @Delete(':id')
   remove(
     @Param('id', ParseIntPipe) id: number,
-    @Query('groupId') groupId: number,
+    @Query('groupId', ParseIntPipe) groupId: number,
   ) {
     return this.remindersService.removeBy({ id, groupId });
   }

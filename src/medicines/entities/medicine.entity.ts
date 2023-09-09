@@ -1,3 +1,4 @@
+import { File } from 'src/files/entities/file.entity';
 import { CoreEntity } from '../../core/entities/core-entity';
 import { Group } from '../../groups/entities/group.entity';
 import { MedicineUnit } from '../../medicine-units/entities/medicine-unit.entity';
@@ -17,6 +18,14 @@ export class Medicine extends CoreEntity {
 
   @Column()
   medicineUnitId: number;
+
+  @ManyToOne(() => File, (File: File) => File.medicines, {
+    eager: true,
+  })
+  photo: File;
+
+  @Column()
+  photoId: number;
 
   @ManyToOne(() => Group, (group: Group) => group.medicines, {
     onDelete: 'CASCADE',
