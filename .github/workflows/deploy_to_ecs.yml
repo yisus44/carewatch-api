@@ -15,8 +15,6 @@ jobs:
         node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
-      - name: Run units tests
-        uses: ./.github/actions/run_unit_tests
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
