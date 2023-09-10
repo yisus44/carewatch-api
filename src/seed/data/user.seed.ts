@@ -8,6 +8,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '523321297431',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'a20110332@ceti.mx',
@@ -16,6 +17,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '523323433131',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'a20110361@ceti.mx',
@@ -24,6 +26,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615651',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'demo@demo.com',
@@ -32,6 +35,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615652',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'test@test.com',
@@ -40,6 +44,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615653',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'test456@test.com',
@@ -48,6 +53,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615353',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'fake@fake.com',
@@ -56,6 +62,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615654',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'prueba@prueba.com',
@@ -64,6 +71,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615655',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'fake123@fake.com',
@@ -72,6 +80,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615656',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'demo123@demo.com',
@@ -80,6 +89,7 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335615656',
     profilePictureId: null,
+    deviceId: '',
   },
   {
     email: 'demo1244@demo.com',
@@ -88,5 +98,6 @@ export const userSeed: SignUpDto[] = [
     password: '1234567890',
     phone: '52335665656',
     profilePictureId: null,
+    deviceId: '',
   },
 ];

@@ -13,6 +13,7 @@ export class UserGroup extends CoreEntity {
 
   @ManyToOne(() => Group, (group: Group) => group.userGroups, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   group: Group;
 

@@ -17,6 +17,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
+  deviceId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(4)
   lastName: string;
 
   @IsOptional()
