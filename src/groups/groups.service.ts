@@ -48,7 +48,10 @@ export class GroupsService extends CoreService<Group> {
     const skippedItems = (page - 1) * perPage;
     const [data, totalCount] = await this.getQueryBuilder('groups')
       .leftJoinAndSelect('groups.userGroups', 'group_invitation') // Use alias 'group_invitation' for the join
-      .where(`group_invitation.user_id = :userId `, { userId: user.id })
+      .where(
+        `group_invitation.user_id = :userId and (group_invitation.is_active = true or group_invitation.is_admin=true )`,
+        { userId: user.id },
+      )
       .skip(skippedItems)
       .take(perPage)
       .getManyAndCount();

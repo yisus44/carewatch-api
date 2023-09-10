@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -88,6 +89,20 @@ export class UserGroupsController {
     return await this.userGroupService.update(id, updateUserGroupDto);
   }
 
+  @UseGuards(AuthGuard, AdminGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: number, @Query('groupId') groupId: number) {
+    return await this.userGroupService.removeBy({ id, groupId });
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id/me')
+  async deleteUnwantedInvitation(
+    @Param('id') id: number,
+    @GetCurrentUser() user: User,
+  ) {
+    return await this.userGroupService.removeBy({ id, userId: user.id });
+  }
   @Patch(':token/accept')
   async acceptInvitation(
     @Param('token') token: string,
