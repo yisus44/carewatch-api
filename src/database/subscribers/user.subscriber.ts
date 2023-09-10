@@ -11,7 +11,12 @@ import {
   UpdateEvent,
   Connection,
 } from 'typeorm';
-
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import {
+  generateUserCacheHasPaymentMethod,
+  generateUserCacheIsPremium,
+} from '../utils/generateUserSubscriptionCacheKey';
 @Injectable()
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
@@ -19,34 +24,51 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     private readonly connection: Connection,
     private readonly subscriptionUserService: SubscriptionsUserService,
     private readonly stripeService: StripeService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.connection.subscribers.push(this);
   }
   listenTo() {
     return User;
   }
-
   async fetchInfo(user: User): Promise<User> {
-    user.isPremium = true;
-    user.hasPaymentMethod = true;
-    const stripeCustomer = await this.stripeService.createOrFindCustomer({
-      email: user.email,
-    });
-    const subPromise = [
-      this.stripeService.findCustomerSubscription(stripeCustomer.id),
-      this.stripeService.findPaymentMethod(stripeCustomer.id),
-    ];
+    const isPremiumCacheKey = generateUserCacheIsPremium(user);
+    const hasPaymentMethodCacheKey = generateUserCacheHasPaymentMethod(user);
 
-    const [subscription, paymentMethods] = await Promise.all(subPromise);
-    const castedPaymentMethod =
-      paymentMethods as any as Stripe.ApiList<Stripe.PaymentMethod>;
-    user.isPremium = subscription ? true : false;
-    user.hasPaymentMethod = castedPaymentMethod.data.length > 0;
-    console.log({
-      user: user.id,
-      premium: user.isPremium,
-      pay: user.hasPaymentMethod,
-    });
+    const isPremiumCached = await this.cacheManager.get<boolean>(
+      isPremiumCacheKey,
+    );
+
+    if (isPremiumCached !== undefined) {
+      user.isPremium = isPremiumCached;
+    } else {
+      user.isPremium =
+        await this.subscriptionUserService.getUserSubscriptionStatus(user);
+      await this.cacheManager.set(isPremiumCacheKey, user.isPremium, 15000);
+    }
+    const hasPaymentMethodCached = await this.cacheManager.get<boolean>(
+      hasPaymentMethodCacheKey,
+    );
+
+    if (hasPaymentMethodCached !== undefined) {
+      user.hasPaymentMethod = hasPaymentMethodCached;
+    } else {
+      const stripeCustomer = await this.stripeService.createOrFindCustomer({
+        email: user.email,
+      });
+      const paymentMethods = await this.stripeService.findPaymentMethod(
+        stripeCustomer.id,
+      );
+      const castedPaymentMethod =
+        paymentMethods as any as Stripe.ApiList<Stripe.PaymentMethod>;
+      user.hasPaymentMethod = castedPaymentMethod.data.length > 0;
+
+      await this.cacheManager.set(
+        hasPaymentMethodCacheKey,
+        user.hasPaymentMethod,
+        15000,
+      );
+    }
     return user;
   }
 
@@ -60,14 +82,10 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
       } catch (ex) {
         if (ex.statusCode != 429) continue;
         await new Promise((resolve) => {
-          setTimeout(resolve, 1000);
+          setTimeout(resolve, attempts * 1000);
         });
+        console.log('Problem retriving user info', { ex });
       }
-      console.log('it didnt work');
-    }
-    try {
-    } catch (ex) {
-      this.fetchInfo(user);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
@@ -6,12 +6,13 @@ import { UserSubscriber } from './subscribers/user.subscriber';
 import { SubscriptionsUserService } from '../subscriptions-user/subscriptions-user.service';
 import { SubscriptionsUserModule } from '../subscriptions-user/subscriptions-user.module';
 import { StripeModule } from '../stripe/stripe.module';
-
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   providers: [UserSubscriber],
   imports: [
     SubscriptionsUserModule,
     StripeModule,
+    CacheModule.register(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

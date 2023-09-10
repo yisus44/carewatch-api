@@ -40,6 +40,7 @@ import { ReminderActivationTimeModule } from './reminder-activation-time/reminde
 
 @Module({
   imports: [
+    CacheModule.register(),
     DatabaseModule,
     UsersModule,
     AuthModule,
@@ -51,7 +52,6 @@ import { ReminderActivationTimeModule } from './reminder-activation-time/reminde
     MailModule,
     AwsModule,
     AssetsModule,
-    CacheModule.register(),
     AwsS3Module,
     StripeModule,
     SubscriptionsModule,
