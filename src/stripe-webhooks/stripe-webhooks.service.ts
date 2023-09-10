@@ -33,8 +33,8 @@ export class StripeWebhooksService {
     if (event.type == StripeWebHookEvents.INVOICE_PAID) {
       const obj: any = event.data.object;
       const customer = obj.customer;
-      const endDate = obj.period_end;
-      const startDate = obj.period_start;
+      const endDate = new Date(obj.lines.period.end * 1000);
+      const startDate = new Date(obj.lines.period.start * 1000);
       const subscription = await this.subscriptionService.findOneBy({
         stripeUserId: customer.id,
       });
