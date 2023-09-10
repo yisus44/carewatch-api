@@ -37,4 +37,9 @@ export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   phone: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(4)
+  deviceId: string;
 }
