@@ -28,31 +28,31 @@ export class UserGroup extends CoreEntity {
   @Column({ nullable: true })
   userId: number;
 
-  @Column({ default: false })
+  @Column({ default: true })
   readPermissionReminder: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   writePermissionReminder: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   editPermissionReminder: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   deletePermissionReminder: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   readPermissionFile: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   uploadPermissionFile: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   deletePermissionFile: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   readPermissionMedicine: boolean;
 
-  @Column({ default: false })
+  @Column({ default: true })
   writePermissionMedicine: boolean;
 
   @Column({ default: false })
