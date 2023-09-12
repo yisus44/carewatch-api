@@ -12,7 +12,7 @@ export class FirebaseService {
       },
       token: registrationToken,
     };
-
+    admin.messaging().send;
     // Send a message to the device corresponding to the provided
     // registration token.
     // admin

@@ -20,7 +20,7 @@ export class User extends CoreEntity {
   @Column({ length: 50 })
   name: string;
 
-  @Column({ length: 150, default: '' })
+  @Column({ length: 170, default: '' })
   deviceId: string;
 
   @Column({ length: 50 })

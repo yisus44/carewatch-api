@@ -72,9 +72,9 @@ export class UserGroupsController {
   @Get('members/me')
   async getMyInvitations(
     @GetCurrentUser() user: User,
-    @Query() paginateGroupDto: PaginateGroupDto,
+    @Query() paginationDto: PaginationDto,
   ) {
-    return await this.userGroupService.findPaginated(paginateGroupDto, {
+    return await this.userGroupService.findPaginated(paginationDto, {
       userId: user.id,
       isActive: false,
     });
