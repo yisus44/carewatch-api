@@ -53,7 +53,7 @@ export class StripeWebhooksService {
         break;
       }
 
-      case StripeWebHookEvents.PAYMENT_METHOD: {
+      case StripeWebHookEvents.PAYMENT_METHOD_ATTACHED: {
         const obj: any = event.data.object;
         const customer = obj.customer;
         const subscription = await this.subscriptionService.findOneBy({

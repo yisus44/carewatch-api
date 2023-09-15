@@ -33,45 +33,21 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
   async fetchInfo(user: User): Promise<User> {
     try {
-        const isPremiumCacheKey = generateUserCacheIsPremium(user);
-        const hasPaymentMethodCacheKey = generateUserCacheHasPaymentMethod(user);
-    
-        const isPremiumCached = await this.cacheManager.get<boolean>(
-          isPremiumCacheKey,
-        );
-    
-        if (isPremiumCached !== undefined) {
-          user.isPremium = isPremiumCached;
-        } else {
-          user.isPremium =
-            await this.subscriptionUserService.getUserSubscriptionStatus(user);
-          await this.cacheManager.set(isPremiumCacheKey, user.isPremium, 15000);
-        }
-        const hasPaymentMethodCached = await this.cacheManager.get<boolean>(
-          hasPaymentMethodCacheKey,
-        );
-    
-        if (hasPaymentMethodCached !== undefined) {
-          user.hasPaymentMethod = hasPaymentMethodCached;
-        } else {
-          const stripeCustomer = await this.stripeService.createOrFindCustomer({
-            email: user.email,
-          });
-          const paymentMethods = await this.stripeService.findPaymentMethod(
-            stripeCustomer.id,
-          );
-          const castedPaymentMethod =
-            paymentMethods as any as Stripe.ApiList<Stripe.PaymentMethod>;
-          user.hasPaymentMethod = castedPaymentMethod.data.length > 0;
-    
-          await this.cacheManager.set(
-            hasPaymentMethodCacheKey,
-            user.hasPaymentMethod,
-            15000,
-          );
-        }
+      const isPremiumCacheKey = generateUserCacheIsPremium(user);
+
+      const isPremiumCached = await this.cacheManager.get<boolean>(
+        isPremiumCacheKey,
+      );
+
+      if (isPremiumCached !== undefined) {
+        user.isPremium = isPremiumCached;
+      } else {
+        user.isPremium =
+          await this.subscriptionUserService.getUserSubscriptionStatus(user);
+        await this.cacheManager.set(isPremiumCacheKey, user.isPremium, 15000);
+      }
     } catch (error) {
-        console.log({errorAtUserSubscriber:error})
+      console.log({ errorAtUserSubscriber: error });
     }
 
     return user;

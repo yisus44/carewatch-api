@@ -57,8 +57,9 @@ export class User extends CoreEntity {
   )
   subscription: Subscription;
 
+  @Column({ default: false })
+  hasPaymentMethod: boolean;
+
   //Virtual fields calculated on runtime
   isPremium: boolean;
-
-  hasPaymentMethod: boolean;
 }
