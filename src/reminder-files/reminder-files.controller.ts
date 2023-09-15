@@ -26,10 +26,14 @@ export class ReminderFilesController {
 
   @Post()
   @Permissions(Permission.uploadPermissionFile)
-  create(
+  async create(
     @Query('groupId') groupId: number,
     @Body() createReminderFileDto: CreateReminderFileDto,
   ) {
+    await this.reminderFilesService.failIfFileExist(
+      createReminderFileDto.reminderId,
+      createReminderFileDto.fileId,
+    );
     return this.reminderFilesService.create(createReminderFileDto);
   }
 
@@ -44,15 +48,19 @@ export class ReminderFilesController {
   @Permissions(Permission.readPermissionFile)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.reminderFilesService.findOneBy({ id });
+    return this.reminderFilesService.findOneByOrFail({ id });
   }
 
   @Permissions(Permission.uploadPermissionFile)
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateReminderFileDto: UpdateReminderFileDto,
   ) {
+    await this.reminderFilesService.failIfFileExist(
+      updateReminderFileDto.reminderId,
+      updateReminderFileDto.fileId,
+    );
     return this.reminderFilesService.updateBy({ id }, updateReminderFileDto);
   }
 

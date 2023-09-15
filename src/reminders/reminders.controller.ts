@@ -51,7 +51,7 @@ export class RemindersController {
     @Param('id', ParseIntPipe) id: number,
     @Query('groupId', ParseIntPipe) groupId: number,
   ) {
-    return this.remindersService.findOneBy({ id, groupId });
+    return this.remindersService.findOneByOrFail({ id, groupId });
   }
 
   @Permissions(Permission.editPermissionReminder)

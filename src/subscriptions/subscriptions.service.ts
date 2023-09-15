@@ -17,7 +17,7 @@ export class SubscriptionsService extends CoreService<Subscription> {
     super(subscriptionsRepository);
   }
 
-  async findOneBy(query: Partial<Subscription>) {
+  async findOneByOrFail(query: Partial<Subscription>) {
     return await this.subscriptionsRepository.findOneBy(query);
   }
   async create(user: User) {

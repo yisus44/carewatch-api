@@ -14,6 +14,7 @@ import { CreateSubscriptionsHistoryDto } from './dto/create-subscriptions_histor
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { GetCurrentUser } from '../auth/decorators/current-user';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('subscriptions-history')
 export class SubscriptionsHistoryController {
@@ -25,6 +26,15 @@ export class SubscriptionsHistoryController {
   create(@Body() createSubscriptionsHistoryDto: CreateSubscriptionsHistoryDto) {
     return this.subscriptionsHistoryService.create(
       createSubscriptionsHistoryDto,
+    );
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  findAll(@Query() paginationDto: PaginationDto, @GetCurrentUser() user: User) {
+    return this.subscriptionsHistoryService.findAllUserSubscription(
+      user,
+      paginationDto,
     );
   }
 }

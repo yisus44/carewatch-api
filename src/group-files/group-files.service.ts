@@ -5,6 +5,7 @@ import { CoreService } from '../core/core.service';
 import { GroupFile } from './entities/group-file.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ResourceAlreadyExist } from 'src/common/exceptions/resource-already-exists.exception';
 
 @Injectable()
 export class GroupFilesService extends CoreService<GroupFile> {
@@ -13,5 +14,10 @@ export class GroupFilesService extends CoreService<GroupFile> {
     private readonly groupFileRepository: Repository<GroupFile>,
   ) {
     super(groupFileRepository);
+  }
+
+  async failIfFileExist(groupId: number, fileId: number) {
+    const match = await this.findOneBy({ groupId, fileId });
+    if (match) throw new ResourceAlreadyExist();
   }
 }

@@ -18,7 +18,9 @@ export class StripeWebhooksService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   public async constructEventFromPayload(signature: string, payload: Buffer) {
-    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const webhookSecret =
+      'whsec_d8789fd499e2d0020a1a3888bf80505d165d04e97c307af3b58a371972744879';
+    process.env.STRIPE_WEBHOOK_SECRET;
 
     return this.stripe.webhooks.constructEvent(
       payload,
@@ -30,26 +32,44 @@ export class StripeWebhooksService {
   public async handleSubscriptionPayment(signature: string, buffer: Buffer) {
     const event = await this.constructEventFromPayload(signature, buffer);
 
-    if (event.type == StripeWebHookEvents.INVOICE_PAID) {
-      const obj: any = event.data.object;
-      const customer = obj.customer;
-      const endDate = new Date(obj.lines.data[0].period.end * 1000);
-      const startDate = new Date(obj.lines.data[0].period.start * 1000);
-      const subscription = await this.subscriptionService.findOneBy({
-        stripeUserId: customer,
-      });
-      if (!subscription) throw new NotFoundException();
-      const user = await this.userService.listOne({ email: customer.email });
-      const userCacheKey = generateUserCacheIsPremium(user);
-      await this.cacheManager.del(userCacheKey);
-      return await this.subscriptionHistoryService.create({
-        endDate,
-        startDate,
-        stripePaymentId: event.id,
-        stripePaymentObject: JSON.stringify(event),
-        subscriptionId: subscription.id,
-      });
+    switch (event.type) {
+      case StripeWebHookEvents.INVOICE_PAID: {
+        const obj: any = event.data.object;
+        const customer = obj.customer;
+        const endDate = new Date(obj.lines.data[0].period.end * 1000);
+        const startDate = new Date(obj.lines.data[0].period.start * 1000);
+        const subscription = await this.subscriptionService.findOneByOrFail({
+          stripeUserId: customer,
+        });
+        if (!subscription) throw new NotFoundException();
+        const user = await this.userService.listOne({ email: customer.email });
+        const userCacheKey = generateUserCacheIsPremium(user);
+        await this.cacheManager.del(userCacheKey);
+        await this.subscriptionHistoryService.create({
+          endDate,
+          startDate,
+          stripePaymentId: event.id,
+          stripePaymentObject: JSON.stringify(event),
+          subscriptionId: subscription.id,
+        });
+        break;
+      }
+
+      case StripeWebHookEvents.PAYMENT_METHOD: {
+        const obj: any = event.data.object;
+        const customer = obj.customer;
+        const subscription = await this.subscriptionService.findOneByOrFail({
+          stripeUserId: customer,
+        });
+        if (!subscription) throw new NotFoundException();
+        await this.userService.updateBy(
+          { id: subscription.userId },
+          { hasPaymentMethod: true },
+        );
+        break;
+      }
     }
+
     return event;
   }
 }

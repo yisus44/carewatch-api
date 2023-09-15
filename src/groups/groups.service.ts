@@ -76,15 +76,15 @@ export class GroupsService extends CoreService<Group> {
     invitateUsersToGroup: InvitateUsersToGroup,
     user: User,
   ) {
-    const careWatchInvitationsPromise: Promise<UserGroup | void>[] = [];
+    const carewatchInvitationsPromise: Promise<UserGroup | void>[] = [];
     const group = await this.findOneById(invitateUsersToGroup.groupId);
     if (!group) throw new GroupNotFoundException();
 
-    for (const careWatchInvitation of invitateUsersToGroup.careWatchInvitation) {
-      careWatchInvitationsPromise.push(
+    for (const carewatchInvitation of invitateUsersToGroup.carewatchInvitation) {
+      carewatchInvitationsPromise.push(
         this.userGroupService.create({
           groupId: invitateUsersToGroup.groupId,
-          userId: careWatchInvitation.userId,
+          userId: carewatchInvitation.userId,
         }),
       );
     }
@@ -96,7 +96,7 @@ export class GroupsService extends CoreService<Group> {
         guestName: emailInvitation.name,
       });
 
-      careWatchInvitationsPromise.push(
+      carewatchInvitationsPromise.push(
         this.mailService.sendEmailInvitation(
           emailInvitation.email,
           emailInvitation.name,
@@ -113,7 +113,7 @@ export class GroupsService extends CoreService<Group> {
         guestPhone: whatsappInvitation.phone.toString(),
         guestName: whatsappInvitation.name,
       });
-      careWatchInvitationsPromise.push(
+      carewatchInvitationsPromise.push(
         this.whatsAppService.sendWhatsAppInvitation(
           whatsappInvitation.phone,
           whatsappInvitation.name,
@@ -125,7 +125,7 @@ export class GroupsService extends CoreService<Group> {
     }
 
     try {
-      console.log(await Promise.all(careWatchInvitationsPromise));
+      console.log(await Promise.all(carewatchInvitationsPromise));
     } catch (ex) {
       console.log(ex);
       const modifiedError = new BadRequestException(

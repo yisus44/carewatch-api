@@ -9,14 +9,12 @@ import {
 export class CreateUserSettingDto {
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
-  @MaxLength(64)
+  @MaxLength(50)
   key: string;
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
-  @MaxLength(64)
+  @MaxLength(50)
   value: string;
 
   userId: number;

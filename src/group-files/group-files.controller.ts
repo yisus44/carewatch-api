@@ -26,10 +26,14 @@ export class GroupFilesController {
 
   @Permissions(Permission.uploadPermissionFile)
   @Post()
-  create(
+  async create(
     @Body() createGroupFileDto: CreateGroupFileDto,
     @Query('groupId', ParseIntPipe) groupId: number,
   ) {
+    await this.groupFilesService.failIfFileExist(
+      groupId,
+      createGroupFileDto.fileId,
+    );
     return this.groupFilesService.create({ ...createGroupFileDto, groupId });
   }
 
@@ -47,16 +51,20 @@ export class GroupFilesController {
     @Param('id', ParseIntPipe) id: number,
     @Query('groupId') groupId: number,
   ) {
-    return this.groupFilesService.findOneBy({ id, groupId });
+    return this.groupFilesService.findOneByOrFail({ id, groupId });
   }
 
   @Permissions(Permission.uploadPermissionFile)
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateGroupFileDto: UpdateGroupFileDto,
     @Query('groupId') groupId: number,
   ) {
+    await this.groupFilesService.failIfFileExist(
+      groupId,
+      updateGroupFileDto.fileId,
+    );
     return this.groupFilesService.updateBy({ id, groupId }, updateGroupFileDto);
   }
 

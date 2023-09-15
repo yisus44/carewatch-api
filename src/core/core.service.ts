@@ -60,6 +60,9 @@ export abstract class CoreService<T extends CoreEntity> {
     return match;
   }
   async findOneBy(query: FindOptionsWhere<T>) {
+    return await this.repository.findOneBy(query);
+  }
+  async findOneByOrFail(query: FindOptionsWhere<T>) {
     const match = await this.repository.findOneBy(query);
     if (!match) throw new NotFoundException();
     return match;

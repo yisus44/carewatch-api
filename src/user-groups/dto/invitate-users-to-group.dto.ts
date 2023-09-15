@@ -15,7 +15,7 @@ export class InvitateUsersToGroup {
 
   @IsOptional()
   @IsArray()
-  careWatchInvitation: CareWatchInvitation[] = [];
+  carewatchInvitation: CareWatchInvitation[] = [];
 
   @IsOptional()
   @IsArray()
