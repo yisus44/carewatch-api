@@ -16,6 +16,26 @@ export class UserGroupService extends CoreService<UserGroup> {
     super(userGroupRepository);
   }
 
+  sanitizeUserUpdate(updateUserGroupDto: UpdateUserGroupDto) {
+    delete updateUserGroupDto.isAdmin;
+    delete updateUserGroupDto.userId;
+    delete updateUserGroupDto.groupId;
+    return updateUserGroupDto;
+  }
+
+  sanitizeUserUpdatePermission(updateUserGroupDto: UpdateUserGroupDto) {
+    delete updateUserGroupDto.readPermissionReminder;
+    delete updateUserGroupDto.writePermissionReminder;
+    delete updateUserGroupDto.editPermissionReminder;
+    delete updateUserGroupDto.deletePermissionReminder;
+    delete updateUserGroupDto.readPermissionFile;
+    delete updateUserGroupDto.uploadPermissionFile;
+    delete updateUserGroupDto.deletePermissionFile;
+    delete updateUserGroupDto.readPermissionMedicine;
+    delete updateUserGroupDto.writePermissionMedicine;
+    return updateUserGroupDto;
+  }
+
   generateTokenInvitation() {
     return crypto.randomBytes(10).toString('hex');
   }

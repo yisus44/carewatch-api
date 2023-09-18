@@ -80,13 +80,40 @@ export class UserGroupsController {
     });
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Patch(':id')
   async update(
-    @Param() id: number,
+    @Param('id') id: number,
     @Body() updateUserGroupDto: UpdateUserGroupDto,
+    @Query('groupId') groupId: number,
   ) {
-    return await this.userGroupService.update(id, updateUserGroupDto);
+    const sanitizedUpate =
+      this.userGroupService.sanitizeUserUpdate(updateUserGroupDto);
+    return await this.userGroupService.update(id, {
+      ...sanitizedUpate,
+      groupId,
+    });
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(':id/me')
+  async updateMe(
+    @Param('id') id: number,
+    @Body() updateUserGroupDto: UpdateUserGroupDto,
+    @Query('groupId') groupId: number,
+    @GetCurrentUser() user: User,
+  ) {
+    const sanitizedUpate =
+      this.userGroupService.sanitizeUserUpdate(updateUserGroupDto);
+    const sanitizeFromPermissionUpdate =
+      this.userGroupService.sanitizeUserUpdatePermission(sanitizedUpate);
+
+    return await this.userGroupService.updateBy(
+      { id, userId: user.id, groupId },
+      {
+        ...sanitizeFromPermissionUpdate,
+      },
+    );
   }
 
   @UseGuards(AuthGuard, AdminGuard)
