@@ -15,6 +15,7 @@ export class ReminderFile extends CoreEntity {
 
   @ManyToOne(() => File, (file: File) => file.reminderFiles, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   file: File;
 

@@ -16,6 +16,7 @@ export class GroupFile extends CoreEntity {
 
   @ManyToOne(() => File, (file: File) => file.groupFiles, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   file: File;
 
