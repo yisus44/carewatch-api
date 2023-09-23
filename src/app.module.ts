@@ -32,11 +32,7 @@ import { RemindersModule } from './reminders/reminders.module';
 import { GroupFilesModule } from './group-files/group-files.module';
 import { ReminderFilesModule } from './reminder-files/reminder-files.module';
 import { WeekDaysModule } from './week-days/week-days.module';
-import { ReminderWeekDaysModule } from './reminder-week-days/reminder-week-days.module';
 import { SchedulesModule } from './schedules/schedules.module';
-import { FrequencyUnitsModule } from './frequency-units/frequency-units.module';
-import { ReminderFrequenciesModule } from './reminder-frequencies/reminder-frequencies.module';
-import { ReminderActivationTimeModule } from './reminder-activation-time/reminder-activation-time.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { ReminderExecutionModule } from './reminder-execution/reminder-execution.module';
 
@@ -71,11 +67,7 @@ import { ReminderExecutionModule } from './reminder-execution/reminder-execution
     GroupFilesModule,
     ReminderFilesModule,
     WeekDaysModule,
-    ReminderWeekDaysModule,
     SchedulesModule,
-    FrequencyUnitsModule,
-    ReminderFrequenciesModule,
-    ReminderActivationTimeModule,
     FirebaseModule,
     ReminderExecutionModule,
   ],
