@@ -35,6 +35,8 @@ import { WeekDaysModule } from './week-days/week-days.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { ReminderExecutionModule } from './reminder-execution/reminder-execution.module';
+import { FrequencyTypesModule } from './frequency-types/frequency-types.module';
+import { ReminderActivationTimeModule } from './reminder-activation-time/reminder-activation-time.module';
 
 @Module({
   imports: [
@@ -70,6 +72,8 @@ import { ReminderExecutionModule } from './reminder-execution/reminder-execution
     SchedulesModule,
     FirebaseModule,
     ReminderExecutionModule,
+    FrequencyTypesModule,
+    ReminderActivationTimeModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

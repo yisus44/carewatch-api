@@ -1,3 +1,4 @@
+import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 import { CoreEntity } from '../../core/entities/core-entity';
 import { Group } from '../../groups/entities/group.entity';
 import { Medicine } from '../../medicines/entities/medicine.entity';
@@ -18,6 +19,16 @@ export class Reminder extends CoreEntity {
     onDelete: 'CASCADE',
   })
   medicine: Medicine;
+
+  @ManyToOne(
+    () => ReminderActivationTime,
+    (reminderActivationTime: ReminderActivationTime) =>
+      reminderActivationTime.reminder,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  reminderActivationTime: ReminderActivationTime;
 
   @Column()
   medicineId: number;
