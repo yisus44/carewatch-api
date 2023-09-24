@@ -7,6 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { MedicineUnitsModule } from '../medicine-units/medicine-units.module';
 import { WeekDaysModule } from '../week-days/week-days.module';
+import { FrequencyTypesModule } from 'src/frequency-types/frequency-types.module';
 @Module({
   controllers: [SeedController],
   providers: [SeedService],
@@ -17,6 +18,7 @@ import { WeekDaysModule } from '../week-days/week-days.module';
     MedicineUnitsModule,
     AuthModule,
     WeekDaysModule,
+    FrequencyTypesModule,
   ],
 })
 export class SeedModule {}

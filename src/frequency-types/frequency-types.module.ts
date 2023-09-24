@@ -8,5 +8,6 @@ import { FrequencyType } from './entities/frequency-type.entity';
   controllers: [FrequencyTypesController],
   providers: [FrequencyTypesService],
   imports: [TypeOrmModule.forFeature([FrequencyType])],
+  exports: [FrequencyTypesService],
 })
 export class FrequencyTypesModule {}

@@ -8,5 +8,6 @@ import { ReminderActivationTime } from './entities/reminder-activation-time.enti
   controllers: [ReminderActivationTimeController],
   providers: [ReminderActivationTimeService],
   imports: [TypeOrmModule.forFeature([ReminderActivationTime])],
+  exports: [ReminderActivationTimeService],
 })
 export class ReminderActivationTimeModule {}
