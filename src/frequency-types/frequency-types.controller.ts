@@ -8,12 +8,15 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { FrequencyTypesService } from './frequency-types.service';
 import { CreateFrequencyTypeDto } from './dto/create-frequency-type.dto';
 import { UpdateFrequencyTypeDto } from './dto/update-frequency-type.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('frequency-types')
 export class FrequencyTypesController {
   constructor(private readonly frequencyTypesService: FrequencyTypesService) {}
