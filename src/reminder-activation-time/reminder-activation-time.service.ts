@@ -44,28 +44,40 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
       createReminderActivationTimeDto.frequencyTypeId,
     );
     if (!frequencyType) throw new RelationDoNotExistsException();
-    let reminderActivationTime;
+    const reminderActivationTime = await this.evaluateSingleOrConstant(
+      frequencyType,
+      async () =>
+        await super.create({
+          ...createReminderActivationTimeDto,
+          intialDateTime: null,
+        }),
+      async () =>
+        await super.create({
+          ...createReminderActivationTimeDto,
+          intialDateTime:
+            createReminderActivationTimeDto.intialDateTime ?? new Date(),
+          time: null,
+        }),
+    );
+    await this.handleExecution(reminderActivationTime, frequencyType);
+    return reminderActivationTime;
+  }
+
+  async evaluateSingleOrConstant(
+    frequencyType: FrequencyType,
+    singleFrequency: Function,
+    constantFrequency: Function,
+  ) {
     if (
       frequencyType.name === FrequencyTypeEnum.SPECIFC_DATE ||
       frequencyType.name === FrequencyTypeEnum.SPECIFC_WEEKDAY
     ) {
-      reminderActivationTime = await super.create({
-        ...createReminderActivationTimeDto,
-        intialDateTime: null,
-      });
+      return await singleFrequency();
     } else {
       //when we want to execute the reminder
       // every x numbers seconds, minutes, hours and day
-      reminderActivationTime = await super.create({
-        ...createReminderActivationTimeDto,
-        intialDateTime:
-          createReminderActivationTimeDto.intialDateTime ?? new Date(),
-        time: null,
-      });
+      return await constantFrequency();
     }
-
-    await this.handleExecution(reminderActivationTime, frequencyType);
-    return reminderActivationTime;
   }
 
   override async update(
@@ -86,24 +98,22 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
       );
     }
     if (!frequencyType) throw new RelationDoNotExistsException();
-    if (
-      frequencyType.name === FrequencyTypeEnum.SPECIFC_DATE ||
-      frequencyType.name === FrequencyTypeEnum.SPECIFC_WEEKDAY
-    ) {
-      result = await super.update(id, {
-        ...updateReminderActivationTimeDto,
-        intialDateTime: null,
-      });
-    } else {
-      //when we want to execute the reminder
-      // every x numbers seconds, minutes, hours and day
-      result = await super.update(id, {
-        ...updateReminderActivationTimeDto,
-        intialDateTime:
-          updateReminderActivationTimeDto.intialDateTime ?? new Date(),
-        time: null,
-      });
-    }
+    result = await this.evaluateSingleOrConstant(
+      frequencyType,
+      async () =>
+        await super.update(id, {
+          ...updateReminderActivationTimeDto,
+          intialDateTime: null,
+        }),
+      async () =>
+        await super.update(id, {
+          ...updateReminderActivationTimeDto,
+          intialDateTime:
+            updateReminderActivationTimeDto.intialDateTime ?? new Date(),
+          time: null,
+        }),
+    );
+
     reminderActivationTime = await this.findOneById(id);
     await this.handleExecution(reminderActivationTime, frequencyType);
     return result;
@@ -217,13 +227,11 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
   ) {
     switch (frequencyType.name) {
       case FrequencyTypeEnum.SPECIFC_DATE: {
-        console.log([reminderActivationTime]);
         this.reminderExecutionService.createOrUpdateSpecificDate(
           reminderActivationTime.time.toString(),
           reminderActivationTime.frequencyValue,
           reminderActivationTime.id.toString(),
           async () => {
-            console.log('callback');
             await this.executeReminder(
               reminderActivationTime.id,
               reminderActivationTime,
