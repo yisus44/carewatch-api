@@ -149,6 +149,7 @@ export class ReminderActivationTimeHelperExecution {
           reminderActivationTime.id.toString(),
           executeReminderFunction,
         );
+        break;
       }
       case FrequencyTypeEnum.SPECIFC_WEEKDAY: {
         console.log({ reminderActivationTime, frequencyType });
@@ -158,6 +159,7 @@ export class ReminderActivationTimeHelperExecution {
           reminderActivationTime.id.toString(),
           executeReminderFunction,
         );
+        break;
       }
     }
   }
