@@ -20,4 +20,25 @@ export class CommonService {
     const milliseconds = parseInt(value) * unitToMilliseconds[unit];
     return milliseconds;
   }
+
+  parseDate(hourToBeExecuted: string, dateToBeExecuted: string) {
+    const timeComponents = hourToBeExecuted.split(':');
+    const hour = Number(timeComponents[0]);
+    const minute = Number(timeComponents[1]);
+    const second = Number(timeComponents[2]);
+    const dateComponents = dateToBeExecuted.split('-');
+    const year = Number(dateComponents[0]);
+    const month = Number(dateComponents[1]) - 1;
+    const day = Number(dateComponents[2]);
+    const executionDate = new Date(year, month, day, hour, minute, second);
+    return {
+      hour,
+      minute,
+      second,
+      year,
+      month,
+      day,
+      executionDate,
+    };
+  }
 }

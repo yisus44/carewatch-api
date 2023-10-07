@@ -21,5 +21,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     MailModule,
     CacheModule.register(),
   ],
+  exports: [GroupsService],
 })
 export class GroupsModule {}

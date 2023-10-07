@@ -4,6 +4,10 @@ import axios from 'axios';
 import { WhatsAppTemplates } from './enums/whatsapp-templates.enum';
 import { User } from 'src/users/entities/user.entity';
 import { Twilio } from 'twilio';
+import { Reminder } from 'src/reminders/entities/reminder.entity';
+import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { Group } from 'src/groups/entities/group.entity';
+import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 @Injectable()
 export class WhatsappService {
   constructor(private readonly client: Twilio) {}
@@ -37,6 +41,39 @@ export class WhatsappService {
       CareWatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
       
       Sí deseas unirte al grupo o conocer más acerca de nuestra aplicación sigue el siguiente enlace ${link}`;
+      const from = 'whatsapp:+14155238886';
+      const to = `whatsapp:+${phone}`;
+      await this.sendWhatsapp(body, to, from);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async sendWhatsappReminder(
+    userName: string,
+    phone: number,
+    reminder: Reminder,
+    medicine: Medicine,
+    group: Group,
+    reminderActivationTime: ReminderActivationTime,
+    token: string,
+  ) {
+    try {
+      const body = `
+      Hola ${userName}!
+      
+      Carewatch te recuerda que es tu turno de apoyar en tu grupo ${group.name}
+      
+      ***********RECORDATORIO***********
+      
+      Medicamento: ${medicine.name}
+      Dosis: ${reminder.dosis}
+      Detalles adicionales: ${reminder.additionalDetails}
+      Hora de aplicación: ${reminderActivationTime.time}
+      
+      
+      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
+    `;
       const from = 'whatsapp:+14155238886';
       const to = `whatsapp:+${phone}`;
       await this.sendWhatsapp(body, to, from);

@@ -23,7 +23,7 @@ export class ReminderActivationTime extends CoreEntity {
   @Column()
   reminderId: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'time' })
   time?: Date;
 
   @Column()

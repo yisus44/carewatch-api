@@ -1,4 +1,4 @@
-import { IsISO8601, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsISO8601, IsNotEmpty, IsOptional, Validate } from 'class-validator';
 import { IsValidTimeConstraint } from 'src/common/decorators/validators/is-valid-time';
 
 export class CreateReminderActivationTimeDto {
@@ -9,6 +9,7 @@ export class CreateReminderActivationTimeDto {
   reminderId: number;
 
   @IsOptional()
+  @Validate(IsValidTimeConstraint)
   time?: Date;
 
   @IsNotEmpty()

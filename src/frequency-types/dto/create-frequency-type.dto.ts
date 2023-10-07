@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { FrequencyTypeEnum } from '../entities/frequency-type.entity';
 
 export class CreateFrequencyTypeDto {
   @IsNotEmpty()

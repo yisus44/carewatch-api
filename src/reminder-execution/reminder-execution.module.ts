@@ -6,5 +6,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   providers: [ReminderExecutionService],
   imports: [UserGroupModule, ScheduleModule.forRoot()],
+  exports: [ReminderExecutionService],
 })
 export class ReminderExecutionModule {}
