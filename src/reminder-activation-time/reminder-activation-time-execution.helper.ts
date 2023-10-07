@@ -74,10 +74,10 @@ export class ReminderActivationTimeHelperExecution {
         on user_group.id = active_users.user_group_id
         LEFT JOIN public.user AS usr
         ON usr.id = user_group.user_id
-            WHERE user_group.group_id = 21
+            WHERE user_group.group_id = ?
             AND user_group.is_active = true
           `,
-      // [group.id],
+      [group.id],
     );
     for (const invitation of data) {
       const promiseArr = [];
@@ -152,7 +152,6 @@ export class ReminderActivationTimeHelperExecution {
         break;
       }
       case FrequencyTypeEnum.SPECIFC_WEEKDAY: {
-        console.log({ reminderActivationTime, frequencyType });
         this.reminderExecutionService.createOrUpdateSpecificDayOfTheWeek(
           reminderActivationTime.time.toString(),
           reminderActivationTime.frequencyValue,
