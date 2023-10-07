@@ -10,10 +10,14 @@ import { MailModule } from 'src/mail/mail.module';
 import { RemindersModule } from 'src/reminders/reminders.module';
 import { MedicinesModule } from 'src/medicines/medicines.module';
 import { GroupsModule } from 'src/groups/groups.module';
+import { ReminderActivationTimeHelperExecution } from './reminder-activation-time-execution.helper';
 
 @Module({
   controllers: [ReminderActivationTimeController],
-  providers: [ReminderActivationTimeService],
+  providers: [
+    ReminderActivationTimeHelperExecution,
+    ReminderActivationTimeService,
+  ],
   imports: [
     TypeOrmModule.forFeature([ReminderActivationTime]),
     FrequencyTypesModule,
