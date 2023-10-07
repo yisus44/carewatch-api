@@ -125,7 +125,7 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
   }
 
   async remove(id: number) {
-    this.reminderExecutionService.removeSpecificDate(id.toString());
+    this.reminderExecutionService.removeWithName(id.toString());
     return super.remove(id);
   }
 }

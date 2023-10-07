@@ -91,10 +91,24 @@ export class ReminderExecutionService implements OnModuleInit {
     // this.schedulerRegistry.addTimeout('namexx', job);
     // job.start();
   }
-  removeSpecificDate(name: string) {
+  removeWithName(name: string) {
     try {
       this.schedulerRegistry.getTimeout(name);
       this.schedulerRegistry.deleteTimeout(name);
+    } catch (error) {
+      //The schedulerRegistry will throw an exception if they do not found a timeout so we do not need
+      //to handle anything here...yet
+    }
+    try {
+      this.schedulerRegistry.getInterval(name);
+      this.schedulerRegistry.deleteInterval(name);
+    } catch (error) {
+      //The schedulerRegistry will throw an exception if they do not found a timeout so we do not need
+      //to handle anything here...yet
+    }
+    try {
+      this.schedulerRegistry.getCronJob(name);
+      this.schedulerRegistry.deleteCronJob(name);
     } catch (error) {
       //The schedulerRegistry will throw an exception if they do not found a timeout so we do not need
       //to handle anything here...yet

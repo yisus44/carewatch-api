@@ -55,11 +55,11 @@ export class ReminderActivationTimeHelperExecution {
         JOIN week_day
         ON week_day.id = schedule.week_day_id
             WHERE
-                CAST(start_time AS TIME) < CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City'
+                CAST(start_time AS TIME) < CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone
             AND
-                CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City' AS TIME )
+                CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone AS TIME )
             AND
-                EXTRACT(DOW FROM CURRENT_DATE AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City') = week_day.week_day_number
+                EXTRACT(DOW FROM CURRENT_DATE   AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone) = week_day.week_day_number
             )
         /*Join the information*/
         SELECT
@@ -68,7 +68,7 @@ export class ReminderActivationTimeHelperExecution {
             /*Where we will send in case of a guest*/
             guest_email, guest_name, guest_name, guest_phone,
              /*Where we will send in case of a carewatch user*/
-            name,last_name, email, phone, token
+            name, last_name, email, phone, token
         FROM active_users
         JOIN user_group
         on user_group.id = active_users.user_group_id

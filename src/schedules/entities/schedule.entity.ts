@@ -17,7 +17,8 @@ export class Schedule extends CoreEntity {
 
   @Column()
   endTime: string;
-
+  @Column({ nullable: false, default: 'America/Mexico_City' })
+  timeZone?: string;
   @Column()
   description: string;
 }
