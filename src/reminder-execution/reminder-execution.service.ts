@@ -6,6 +6,15 @@ import { UserGroupService } from 'src/user-groups/user-group.service';
 
 @Injectable()
 export class ReminderExecutionService implements OnModuleInit {
+  private readonly daysOfWeek: { [key: string]: string } = {
+    L: '1',
+    M: '2',
+    Mr: '3',
+    J: '4',
+    V: '5',
+    S: '6',
+    D: '7',
+  };
   constructor(
     private readonly userGroupService: UserGroupService,
     private readonly schedulerRegistry: SchedulerRegistry,
@@ -20,7 +29,33 @@ export class ReminderExecutionService implements OnModuleInit {
     // this.schedulerRegistry.addCronJob('name', job);
     // job.start();
   }
+  createOrUpdateSpecificDayOfTheWeek(
+    hour: string,
+    days: string,
+    name: string,
+    fn: Function,
+  ) {
+    const daysArray = days.split(',').map((day) => this.daysOfWeek[day.trim()]);
+    const validDays = daysArray.filter((day) => !!day);
+    const [hours, minutes, seconds] = hour.split(':').map(Number);
+    try {
+      this.schedulerRegistry.getCronJob(name);
+      this.schedulerRegistry.deleteCronJob(name);
+    } catch (error) {
+      //The schedulerRegistry will throw an exception if they do not found a cronjob so we do not need
+      //to handle anything here...yet
+    }
+    // Create a cron expression with the specified hour and days
+    const cronExpression = `${seconds} ${minutes} ${hours} * * ${validDays.join(
+      ',',
+    )}`;
+    const job = new CronJob(cronExpression, () => {
+      fn();
+    });
 
+    job.start();
+    this.schedulerRegistry.addCronJob(name, job);
+  }
   createOrUpdateSpecificDate(
     hourToBeExecuted: string,
     dateToBeExecuted: string,
