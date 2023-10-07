@@ -59,7 +59,7 @@ export class ReminderActivationTimeHelperExecution {
             AND
                 CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City' AS TIME )
             AND
-                EXTRACT(DOW FROM CURRENT_DATE  AT TIME ZONE 'America/Mexico_City') = week_day.week_day_number
+                EXTRACT(DOW FROM CURRENT_DATE AT TIME ZONE 'UTC' AT TIME ZONE 'America/Mexico_City') = week_day.week_day_number
             )
         /*Join the information*/
         SELECT
