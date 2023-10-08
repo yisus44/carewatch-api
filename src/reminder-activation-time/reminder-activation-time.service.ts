@@ -87,17 +87,12 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
   ) {
     let reminderActivationTime = await this.findOneById(id);
     if (!reminderActivationTime) throw new NotFoundException();
-    let frequencyType;
+
     let result;
-    if (updateReminderActivationTimeDto.frequencyTypeId) {
-      frequencyType = await this.frequencyTypeService.findOneById(
-        updateReminderActivationTimeDto.frequencyTypeId,
-      );
-    } else {
-      frequencyType = await this.frequencyTypeService.findOneById(
+    let frequencyType = await this.frequencyTypeService.findOneById(
+      updateReminderActivationTimeDto.frequencyTypeId ??
         reminderActivationTime.frequencyTypeId,
-      );
-    }
+    );
     if (!frequencyType) throw new RelationDoNotExistsException();
     result = await this.evaluateSingleOrConstant(
       frequencyType,

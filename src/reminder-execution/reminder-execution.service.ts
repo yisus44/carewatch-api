@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { SchedulerRegistry, CronExpression } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { CommonService } from 'src/common/common.service';
 import { UserGroupService } from 'src/user-groups/user-group.service';
@@ -29,6 +29,71 @@ export class ReminderExecutionService implements OnModuleInit {
     // this.schedulerRegistry.addCronJob('name', job);
     // job.start();
   }
+  secondsToCron(seconds: number) {
+    if (seconds < 1) {
+      throw new Error('Input seconds must be greater than or equal to 1');
+    }
+
+    const cronExpression = [];
+
+    let minutes = Math.floor(seconds / 60);
+    seconds %= 60;
+
+    let hours = Math.floor(minutes / 60);
+    minutes %= 60;
+
+    let days = Math.floor(hours / 24);
+    hours %= 24;
+
+    let months = Math.floor(days / 30); // Approximate, assumes 30 days per month
+    days %= 30;
+
+    if (months > 0) {
+      cronExpression.push('*');
+    } else {
+      cronExpression.push(seconds != 0 ? `*/${seconds.toString()}` : '*');
+    }
+
+    cronExpression.push(minutes != 0 ? `*/${minutes.toString()}` : '*');
+    cronExpression.push(hours != 0 ? `*/${hours.toString()}` : '*');
+    cronExpression.push('*'); // Day of the month
+    cronExpression.push('*'); // Month
+    cronExpression.push('*'); //  day of week
+
+    return cronExpression.join(' ');
+  }
+
+  createOrUpdateFrequency(
+    initialDate: string,
+    frequency: string,
+    name: string,
+    fn: Function,
+  ) {
+    const date = new Date(initialDate);
+    const frequencyInSeconds = Number(frequency);
+    this.removeWithName(name);
+    const currentTime = new Date();
+
+    const timeDifferenceInSeconds =
+      (currentTime.getTime() - date.getTime()) / 1000;
+    const remainder = timeDifferenceInSeconds % frequencyInSeconds;
+    const cronExpression = this.secondsToCron(frequencyInSeconds);
+    const job = new CronJob(cronExpression, () => {
+      fn();
+      console.log('job');
+    });
+    if (remainder < 1) {
+      job.start();
+    } else {
+      const timeRemaining = frequencyInSeconds - remainder;
+      const timeoutId = setTimeout(() => {
+        job.start();
+      }, (timeRemaining - 1) * 1000);
+      this.schedulerRegistry.addTimeout(name, timeoutId);
+
+      return timeRemaining; // Time remaining until the next frequency interval
+    }
+  }
   createOrUpdateSpecificDayOfTheWeek(
     hour: string,
     days: string,
@@ -38,13 +103,7 @@ export class ReminderExecutionService implements OnModuleInit {
     const daysArray = days.split(',').map((day) => this.daysOfWeek[day.trim()]);
     const validDays = daysArray.filter((day) => !!day);
     const [hours, minutes, seconds] = hour.split(':').map(Number);
-    try {
-      this.schedulerRegistry.getCronJob(name);
-      this.schedulerRegistry.deleteCronJob(name);
-    } catch (error) {
-      //The schedulerRegistry will throw an exception if they do not found a cronjob so we do not need
-      //to handle anything here...yet
-    }
+    this.removeWithName(name);
     // Create a cron expression with the specified hour and days
     const cronExpression = `${seconds} ${minutes} ${hours} * * ${validDays.join(
       ',',
@@ -66,13 +125,7 @@ export class ReminderExecutionService implements OnModuleInit {
       hourToBeExecuted,
       dateToBeExecuted,
     );
-    try {
-      this.schedulerRegistry.getTimeout(name);
-      this.schedulerRegistry.deleteTimeout(name);
-    } catch (error) {
-      //The schedulerRegistry will throw an exception if they do not found a timeout so we do not need
-      //to handle anything here...yet
-    }
+    this.removeWithName(name);
 
     const currentTimestamp = new Date().getTime();
     const delay = executionDate.getTime() - currentTimestamp;
