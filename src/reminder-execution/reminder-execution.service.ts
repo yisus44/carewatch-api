@@ -77,17 +77,29 @@ export class ReminderExecutionService implements OnModuleInit {
     const timeDifferenceInSeconds =
       (currentTime.getTime() - date.getTime()) / 1000;
     const remainder = timeDifferenceInSeconds % frequencyInSeconds;
-    const cronExpression = this.secondsToCron(frequencyInSeconds);
-    const job = new CronJob(cronExpression, () => {
-      fn();
-      console.log('job');
-    });
-    if (remainder < 1) {
-      job.start();
+
+    if (remainder == 0) {
+      const interval = setInterval(() => {
+        fn();
+      }, frequencyInSeconds * 1000);
+      this.schedulerRegistry.addInterval(name, interval);
+    } else if (remainder < 0) {
+      const timeoutId = setTimeout(() => {
+        fn();
+        const interval = setInterval(() => {
+          fn();
+        }, frequencyInSeconds * 1000);
+        this.schedulerRegistry.addInterval(name, interval);
+      }, (Math.abs(remainder) - 1) * 1000);
+      this.schedulerRegistry.addTimeout(name, timeoutId);
     } else {
       const timeRemaining = frequencyInSeconds - remainder;
       const timeoutId = setTimeout(() => {
-        job.start();
+        fn();
+        const interval = setInterval(() => {
+          fn();
+        }, frequencyInSeconds * 1000);
+        this.schedulerRegistry.addInterval(name, interval);
       }, (timeRemaining - 1) * 1000);
       this.schedulerRegistry.addTimeout(name, timeoutId);
 
