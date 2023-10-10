@@ -9,9 +9,13 @@ import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 import { FrequencyType } from 'src/frequency-types/entities/frequency-type.entity';
+import { CommonService } from 'src/common/common.service';
 @Injectable()
 export class WhatsappService {
-  constructor(private readonly client: Twilio) {}
+  constructor(
+    private readonly client: Twilio,
+    private readonly commonService: CommonService,
+  ) {}
 
   async sendWhatsapp(
     body: string,
@@ -71,10 +75,10 @@ export class WhatsappService {
       Medicamento: ${medicine.name}
       Dosis: ${reminder.dosis}
       Detalles adicionales: ${reminder.additionalDetails}
-      Hora de aplicación: ${
-        reminderActivationTime.time ??
-        `Cada ${reminderActivationTime.times} ${frequencyType.name}`
-      }
+      Aplicación: ${this.commonService.buildFrequencyString(
+        reminderActivationTime,
+        frequencyType,
+      )}
       Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${
         process.env.DOMAIN
       }/delete/${token}

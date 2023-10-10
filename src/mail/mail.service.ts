@@ -7,10 +7,14 @@ import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 import { FrequencyType } from 'src/frequency-types/entities/frequency-type.entity';
+import { CommonService } from 'src/common/common.service';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly awsService: AwsService) {}
+  constructor(
+    private readonly awsService: AwsService,
+    private readonly commonService: CommonService,
+  ) {}
 
   async sendEmailInvitation(
     email: string,
@@ -54,9 +58,10 @@ export class MailService {
         groupName: group.name,
         dosis: reminder.dosis,
         aditionalDetails: reminder.additionalDetails,
-        time:
-          reminderActivationTime.time ??
-          `Cada ${reminderActivationTime.times} ${frequencyType.name}`,
+        time: this.commonService.buildFrequencyString(
+          reminderActivationTime,
+          frequencyType,
+        ),
         domain: ` ${process.env.DOMAIN}/delete/${token}`,
       }),
     );

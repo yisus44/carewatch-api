@@ -2,6 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PaginationDto } from './dto/pagination.dto';
 import { PageDto } from './dto/page.dto';
 import { User } from '../users/entities/user.entity';
+import {
+  FrequencyType,
+  FrequencyTypeEnum,
+} from 'src/frequency-types/entities/frequency-type.entity';
+import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
 
 @Injectable()
 export class CommonService {
@@ -40,5 +45,40 @@ export class CommonService {
       day,
       executionDate,
     };
+  }
+
+  buildFrequencyString(
+    reminderActivationTime: ReminderActivationTime,
+    frequencyType: FrequencyType,
+  ): string {
+    const { time, times, frequencyValue } = reminderActivationTime;
+
+    switch (frequencyType.name) {
+      case FrequencyTypeEnum.SPECIFC_DATE:
+      case FrequencyTypeEnum.SPECIFC_WEEKDAY:
+        return `${time}`;
+        break;
+      case FrequencyTypeEnum.SECOND:
+        return `Cada ${times} ${
+          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+        } `;
+        break;
+      case FrequencyTypeEnum.MINUTE:
+        return `Cada ${times} ${
+          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+        } `;
+        break;
+      case FrequencyTypeEnum.HOUR:
+        return `Cada ${times} ${
+          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+        } `;
+        break;
+      case FrequencyTypeEnum.DAY:
+        return `Cada ${times} ${
+          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+        } `;
+        break;
+    }
+    return '';
   }
 }

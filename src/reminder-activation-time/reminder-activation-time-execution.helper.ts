@@ -49,7 +49,7 @@ export class ReminderActivationTimeHelperExecution {
         `
         WITH active_users AS  (
           SELECT
-             schedule.user_group_id
+              week_day.week_day_number
           FROM schedule
           JOIN week_day
           ON week_day.id = schedule.week_day_id
@@ -58,7 +58,7 @@ export class ReminderActivationTimeHelperExecution {
               AND
                   CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone AS TIME )
               AND
-                  EXTRACT(DOW FROM CURRENT_DATE  AT TIME ZONE schedule.time_zone) = week_day.week_day_number
+                EXTRACT(DOW FROM now() AT TIME ZONE schedule.time_zone) = week_day.week_day_number
               )
           /*Join the information*/
           SELECT

@@ -27,6 +27,9 @@ import { CacheModule } from '@nestjs/cache-manager';
         // entities: [__dirname + '/../**/*.entity.ts'],
         autoLoadEntities: true,
         namingStrategy: new SnakeNamingStrategy(),
+        ssl: {
+          rejectUnauthorized: false, // Allow self-signed certificates
+        },
       }),
     }),
   ],
