@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CoreService } from 'src/core/core.service';
 import { ReminderActivationTime } from './entities/reminder-activation-time.entity';
 import { Repository } from 'typeorm';
@@ -15,11 +11,6 @@ import {
   FrequencyTypeEnum,
 } from 'src/frequency-types/entities/frequency-type.entity';
 import { ReminderExecutionService } from 'src/reminder-execution/reminder-execution.service';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-import { MailService } from 'src/mail/mail.service';
-import { RemindersService } from 'src/reminders/reminders.service';
-import { MedicinesService } from 'src/medicines/medicines.service';
-import { GroupsService } from 'src/groups/groups.service';
 import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activation-time.dto';
 import { ReminderActivationTimeHelperExecution } from './reminder-activation-time-execution.helper';
 

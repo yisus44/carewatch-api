@@ -1,15 +1,8 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { CoreService } from 'src/core/core.service';
+import { Injectable } from '@nestjs/common';
 import { ReminderActivationTime } from './entities/reminder-activation-time.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateReminderActivationTimeDto } from './dto/create-reminder-activation-time.dto';
 import { FrequencyTypesService } from 'src/frequency-types/frequency-types.service';
-import { RelationDoNotExistsException } from 'src/common/exceptions/relation-do-not-exists.exception';
 import {
   FrequencyType,
   FrequencyTypeEnum,
@@ -20,7 +13,6 @@ import { MailService } from 'src/mail/mail.service';
 import { RemindersService } from 'src/reminders/reminders.service';
 import { MedicinesService } from 'src/medicines/medicines.service';
 import { GroupsService } from 'src/groups/groups.service';
-import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activation-time.dto';
 
 @Injectable()
 export class ReminderActivationTimeHelperExecution {
