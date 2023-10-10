@@ -3,12 +3,12 @@ import { ReminderActivationTime } from 'src/reminder-activation-time/entities/re
 import { Column, Entity, OneToMany } from 'typeorm';
 
 export enum FrequencyTypeEnum {
-  SECOND = 'second',
-  MINUTE = 'minute',
-  HOUR = 'hour',
-  DAY = 'day',
-  SPECIFC_WEEKDAY = 'weekday',
-  SPECIFC_DATE = 'date',
+  SECOND = 'segundos',
+  MINUTE = 'minutos',
+  HOUR = 'horas',
+  DAY = 'dias',
+  SPECIFC_WEEKDAY = 'dia de la semana',
+  SPECIFC_DATE = 'fecha',
 }
 @Entity()
 export class FrequencyType extends CoreEntity {

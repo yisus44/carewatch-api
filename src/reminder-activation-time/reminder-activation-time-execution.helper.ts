@@ -27,11 +27,13 @@ export class ReminderActivationTimeHelperExecution {
   constructor(
     @InjectRepository(ReminderActivationTime)
     private readonly reminderActivationTimeRepository: Repository<ReminderActivationTime>,
-    private readonly reminderExecutionService: ReminderExecutionService,
     private readonly whatsAppService: WhatsappService,
+    private readonly mailService: MailService,
+    private readonly reminderExecutionService: ReminderExecutionService,
     private readonly reminderService: RemindersService,
     private readonly medicineService: MedicinesService,
     private readonly groupService: GroupsService,
+    private readonly frequencyTypeService: FrequencyTypesService,
   ) {}
 
   async executeReminder(
@@ -43,6 +45,9 @@ export class ReminderActivationTimeHelperExecution {
       const group = await this.groupService.findOneById(reminder.groupId);
       const medicine = await this.medicineService.findOneById(
         reminder.medicineId,
+      );
+      const frequencyType = await this.frequencyTypeService.findOneById(
+        reminderActivationTime.frequencyTypeId,
       );
       let nameToSend;
       let phoneToSend;
@@ -122,11 +127,24 @@ export class ReminderActivationTimeHelperExecution {
               medicine,
               group,
               reminderActivationTime,
+              frequencyType,
               token,
             ),
           );
         }
         if (email_communication && mailToSend) {
+          promiseArr.push(
+            this.mailService.sendMailReminder(
+              nameToSend,
+              mailToSend,
+              reminder,
+              medicine,
+              group,
+              reminderActivationTime,
+              frequencyType,
+              token,
+            ),
+          );
         }
         await Promise.all(promiseArr);
       }

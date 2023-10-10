@@ -8,6 +8,7 @@ import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
+import { FrequencyType } from 'src/frequency-types/entities/frequency-type.entity';
 @Injectable()
 export class WhatsappService {
   constructor(private readonly client: Twilio) {}
@@ -56,6 +57,7 @@ export class WhatsappService {
     medicine: Medicine,
     group: Group,
     reminderActivationTime: ReminderActivationTime,
+    frequencyType: FrequencyType,
     token: string,
   ) {
     try {
@@ -69,10 +71,13 @@ export class WhatsappService {
       Medicamento: ${medicine.name}
       Dosis: ${reminder.dosis}
       Detalles adicionales: ${reminder.additionalDetails}
-      Hora de aplicación: ${reminderActivationTime.time}
-      
-      
-      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
+      Hora de aplicación: ${
+        reminderActivationTime.time ??
+        `Cada ${reminderActivationTime.times} ${frequencyType.name}`
+      }
+      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${
+        process.env.DOMAIN
+      }/delete/${token}
     `;
       const from = 'whatsapp:+14155238886';
       const to = `whatsapp:+${phone}`;

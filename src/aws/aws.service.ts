@@ -38,6 +38,16 @@ export class AwsService {
       templateHtmlFileName,
     );
   }
+  async generateReminderTemplate() {
+    const templateName = EmailTemplates.reminder;
+    const subject = 'Recordatorio de carewatch';
+    const templateHtmlFileName = 'reminder-execution-template';
+    return await this.generateTemplate(
+      templateName,
+      subject,
+      templateHtmlFileName,
+    );
+  }
 
   async generateTemplate(
     templateName: string,
