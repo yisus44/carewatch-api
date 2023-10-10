@@ -47,9 +47,9 @@ export class ReminderActivationTimeHelperExecution {
       console.log({ executed: new Date() });
       const data = await this.reminderActivationTimeRepository.query(
         `
-        WITH active_users AS  (
+        WITH active_users AS (
           SELECT
-              week_day.week_day_number
+               schedule.user_group_id
           FROM schedule
           JOIN week_day
           ON week_day.id = schedule.week_day_id
@@ -58,7 +58,7 @@ export class ReminderActivationTimeHelperExecution {
               AND
                   CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone AS TIME )
               AND
-                EXTRACT(DOW FROM now() AT TIME ZONE schedule.time_zone) = week_day.week_day_number
+                EXTRACT(DOW FROM now()    AT TIME ZONE schedule.time_zone) = week_day.week_day_number
               )
           /*Join the information*/
           SELECT
@@ -174,7 +174,10 @@ export class ReminderActivationTimeHelperExecution {
         );
         break;
       }
-      case FrequencyTypeEnum.SECOND: {
+      case FrequencyTypeEnum.SECOND:
+      case FrequencyTypeEnum.MINUTE:
+      case FrequencyTypeEnum.HOUR:
+      case FrequencyTypeEnum.DAY: {
         this.reminderExecutionService.createOrUpdateFrequency(
           reminderActivationTime.intialDateTime.toString(),
           reminderActivationTime.frequencyValue,

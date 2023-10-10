@@ -60,22 +60,22 @@ export class CommonService {
         break;
       case FrequencyTypeEnum.SECOND:
         return `Cada ${times} ${
-          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+          times == 1 ? frequencyType.name.slice(0, -1) : frequencyType.name
         } `;
         break;
       case FrequencyTypeEnum.MINUTE:
         return `Cada ${times} ${
-          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+          times == 1 ? frequencyType.name.slice(0, -1) : frequencyType.name
         } `;
         break;
       case FrequencyTypeEnum.HOUR:
         return `Cada ${times} ${
-          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+          times == 1 ? frequencyType.name.slice(0, -1) : frequencyType.name
         } `;
         break;
       case FrequencyTypeEnum.DAY:
         return `Cada ${times} ${
-          times == 1 ? frequencyType.name.split('s')[0] : frequencyType.name
+          times == 1 ? frequencyType.name.slice(0, -1) : frequencyType.name
         } `;
         break;
     }
