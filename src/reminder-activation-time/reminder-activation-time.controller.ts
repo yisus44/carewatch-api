@@ -15,8 +15,7 @@ import { CreateReminderActivationTimeDto } from './dto/create-reminder-activatio
 import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activation-time.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 @Controller('reminder-activation-time')
 export class ReminderActivationTimeController {
   constructor(
