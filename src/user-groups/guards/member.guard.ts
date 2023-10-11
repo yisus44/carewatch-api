@@ -28,7 +28,7 @@ export class MemberGuard implements CanActivate {
     const user = request.user;
     const requestBody = request.body;
     if (!requestBody) throw new GroupNotFoundException();
-    const groupId = request.body.groupId;
+    const groupId = request.body.groupId || request.query.groupId;
     const userGroupCacheKey = generateUserGroupCache(user, groupId);
     const cachedUserGroup: UserGroup = await this.cacheManager.get(
       userGroupCacheKey,
