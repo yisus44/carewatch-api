@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { CoreService } from 'src/core/core.service';
 import { ReminderActivationTime } from './entities/reminder-activation-time.entity';
 import { Repository } from 'typeorm';
@@ -15,7 +15,10 @@ import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activatio
 import { ReminderActivationTimeHelperExecution } from './reminder-activation-time-execution.helper';
 
 @Injectable()
-export class ReminderActivationTimeService extends CoreService<ReminderActivationTime> {
+export class ReminderActivationTimeService
+  extends CoreService<ReminderActivationTime>
+  implements OnModuleInit
+{
   constructor(
     @InjectRepository(ReminderActivationTime)
     private readonly reminderActivationTimeRepository: Repository<ReminderActivationTime>,
@@ -25,6 +28,35 @@ export class ReminderActivationTimeService extends CoreService<ReminderActivatio
   ) {
     super(reminderActivationTimeRepository);
   }
+
+  async onModuleInit() {
+    // const seconds = 5;
+    // const job = new CronJob(`${seconds} * * * * *`, () => {
+    //   console.log(`time (${seconds}) for job  to run!`);
+    // });
+    // this.schedulerRegistry.addCronJob('name', job);
+    // job.start();
+    if (process.env.CONTAINER_ROLE == 'ONLY_DATA_STORAGE') return;
+    console.log({ date: new Date() });
+    let newDate = new Date();
+    const data = await this.reminderActivationTimeRepository.find({
+      relations: {
+        frequencyType: true,
+      },
+    });
+    const promiseArr = [];
+    for (const activation of data) {
+      promiseArr.push(
+        this.reminderActivationTimeExecutionHelper.handleExecution(
+          activation,
+          activation.frequencyType,
+        ),
+      );
+    }
+    await Promise.all(promiseArr);
+    console.log({ postLoadDate: new Date().getTime() - newDate.getTime() });
+  }
+
   override async create(
     createReminderActivationTimeDto: CreateReminderActivationTimeDto,
   ): Promise<ReminderActivationTime> {

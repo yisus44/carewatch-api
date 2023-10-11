@@ -5,7 +5,7 @@ import { CommonService } from 'src/common/common.service';
 import { UserGroupService } from 'src/user-groups/user-group.service';
 
 @Injectable()
-export class ReminderExecutionService implements OnModuleInit {
+export class ReminderExecutionService {
   private readonly daysOfWeek: { [key: string]: string } = {
     L: '1',
     M: '2',
@@ -21,14 +21,6 @@ export class ReminderExecutionService implements OnModuleInit {
     private readonly commonService: CommonService,
   ) {}
 
-  async onModuleInit() {
-    // const seconds = 5;
-    // const job = new CronJob(`${seconds} * * * * *`, () => {
-    //   console.log(`time (${seconds}) for job  to run!`);
-    // });
-    // this.schedulerRegistry.addCronJob('name', job);
-    // job.start();
-  }
   secondsToCron(seconds: number) {
     if (seconds < 1) {
       throw new Error('Input seconds must be greater than or equal to 1');
