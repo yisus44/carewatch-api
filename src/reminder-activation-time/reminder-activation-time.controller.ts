@@ -15,7 +15,9 @@ import { CreateReminderActivationTimeDto } from './dto/create-reminder-activatio
 import { UpdateReminderActivationTimeDto } from './dto/update-reminder-activation-time.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
-@UseGuards(AuthGuard)
+import { MemberGuard } from 'src/user-groups/guards/member.guard';
+import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
+@UseGuards(AuthGuard, MemberGuard)
 @Controller('reminder-activation-time')
 export class ReminderActivationTimeController {
   constructor(
@@ -30,9 +32,18 @@ export class ReminderActivationTimeController {
       createReminderActivationTimeDto,
     );
   }
+  @Get('/reminder/:reminderId')
+  findAllActivationTimeOfReminder(
+    @Param('reminderId', ParseIntPipe) reminderId: number,
+    @Query() paginationDto: PaginateGroupDto,
+  ) {
+    return this.reminderActivationTimeService.findPaginated(paginationDto, {
+      reminderId,
+    });
+  }
 
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
+  findAll(@Query() paginationDto: PaginateGroupDto) {
     return this.reminderActivationTimeService.findPaginated(paginationDto);
   }
 

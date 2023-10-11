@@ -11,6 +11,8 @@ import { RemindersModule } from 'src/reminders/reminders.module';
 import { MedicinesModule } from 'src/medicines/medicines.module';
 import { GroupsModule } from 'src/groups/groups.module';
 import { ReminderActivationTimeHelperExecution } from './reminder-activation-time-execution.helper';
+import { CacheModule } from '@nestjs/cache-manager';
+import { UserGroupModule } from 'src/user-groups/user-group.module';
 
 @Module({
   controllers: [ReminderActivationTimeController],
@@ -20,6 +22,8 @@ import { ReminderActivationTimeHelperExecution } from './reminder-activation-tim
   ],
   imports: [
     TypeOrmModule.forFeature([ReminderActivationTime]),
+    CacheModule.register(),
+    UserGroupModule,
     FrequencyTypesModule,
     ReminderExecutionModule,
     WhatsappModule,
