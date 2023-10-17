@@ -17,7 +17,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { MemberGuard } from 'src/user-groups/guards/member.guard';
 import { PaginateGroupDto } from 'src/user-groups/dto/paginate-group.dto';
-@UseGuards(AuthGuard, MemberGuard)
+
 @Controller('reminder-activation-time')
 export class ReminderActivationTimeController {
   constructor(
