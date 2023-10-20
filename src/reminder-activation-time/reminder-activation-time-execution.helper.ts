@@ -58,7 +58,9 @@ export class ReminderActivationTimeHelperExecution {
               AND
                   CAST(end_time AS TIME) > CAST(CURRENT_TIME AT TIME ZONE 'UTC' AT TIME ZONE schedule.time_zone AS TIME )
               AND
-                EXTRACT(DOW FROM now()    AT TIME ZONE schedule.time_zone) = week_day.week_day_number
+                EXTRACT(DOW FROM now() AT TIME ZONE schedule.time_zone) = week_day.week_day_number
+              AND
+                schedule.deleted_at is not null 
               )
           /*Join the information*/
           SELECT
@@ -73,7 +75,12 @@ export class ReminderActivationTimeHelperExecution {
           on user_group.id = active_users.user_group_id
           LEFT JOIN public.user AS usr
           ON usr.id = user_group.user_id
-              WHERE user_group.group_id = $1 AND user_group.is_active = true
+              WHERE 
+                user_group.group_id = $1 
+              AND 
+                user_group.is_active = true
+              AND
+                user_group.deleted_at is not null
             `,
         [group.id],
       );

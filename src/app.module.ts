@@ -37,6 +37,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { ReminderExecutionModule } from './reminder-execution/reminder-execution.module';
 import { FrequencyTypesModule } from './frequency-types/frequency-types.module';
 import { ReminderActivationTimeModule } from './reminder-activation-time/reminder-activation-time.module';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { ReminderActivationTimeModule } from './reminder-activation-time/reminde
     ReminderExecutionModule,
     FrequencyTypesModule,
     ReminderActivationTimeModule,
+    SyncModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],

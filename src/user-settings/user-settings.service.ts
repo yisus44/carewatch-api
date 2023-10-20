@@ -42,13 +42,6 @@ export class UserSettingsService extends CoreService<UserSetting> {
     return await this.userSettingRepository.findOneBy({ id });
   }
 
-  async remove(id: number): Promise<DeleteResult> {
-    return await this.userSettingRepository.delete(id);
-  }
-
-  async update(id: number, updateFileDto: UpdateUserSettingDto) {
-    return await this.userSettingRepository.update({ id }, updateFileDto);
-  }
   async create(createFileTypeDto: CreateUserSettingDto): Promise<UserSetting> {
     try {
       const userSetting = await super.create({

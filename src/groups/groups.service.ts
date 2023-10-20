@@ -49,7 +49,10 @@ export class GroupsService extends CoreService<Group> {
     const [data, totalCount] = await this.getQueryBuilder('groups')
       .leftJoinAndSelect('groups.userGroups', 'group_invitation') // Use alias 'group_invitation' for the join
       .where(
-        `group_invitation.user_id = :userId and (group_invitation.is_active = true or group_invitation.is_admin=true )`,
+        `group_invitation.user_id = :userId and 
+        (group_invitation.is_active = true or group_invitation.is_admin=true )
+        and groups.deleted_at is null 
+        `,
         { userId: user.id },
       )
       .skip(skippedItems)
