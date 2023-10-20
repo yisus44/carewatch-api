@@ -5,6 +5,7 @@ import {
   FindOptionsOrder,
   FindOptionsWhere,
   Repository,
+  UpdateResult,
 } from 'typeorm';
 import { PageDto } from '../common/dto/page.dto';
 import { CoreEntity } from './entities/core-entity';
@@ -26,7 +27,10 @@ export abstract class CoreService<T extends CoreEntity> {
     const [data, totalCount] = await this.repository.findAndCount({
       skip: skippedItems,
       take: perPage,
-      where: findOptionsWhere,
+      where: {
+        ...findOptionsWhere,
+        deletedAt: null,
+      },
       order: findOptionsOrder,
     });
     return this.calculatePagination(data, totalCount, page, perPage);
@@ -54,16 +58,23 @@ export abstract class CoreService<T extends CoreEntity> {
   async findOneById(id: number) {
     const query = {
       id,
+      deletedAt: null,
     } as unknown as any;
     const match = await this.repository.findOneBy(query);
     if (!match) throw new NotFoundException();
     return match;
   }
   async findOneBy(query: FindOptionsWhere<T>) {
-    return await this.repository.findOneBy(query);
+    return await this.repository.findOneBy({
+      ...query,
+      deletedAt: null,
+    });
   }
   async findOneByOrFail(query: FindOptionsWhere<T>) {
-    const match = await this.repository.findOneBy(query);
+    const match = await this.repository.findOneBy({
+      ...query,
+      deletedAt: null,
+    });
     if (!match) throw new NotFoundException();
     return match;
   }
@@ -72,7 +83,10 @@ export abstract class CoreService<T extends CoreEntity> {
     findOptionsOrder: FindOptionsOrder<T> = {},
   ) {
     return await this.repository.find({
-      where: findOptionsWhere,
+      where: {
+        ...findOptionsWhere,
+        deletedAt: null,
+      },
       order: findOptionsOrder,
     });
   }
@@ -82,7 +96,7 @@ export abstract class CoreService<T extends CoreEntity> {
     findOptionsOrder: FindOptionsOrder<T> = {},
   ) {
     return await this.repository.findOne({
-      where: findOptionsWhere,
+      where: { ...findOptionsWhere, deletedAt: null },
       order: findOptionsOrder,
     });
   }
@@ -100,7 +114,7 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async update(id: number, updateDto: Partial<T>) {
-    const query = { id } as unknown as any;
+    const query = { id, deletedAt: null } as unknown as any;
     const entity = await this.repository.update(
       query,
       updateDto as unknown as QueryDeepPartialEntity<T>,
@@ -110,19 +124,27 @@ export abstract class CoreService<T extends CoreEntity> {
 
   async updateBy(query: any, updateDto: Partial<T>) {
     const entity = await this.repository.update(
-      query,
+      {
+        ...query,
+        deletedAt: null,
+      },
       updateDto as unknown as QueryDeepPartialEntity<T>,
     );
     return entity;
   }
-  async remove(id: number): Promise<DeleteResult> {
-    return await this.repository.delete(id);
+
+  async remove(id: number): Promise<UpdateResult> {
+    return await this.repository.update(id, {
+      deletedAt: new Date(),
+    } as unknown as QueryDeepPartialEntity<T>);
   }
 
-  async removeBy(query: FindOptionsWhere<T>): Promise<DeleteResult> {
+  async removeBy(query: FindOptionsWhere<T>): Promise<UpdateResult> {
     if (!query)
       throw new BadRequestException('YOU CANNOT DELETE THE WHOLE TABLE');
-    return await this.repository.delete(query);
+    return await this.updateBy(query, {
+      deletedAt: new Date(),
+    } as unknown as Partial<T>);
   }
 
   getQueryBuilder(alias: string) {
