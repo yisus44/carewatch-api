@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'yisus44/feature/sync'
 permissions:
   id-token: write
   contents: read
