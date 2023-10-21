@@ -8,5 +8,6 @@ import { ReminderFile } from './entities/reminder-file.entity';
   controllers: [ReminderFilesController],
   providers: [ReminderFilesService],
   imports: [TypeOrmModule.forFeature([ReminderFile])],
+  exports: [ReminderFilesService],
 })
 export class ReminderFilesModule {}

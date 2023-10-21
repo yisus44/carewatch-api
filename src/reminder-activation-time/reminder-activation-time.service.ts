@@ -37,7 +37,6 @@ export class ReminderActivationTimeService
     // this.schedulerRegistry.addCronJob('name', job);
     // job.start();
     if (process.env.CONTAINER_ROLE == 'ONLY_DATA_STORAGE') return;
-    console.log({ date: new Date() });
     let newDate = new Date();
     const data = await this.reminderActivationTimeRepository.find({
       relations: {

@@ -134,8 +134,11 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async remove(id: number): Promise<UpdateResult> {
+    console.log({ newdate: new Date() });
+    console.log({ UTCDate: new Date().toUTCString() });
+
     return await this.repository.update(id, {
-      deletedAt: new Date(),
+      deletedAt: () => 'now()',
     } as unknown as QueryDeepPartialEntity<T>);
   }
 
@@ -143,7 +146,7 @@ export abstract class CoreService<T extends CoreEntity> {
     if (!query)
       throw new BadRequestException('YOU CANNOT DELETE THE WHOLE TABLE');
     return await this.updateBy(query, {
-      deletedAt: new Date(),
+      deletedAt: () => 'now()',
     } as unknown as Partial<T>);
   }
 
