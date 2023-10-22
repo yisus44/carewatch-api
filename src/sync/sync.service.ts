@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SyncDto } from './dto/sync.dto';
+import { SyncDto, SyncPayload } from './dto/sync.dto';
 import { UsersService } from 'src/users/users.service';
 import { UserSettingsService } from 'src/user-settings/user-settings.service';
 import { FileTypeService } from 'src/file-type/file-type.service';
@@ -18,7 +18,8 @@ import { SubscriptionsHistoryService } from 'src/subscriptions_history/subscript
 import { UserGroupService } from 'src/user-groups/user-group.service';
 import { WeekDaysService } from 'src/week-days/week-days.service';
 import { User } from 'src/users/entities/user.entity';
-import { MoreThanOrEqual } from 'typeorm';
+import { In, MoreThanOrEqual } from 'typeorm';
+import { CoreEntity } from 'src/core/entities/core-entity';
 
 @Injectable()
 export class SyncService {
@@ -42,35 +43,169 @@ export class SyncService {
     private readonly weekDaysService: WeekDaysService,
   ) {}
   async toReturn(date: Date, user: User) {
-    // const users = await this.usersService.list({
-    //   createdAt: MoreThanOrEqual(date),
-    // });
-    const [userSettings, subscriptions, userGroups] = await Promise.all([
-      this.userSettingsService.list({
-        createdAt: MoreThanOrEqual(date),
+    const [
+      newUserSettings,
+      newSubscriptions,
+      newUserGroups,
+      allGroups,
+      allUserGroup,
+      allSubscriptions,
+    ] = await Promise.all([
+      this.userSettingsService.list(
+        {
+          createdAt: MoreThanOrEqual(date),
+          userId: user.id,
+        },
+        {},
+        true,
+      ),
+      this.subscriptionsService.list(
+        {
+          createdAt: MoreThanOrEqual(date),
+          userId: user.id,
+        },
+        {},
+        true,
+      ),
+      this.userGroupService.list(
+        {
+          createdAt: MoreThanOrEqual(date),
+          userId: user.id,
+        },
+        {},
+        true,
+      ),
+      this.groupsService.getQueryOfGroupsFromUser(user).getMany(),
+      this.userGroupService.list({
         userId: user.id,
       }),
       this.subscriptionsService.list({
-        createdAt: MoreThanOrEqual(date),
-        userId: user.id,
-      }),
-      this.userGroupService.list({
-        createdAt: MoreThanOrEqual(date),
         userId: user.id,
       }),
     ]);
-    const userPromise = [];
-    for (const userGroup of userGroups) {
-      userPromise.push(this.usersService.findOneById(userGroup.userId));
-    }
-    const users = await Promise.all(userPromise);
 
-    return {
-      userSettings,
-      subscriptions,
-      userGroups,
-      users,
+    const groupsId = new Map<number, number>();
+    const userGroupsId = new Map<number, number>();
+
+    //iterate over all the group invitation to get the new groups and schedules
+    for (const userGroup of allUserGroup) {
+      const groupId = userGroup.groupId;
+      const id = userGroup.id;
+      groupsId.set(groupId, groupId);
+      userGroupsId.set(id, id);
+    }
+    //iterate over all the groups from the user to get the new reminders, group files and
+    const allGroupsId = new Map<number, number>();
+    for (const group of allGroups) {
+      allGroupsId.set(group.id, group.id);
+    }
+
+    const [
+      newGroups,
+      newSchedules,
+      newReminders,
+      allReminders,
+      newGroupFiles,
+      newUserSubscriptionsHistory,
+    ] = await Promise.all([
+      this.groupsService.list({
+        id: In(Array.from(groupsId.values())),
+        createdAt: MoreThanOrEqual(date),
+      }),
+      //get all the schedules where the user has a user group
+      this.scheduleService.list({
+        userGroupId: In(Array.from(userGroupsId.values())),
+        createdAt: MoreThanOrEqual(date),
+      }),
+      this.remindersService.list({
+        createdAt: MoreThanOrEqual(date),
+        groupId: In(Array.from(allGroupsId.values())),
+      }),
+      this.remindersService.list(
+        {
+          groupId: In(Array.from(allGroupsId.values())),
+        },
+        {},
+        true,
+      ),
+      this.groupFilesService.list({
+        createdAt: MoreThanOrEqual(date),
+        groupId: In(Array.from(allGroupsId.values())),
+      }),
+      this.subscriptionsHistoryService.list({}),
+    ]);
+
+    const allRemindersId = new Map<number, number>();
+
+    for (const reminder of allReminders) {
+      allRemindersId.set(reminder.id, reminder.id);
+    }
+
+    const [newMedicines, newReminderActivationTime, newReminderFiles] =
+      await Promise.all([
+        this.medicinesService.list({
+          groupId: In(Array.from(allGroupsId.values())),
+          createdAt: MoreThanOrEqual(date),
+        }),
+        this.reminderActivationTimeService.list({
+          createdAt: MoreThanOrEqual(date),
+          reminderId: In(Array.from(allRemindersId.values())),
+        }),
+        this.reminderFilesService.list({
+          createdAt: MoreThanOrEqual(date),
+          reminderId: In(Array.from(allRemindersId.values())),
+        }),
+      ]);
+    const newFilesId = new Map<number, number>();
+
+    for (const reminderFile of newReminderFiles) {
+      newFilesId.set(reminderFile.fileId, reminderFile.fileId);
+    }
+    for (const groupFiles of newGroupFiles) {
+      newFilesId.set(groupFiles.fileId, groupFiles.fileId);
+    }
+
+    const [newFiles] = await Promise.all([
+      this.filesService.list({
+        id: In(Array.from(newFilesId.values())),
+      }),
+    ]);
+
+    const res: SyncPayload = {
+      userSettings: newUserSettings,
+      subscriptions: newSubscriptions,
+      userGroups: newUserGroups,
+      groups: newGroups,
+      schedules: newSchedules,
+      reminders: newReminders,
+      groupFiles: newGroupFiles,
+      medicines: newMedicines,
+      reminderActivationTime: newReminderActivationTime,
+      subscriptionHistory: newUserSubscriptionsHistory,
+      files: newFiles,
     };
+    return this.convertEntitesToSyncDto(res);
   }
+
+  convertEntitesToSyncDto(syncPayload: SyncPayload) {
+    const syncPayloadDemo = new SyncPayload();
+    const SyncDto: SyncDto = {
+      toCreate: syncPayloadDemo,
+      toUpdate: syncPayloadDemo,
+    };
+    for (const key of Object.keys(syncPayload)) {
+      const entityKey = key as keyof SyncPayload;
+      for (const entity of syncPayload[entityKey]) {
+        if (entity.updatedAt > entity.createdAt) {
+          SyncDto['toUpdate'][entityKey].push(entity as any);
+        } else {
+          SyncDto['toCreate'][entityKey].push(entity as any);
+        }
+      }
+    }
+
+    return SyncDto;
+  }
+
   toUpload(SyncDto: SyncDto) {}
 }

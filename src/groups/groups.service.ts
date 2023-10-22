@@ -46,7 +46,15 @@ export class GroupsService extends CoreService<Group> {
   async getUserGroups(paginationDto: PaginationDto, user: User) {
     const { page, perPage } = paginationDto;
     const skippedItems = (page - 1) * perPage;
-    const [data, totalCount] = await this.getQueryBuilder('groups')
+    const [data, totalCount] = await this.getQueryOfGroupsFromUser(user)
+      .skip(skippedItems)
+      .take(perPage)
+      .getManyAndCount();
+    return this.calculatePagination(data, totalCount, page, perPage);
+  }
+
+  getQueryOfGroupsFromUser(user: User) {
+    return this.getQueryBuilder('groups')
       .leftJoinAndSelect('groups.userGroups', 'group_invitation') // Use alias 'group_invitation' for the join
       .where(
         `group_invitation.user_id = :userId and 
@@ -54,11 +62,7 @@ export class GroupsService extends CoreService<Group> {
         and groups.deleted_at is null 
         `,
         { userId: user.id },
-      )
-      .skip(skippedItems)
-      .take(perPage)
-      .getManyAndCount();
-    return this.calculatePagination(data, totalCount, page, perPage);
+      );
   }
 
   async canCreateMoreGroups(user: User) {

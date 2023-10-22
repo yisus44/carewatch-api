@@ -81,12 +81,11 @@ export abstract class CoreService<T extends CoreEntity> {
   async list(
     findOptionsWhere: FindOptionsWhere<T> = {},
     findOptionsOrder: FindOptionsOrder<T> = {},
+    includeSoftDeletes = false,
   ) {
+    if (!includeSoftDeletes) findOptionsWhere.deletedAt = null;
     return await this.repository.find({
-      where: {
-        ...findOptionsWhere,
-        deletedAt: null,
-      },
+      where: findOptionsWhere,
       order: findOptionsOrder,
     });
   }
@@ -150,6 +149,16 @@ export abstract class CoreService<T extends CoreEntity> {
     } as unknown as Partial<T>);
   }
 
+  async getBatch(ids: number[]) {
+    const queryBuilder = this.getQueryBuilder('groups');
+    return await queryBuilder.where(`id IN (:...ids)`, { ids }).getMany();
+  }
+  async getBatchOfDifferentKey(ids: number[], key: string) {
+    const queryBuilder = this.getQueryBuilder('groups');
+    return await queryBuilder
+      .where(`{key} IN (:...ids)`, { ids, key })
+      .getMany();
+  }
   getQueryBuilder(alias: string) {
     return this.repository.createQueryBuilder(alias);
   }
