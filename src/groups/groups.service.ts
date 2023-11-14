@@ -1,13 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CoreService } from '../core/core.service';
 import { Group } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { User } from '../users/entities/user.entity';
 import { MailService } from '../mail/mail.service';
@@ -28,6 +24,17 @@ export class GroupsService extends CoreService<Group> {
     private readonly whatsAppService: WhatsappService,
   ) {
     super(groupRepository);
+  }
+
+  async batchAdd(entities: Group[], user: User) {
+    const promiseArr = [];
+    for (const entity of entities) {
+      delete entity.id;
+      const canCreateMoreGroups = await this.canCreateMoreGroups(user);
+      if (!canCreateMoreGroups) throw new FreePlanReachedException();
+      promiseArr.push(this.create(entity));
+    }
+    await Promise.all(promiseArr);
   }
 
   async add(createGroupDto: CreateGroupDto, user: User) {

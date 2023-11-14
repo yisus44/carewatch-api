@@ -21,8 +21,8 @@ export class SyncController {
   constructor(private readonly syncService: SyncService) {}
 
   @Post()
-  toUpload(@Body() SyncDto: SyncDto) {
-    return this.syncService.toUpload(SyncDto);
+  toUpload(@Body() syncDto: SyncDto, @GetCurrentUser() user: User) {
+    return this.syncService.toUpload(syncDto, user);
   }
 
   @Get()

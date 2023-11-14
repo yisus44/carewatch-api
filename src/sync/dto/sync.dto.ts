@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'class-validator';
 import { File } from 'src/files/entities/file.entity';
 import { GroupFile } from 'src/group-files/entities/group-file.entity';
 import { Group } from 'src/groups/entities/group.entity';
@@ -9,11 +10,7 @@ import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { SubscriptionsHistory } from 'src/subscriptions_history/entities/subscriptions_history.entity';
 import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
 import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
-
-export class SyncDto {
-  toCreate: SyncPayload;
-  toUpdate: SyncPayload;
-}
+import { User } from 'src/users/entities/user.entity';
 
 export class SyncPayload {
   userSettings: UserSetting[];
@@ -27,6 +24,7 @@ export class SyncPayload {
   reminderActivationTime: ReminderActivationTime[];
   subscriptionHistory: SubscriptionsHistory[];
   files: File[];
+  users: User[];
   constructor() {
     this.userSettings = [];
     this.subscriptions = [];
@@ -39,5 +37,12 @@ export class SyncPayload {
     this.reminderActivationTime = [];
     this.subscriptionHistory = [];
     this.files = [];
+    this.users = [];
   }
+}
+export class SyncDto {
+  @IsNotEmpty()
+  toCreate: SyncPayload;
+  @IsNotEmpty()
+  toUpdate: SyncPayload;
 }

@@ -90,6 +90,17 @@ export abstract class CoreService<T extends CoreEntity> {
     });
   }
 
+  getUnique(list: T[]) {
+    const seen = new Set();
+    return list.filter((obj) => {
+      const value = obj.id;
+      if (!seen.has(value)) {
+        seen.add(value);
+        return true;
+      }
+      return false;
+    });
+  }
   async listOne(
     findOptionsWhere: FindOptionsWhere<T> = {},
     findOptionsOrder: FindOptionsOrder<T> = {},
@@ -98,6 +109,27 @@ export abstract class CoreService<T extends CoreEntity> {
       where: { ...findOptionsWhere, deletedAt: null },
       order: findOptionsOrder,
     });
+  }
+
+  async batchCreate(entities: Partial<T>[]) {
+    const promiseArr = [];
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async batchUpdate(entities: Partial<T>[]) {
+    const promiseArr = [];
+    for (const entity of entities) {
+      // const found = await this.findOneById(entity.id);
+      // //if the user tries to update an non existent identity
+      // if (!found) continue;
+
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
   }
 
   async create(createDto: Partial<T>) {
@@ -113,7 +145,9 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async update(id: number, updateDto: Partial<T>) {
-    const query = { id, deletedAt: null } as unknown as any;
+    const query = { id } as unknown as FindOptionsWhere<T>;
+    delete updateDto.id;
+
     const entity = await this.repository.update(
       query,
       updateDto as unknown as QueryDeepPartialEntity<T>,
@@ -133,9 +167,6 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async remove(id: number): Promise<UpdateResult> {
-    console.log({ newdate: new Date() });
-    console.log({ UTCDate: new Date().toUTCString() });
-
     return await this.repository.update(id, {
       deletedAt: () => 'now()',
     } as unknown as QueryDeepPartialEntity<T>);

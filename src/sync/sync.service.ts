@@ -46,14 +46,15 @@ export class SyncService {
     const [
       newUserSettings,
       newSubscriptions,
-      newUserGroups,
+      //to get new groups where the user is member
+      newUserGroupsOfTheUser,
       allGroups,
       allUserGroup,
       allSubscriptions,
     ] = await Promise.all([
       this.userSettingsService.list(
         {
-          createdAt: MoreThanOrEqual(date),
+          updatedAt: MoreThanOrEqual(date),
           userId: user.id,
         },
         {},
@@ -61,7 +62,7 @@ export class SyncService {
       ),
       this.subscriptionsService.list(
         {
-          createdAt: MoreThanOrEqual(date),
+          updatedAt: MoreThanOrEqual(date),
           userId: user.id,
         },
         {},
@@ -69,7 +70,7 @@ export class SyncService {
       ),
       this.userGroupService.list(
         {
-          createdAt: MoreThanOrEqual(date),
+          updatedAt: MoreThanOrEqual(date),
           userId: user.id,
         },
         {},
@@ -94,10 +95,15 @@ export class SyncService {
       groupsId.set(groupId, groupId);
       userGroupsId.set(id, id);
     }
-    //iterate over all the groups from the user to get the new reminders, group files and
+    //iterate over all the groups from the user to get the new reminders, group files and user groups
     const allGroupsId = new Map<number, number>();
     for (const group of allGroups) {
       allGroupsId.set(group.id, group.id);
+    }
+
+    const allSubscriptionsId = new Map<number, number>();
+    for (const subscription of allSubscriptions) {
+      allSubscriptionsId.set(subscription.id, subscription.id);
     }
 
     const [
@@ -106,19 +112,20 @@ export class SyncService {
       newReminders,
       allReminders,
       newGroupFiles,
+      newUserGroups,
       newUserSubscriptionsHistory,
     ] = await Promise.all([
       this.groupsService.list({
         id: In(Array.from(groupsId.values())),
-        createdAt: MoreThanOrEqual(date),
+        updatedAt: MoreThanOrEqual(date),
       }),
       //get all the schedules where the user has a user group
       this.scheduleService.list({
         userGroupId: In(Array.from(userGroupsId.values())),
-        createdAt: MoreThanOrEqual(date),
+        updatedAt: MoreThanOrEqual(date),
       }),
       this.remindersService.list({
-        createdAt: MoreThanOrEqual(date),
+        updatedAt: MoreThanOrEqual(date),
         groupId: In(Array.from(allGroupsId.values())),
       }),
       this.remindersService.list(
@@ -129,10 +136,17 @@ export class SyncService {
         true,
       ),
       this.groupFilesService.list({
-        createdAt: MoreThanOrEqual(date),
+        updatedAt: MoreThanOrEqual(date),
         groupId: In(Array.from(allGroupsId.values())),
       }),
-      this.subscriptionsHistoryService.list({}),
+      this.userGroupService.list({
+        updatedAt: MoreThanOrEqual(date),
+        groupId: In(Array.from(allGroupsId.values())),
+      }),
+      this.subscriptionsHistoryService.list({
+        updatedAt: MoreThanOrEqual(date),
+        subscriptionId: In(Array.from(allSubscriptionsId.values())),
+      }),
     ]);
 
     const allRemindersId = new Map<number, number>();
@@ -140,22 +154,35 @@ export class SyncService {
     for (const reminder of allReminders) {
       allRemindersId.set(reminder.id, reminder.id);
     }
+    const allNewUserId = new Map<number, number>();
 
-    const [newMedicines, newReminderActivationTime, newReminderFiles] =
-      await Promise.all([
-        this.medicinesService.list({
-          groupId: In(Array.from(allGroupsId.values())),
-          createdAt: MoreThanOrEqual(date),
-        }),
-        this.reminderActivationTimeService.list({
-          createdAt: MoreThanOrEqual(date),
-          reminderId: In(Array.from(allRemindersId.values())),
-        }),
-        this.reminderFilesService.list({
-          createdAt: MoreThanOrEqual(date),
-          reminderId: In(Array.from(allRemindersId.values())),
-        }),
-      ]);
+    for (const userGroup of newUserGroups) {
+      allNewUserId.set(userGroup.userId, userGroup.userId);
+    }
+
+    const [
+      newMedicines,
+      newReminderActivationTime,
+      newReminderFiles,
+      newUsers,
+    ] = await Promise.all([
+      this.medicinesService.list({
+        groupId: In(Array.from(allGroupsId.values())),
+        updatedAt: MoreThanOrEqual(date),
+      }),
+      this.reminderActivationTimeService.list({
+        updatedAt: MoreThanOrEqual(date),
+        reminderId: In(Array.from(allRemindersId.values())),
+      }),
+      this.reminderFilesService.list({
+        updatedAt: MoreThanOrEqual(date),
+        reminderId: In(Array.from(allRemindersId.values())),
+      }),
+      this.usersService.list({
+        //select the new users and the updated current user
+        id: In([...Array.from(allNewUserId.values()), user.id]),
+      }),
+    ]);
     const newFilesId = new Map<number, number>();
 
     for (const reminderFile of newReminderFiles) {
@@ -171,10 +198,17 @@ export class SyncService {
       }),
     ]);
 
+    const userGroups = this.userGroupService.getUnique([
+      ...newUserGroupsOfTheUser,
+      ...newUserGroups,
+    ]);
+
+    const users = this.usersService.getUnique(newUsers);
+
     const res: SyncPayload = {
       userSettings: newUserSettings,
       subscriptions: newSubscriptions,
-      userGroups: newUserGroups,
+      userGroups,
       groups: newGroups,
       schedules: newSchedules,
       reminders: newReminders,
@@ -183,29 +217,90 @@ export class SyncService {
       reminderActivationTime: newReminderActivationTime,
       subscriptionHistory: newUserSubscriptionsHistory,
       files: newFiles,
+      users: users,
     };
-    return this.convertEntitesToSyncDto(res);
+    return this.convertEntitesToSyncDto(res, date);
   }
 
-  convertEntitesToSyncDto(syncPayload: SyncPayload) {
-    const syncPayloadDemo = new SyncPayload();
-    const SyncDto: SyncDto = {
-      toCreate: syncPayloadDemo,
-      toUpdate: syncPayloadDemo,
+  convertEntitesToSyncDto(syncPayload: SyncPayload, syncDate: Date) {
+    const syncPayloadToReturn = new SyncPayload();
+    const syncDto: SyncDto = {
+      toCreate: structuredClone(syncPayloadToReturn),
+      toUpdate: structuredClone(syncPayloadToReturn),
     };
+    //classify records
     for (const key of Object.keys(syncPayload)) {
       const entityKey = key as keyof SyncPayload;
       for (const entity of syncPayload[entityKey]) {
-        if (entity.updatedAt > entity.createdAt) {
-          SyncDto['toUpdate'][entityKey].push(entity as any);
+        if (syncDate <= entity.createdAt) {
+          syncDto.toCreate[entityKey].push(entity as any);
         } else {
-          SyncDto['toCreate'][entityKey].push(entity as any);
+          syncDto.toUpdate[entityKey].push(entity as any);
         }
       }
     }
-
-    return SyncDto;
+    return syncDto;
   }
 
-  toUpload(SyncDto: SyncDto) {}
+  async toUpload(syncDto: SyncDto, user: User) {
+    await this.toCreatePayload(syncDto.toCreate, user);
+    await this.toUpdatePayload(syncDto.toUpdate, user);
+  }
+
+  async toUpdatePayload(syncPayload: SyncPayload, user: User) {
+    await this.groupsService.batchUpdate(syncPayload.groups);
+    await this.userSettingsService.batchUpdate(syncPayload.userSettings);
+
+    await this.filesService.batchUpdate(syncPayload.files);
+
+    await this.userGroupService.batchUpdate(syncPayload.userGroups);
+
+    await this.groupFilesService.batchUpdate(syncPayload.groupFiles);
+
+    await this.remindersService.batchUpdate(syncPayload.reminders);
+
+    await this.medicinesService.batchUpdate(syncPayload.medicines);
+
+    await this.reminderActivationTimeService.batchUpdate(
+      syncPayload.reminderActivationTime,
+    );
+
+    await this.scheduleService.batchUpdate(syncPayload.schedules);
+    await this.subscriptionsHistoryService.batchUpdate(
+      syncPayload.subscriptionHistory,
+    );
+
+    await this.subscriptionsService.batchUpdate(syncPayload.subscriptions);
+  }
+
+  async toCreatePayload(syncPayload: SyncPayload, user: User) {
+    //special implementation of the batch operation because creating extra groups
+    // require some validations
+    await this.groupsService.batchAdd(syncPayload.groups, user);
+    await this.userSettingsService.batchCreate(syncPayload.userSettings);
+
+    await this.filesService.batchCreate(syncPayload.files);
+
+    await this.userGroupService.batchCreate(syncPayload.userGroups);
+
+    await this.groupFilesService.batchCreate(syncPayload.groupFiles);
+
+    await this.remindersService.batchCreate(syncPayload.reminders);
+
+    await this.medicinesService.batchCreate(syncPayload.medicines);
+
+    await this.reminderActivationTimeService.batchCreate(
+      syncPayload.reminderActivationTime,
+    );
+
+    await this.scheduleService.batchCreate(syncPayload.schedules);
+
+    await this.subscriptionsHistoryService.batchCreate(
+      syncPayload.subscriptionHistory,
+    );
+    //special implementation of the batch operation because creating subscriptions
+    //requires another implematnion
+
+    await this.subscriptionsService.batchAdd(syncPayload.subscriptions);
+  }
 }

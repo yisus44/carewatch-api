@@ -31,6 +31,19 @@ export class SubscriptionsService extends CoreService<Subscription> {
     });
     return subscription;
   }
+  async add(subscriptionDto: Partial<Subscription>) {
+    const subscription = super.create(subscriptionDto);
+    return subscription;
+  }
+
+  async batchAdd(subscriptions: Subscription[]) {
+    const subPromiseArr: Promise<Subscription>[] = [];
+    for (const subscription of subscriptions) {
+      delete subscription.id;
+      subPromiseArr.push(this.add(subscription));
+    }
+    await Promise.all(subPromiseArr);
+  }
 
   async getUserSubscription(user: User) {
     return await super.listOne({
