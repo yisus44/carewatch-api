@@ -14,20 +14,31 @@ import { SyncDto } from './dto/sync.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { GetCurrentUser } from 'src/auth/decorators/current-user';
 import { User } from 'src/users/entities/user.entity';
+import { PullSyncDto } from './dto/sync-group.dto';
+import { SyncPullService } from './sync-pull.service';
 
 @UseGuards(AuthGuard)
 @Controller('sync')
 export class SyncController {
-  constructor(private readonly syncService: SyncService) {}
+  constructor(
+    private readonly syncService: SyncService,
+    private readonly syncSPullervice: SyncPullService,
+  ) {}
 
   @Post()
   toUpload(@Body() syncDto: SyncDto, @GetCurrentUser() user: User) {
     return this.syncService.toUpload(syncDto, user);
   }
 
+  // @Get()
+  // toReturn(@GetCurrentUser() user: User, @Query('date') date: Date) {
+  //   console.log({ user });
+  //   return this.syncService.toReturn(date, user);
+  // }
+
   @Get()
-  toReturn(@GetCurrentUser() user: User, @Query('date') date: Date) {
+  toReturn(@GetCurrentUser() user: User, @Body() pullSyncDto: PullSyncDto) {
     console.log({ user });
-    return this.syncService.toReturn(date, user);
+    return this.syncSPullervice.toReturn(pullSyncDto, user);
   }
 }

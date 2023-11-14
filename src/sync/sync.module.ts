@@ -22,10 +22,11 @@ import { SubscriptionsHistoryModule } from 'src/subscriptions_history/subscripti
 import { UserGroupModule } from 'src/user-groups/user-group.module';
 import { WeekDaysModule } from 'src/week-days/week-days.module';
 import { SchedulesModule } from 'src/schedules/schedules.module';
+import { SyncPullService } from './sync-pull.service';
 
 @Module({
   controllers: [SyncController],
-  providers: [SyncService],
+  providers: [SyncService, SyncPullService],
   imports: [
     UsersModule,
     UserSettingsModule,
