@@ -4,6 +4,8 @@ import {
   DeleteResult,
   FindOptionsOrder,
   FindOptionsWhere,
+  IsNull,
+  Not,
   Repository,
   UpdateResult,
 } from 'typeorm';
@@ -29,7 +31,7 @@ export abstract class CoreService<T extends CoreEntity> {
       take: perPage,
       where: {
         ...findOptionsWhere,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       order: findOptionsOrder,
     });
@@ -58,7 +60,7 @@ export abstract class CoreService<T extends CoreEntity> {
   async findOneById(id: number) {
     const query = {
       id,
-      deletedAt: null,
+      deletedAt: IsNull(),
     } as unknown as any;
     const match = await this.repository.findOneBy(query);
     if (!match) throw new NotFoundException();
@@ -73,7 +75,7 @@ export abstract class CoreService<T extends CoreEntity> {
   async findOneByOrFail(query: FindOptionsWhere<T>) {
     const match = await this.repository.findOneBy({
       ...query,
-      deletedAt: null,
+      deletedAt: IsNull(),
     });
     if (!match) throw new NotFoundException();
     return match;
@@ -83,7 +85,8 @@ export abstract class CoreService<T extends CoreEntity> {
     findOptionsOrder: FindOptionsOrder<T> = {},
     includeSoftDeletes = false,
   ) {
-    if (!includeSoftDeletes) findOptionsWhere.deletedAt = null;
+    if (!includeSoftDeletes)
+      findOptionsWhere = { ...findOptionsWhere, deletedAt: IsNull() };
     return await this.repository.find({
       where: findOptionsWhere,
       order: findOptionsOrder,
@@ -106,7 +109,7 @@ export abstract class CoreService<T extends CoreEntity> {
     findOptionsOrder: FindOptionsOrder<T> = {},
   ) {
     return await this.repository.findOne({
-      where: { ...findOptionsWhere, deletedAt: null },
+      where: { ...findOptionsWhere, deletedAt: IsNull() },
       order: findOptionsOrder,
     });
   }
@@ -145,7 +148,7 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async update(id: number, updateDto: Partial<T>) {
-    const query = { id } as unknown as FindOptionsWhere<T>;
+    const query = { id, deletedAt: IsNull() } as unknown as FindOptionsWhere<T>;
     delete updateDto.id;
 
     const entity = await this.repository.update(
@@ -159,7 +162,7 @@ export abstract class CoreService<T extends CoreEntity> {
     const entity = await this.repository.update(
       {
         ...query,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       updateDto as unknown as QueryDeepPartialEntity<T>,
     );

@@ -1,3 +1,4 @@
+import { Smartwatch } from 'src/smartwatch/entities/smartwatch.entity';
 import { CoreEntity } from '../../core/entities/core-entity';
 import { Group } from '../../groups/entities/group.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
@@ -22,6 +23,14 @@ export class UserGroup extends CoreEntity {
   })
   schedules: Schedule;
 
+  @OneToMany(
+    () => Smartwatch,
+    (smartwatch: Smartwatch) => smartwatch.userGroup,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  smartwatch: Smartwatch;
   @Column()
   groupId: number;
 

@@ -38,6 +38,7 @@ import { ReminderExecutionModule } from './reminder-execution/reminder-execution
 import { FrequencyTypesModule } from './frequency-types/frequency-types.module';
 import { ReminderActivationTimeModule } from './reminder-activation-time/reminder-activation-time.module';
 import { SyncModule } from './sync/sync.module';
+import { SmartwatchModule } from './smartwatch/smartwatch.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { SyncModule } from './sync/sync.module';
     FrequencyTypesModule,
     ReminderActivationTimeModule,
     SyncModule,
+    SmartwatchModule,
   ],
   controllers: [AppController],
   providers: [AppService, AssetsService],
