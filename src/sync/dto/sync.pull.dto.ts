@@ -4,6 +4,7 @@ import { GroupFile } from 'src/group-files/entities/group-file.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
+import { ReminderTime } from 'src/reminder-time/entities/reminder-time.entity';
 import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
@@ -12,37 +13,38 @@ import { UserGroup } from 'src/user-groups/entities/group-invitation.entity';
 import { UserSetting } from 'src/user-settings/entities/user-setting.entity';
 import { User } from 'src/users/entities/user.entity';
 
-export class SyncPayload {
-  userSettings: UserSetting[];
-  subscriptions: Subscription[];
+export class SyncPullPayload {
   userGroups: UserGroup[];
   groups: Group[];
   schedules: Schedule[];
   reminders: Reminder[];
   groupFiles: GroupFile[];
   medicines: Medicine[];
-  reminderActivationTime: ReminderActivationTime[];
-  subscriptionHistory: SubscriptionsHistory[];
-  files: File[];
-  users: User[];
+  reminderTimes: ReminderTime[];
+
   constructor() {
-    this.userSettings = [];
-    this.subscriptions = [];
     this.userGroups = [];
     this.groups = [];
     this.schedules = [];
     this.reminders = [];
     this.groupFiles = [];
     this.medicines = [];
-    this.reminderActivationTime = [];
-    this.subscriptionHistory = [];
-    this.files = [];
-    this.users = [];
+    this.reminderTimes = [];
   }
+}
+
+export class SyncSpecialDto {
+  userSettings: UserSetting[];
+  subscriptions: Subscription[];
+  subscriptionHistory: SubscriptionsHistory[];
+  users: User[];
+  files: File[];
 }
 export class SyncDto {
   @IsNotEmpty()
-  toCreate: SyncPayload;
+  toCreate: SyncPullPayload;
   @IsNotEmpty()
-  toUpdate: SyncPayload;
+  toUpdate: SyncPullPayload;
+  @IsNotEmpty()
+  special: SyncSpecialDto;
 }

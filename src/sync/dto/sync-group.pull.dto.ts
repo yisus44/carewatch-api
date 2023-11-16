@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsDate, IsNotEmpty } from 'class-validator';
 
 export class PullSyncDto {
   @IsNotEmpty()
@@ -12,5 +12,6 @@ export class SyncGroupDto {
   groupId: number;
 
   @IsNotEmpty()
+  @IsDate()
   syncDate: Date;
 }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SyncService } from './sync.service';
+import { SyncPushService } from './sync-push.service';
 import { SyncController } from './sync.controller';
 import { UsersModule } from 'src/users/users.module';
 import { UserSettingsModule } from 'src/user-settings/user-settings.module';
@@ -23,10 +23,11 @@ import { UserGroupModule } from 'src/user-groups/user-group.module';
 import { WeekDaysModule } from 'src/week-days/week-days.module';
 import { SchedulesModule } from 'src/schedules/schedules.module';
 import { SyncPullService } from './sync-pull.service';
+import { ReminderTimeModule } from 'src/reminder-time/reminder-time.module';
 
 @Module({
   controllers: [SyncController],
-  providers: [SyncService, SyncPullService],
+  providers: [SyncPushService, SyncPullService],
   imports: [
     UsersModule,
     UserSettingsModule,
@@ -45,6 +46,7 @@ import { SyncPullService } from './sync-pull.service';
     SubscriptionsHistoryModule,
     UserGroupModule,
     WeekDaysModule,
+    ReminderTimeModule,
   ],
 })
 export class SyncModule {}
