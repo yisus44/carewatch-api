@@ -17,7 +17,6 @@ export class SyncPushPayload {
   userSettings: UserSetting[];
   subscriptions: Subscription[];
   userGroups: UserGroup[];
-  groups: Group[];
   schedules: Schedule[];
   reminders: Reminder[];
   groupFiles: GroupFile[];
@@ -30,7 +29,6 @@ export class SyncPushPayload {
     this.userSettings = [];
     this.subscriptions = [];
     this.userGroups = [];
-    this.groups = [];
     this.schedules = [];
     this.reminders = [];
     this.groupFiles = [];
@@ -41,9 +39,18 @@ export class SyncPushPayload {
     this.users = [];
   }
 }
+
+export class SyncPushPayloadUpdate extends SyncPushPayload {
+  groups: Group[];
+
+  constructor() {
+    super();
+    this.groups = [];
+  }
+}
 export class SyncPushDto {
   @IsNotEmpty()
   toCreate: SyncPushPayload;
   @IsNotEmpty()
-  toUpdate: SyncPushPayload;
+  toUpdate: SyncPushPayloadUpdate;
 }

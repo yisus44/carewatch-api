@@ -55,11 +55,17 @@ export class SyncPullService {
       id: groupId,
       updatedAt: MoreThanOrEqual(toSyncDate),
     });
-    const userGroupsPromise = this.userGroupService.list({
+    const newUserGroupsPromise = this.userGroupService.list({
       updatedAt: MoreThanOrEqual(toSyncDate),
       groupId,
     });
+    const allUserGroupsPromise = this.userGroupService.list({
+      groupId,
+    });
 
+    const allRemindersPromise = this.remindersService.list({
+      groupId,
+    });
     const groupsFilesPromise = this.groupFilesService.list({
       updatedAt: MoreThanOrEqual(toSyncDate),
       groupId,
@@ -80,19 +86,29 @@ export class SyncPullService {
       userGroupId: userGroup.id,
     });
 
-    const [group, userGroups, groupFiles, medicines, reminders, schedules] =
-      await Promise.all([
-        groupPromise,
-        userGroupsPromise,
-        groupsFilesPromise,
-        medicinesPromise,
-        remindersPromise,
-        schedulesPromise,
-      ]);
+    const [
+      group,
+      userGroups,
+      allUserGroups,
+      groupFiles,
+      medicines,
+      reminders,
+      allReminders,
+      schedules,
+    ] = await Promise.all([
+      groupPromise,
+      newUserGroupsPromise,
+      allUserGroupsPromise,
+      groupsFilesPromise,
+      medicinesPromise,
+      remindersPromise,
+      allRemindersPromise,
+      schedulesPromise,
+    ]);
     const reminderTimePromise = [];
     const reminderFilePromise = [];
 
-    for (const reminder of reminders) {
+    for (const reminder of allReminders) {
       reminderTimePromise.push(
         this.reminderTimeSerivce.list({
           updatedAt: MoreThanOrEqual(toSyncDate),
@@ -112,7 +128,22 @@ export class SyncPullService {
     const usersId = [];
     const filesId = [];
 
+    const updatedUsersPromise = [];
+    for (const userGroup of allUserGroups) {
+      if (!userGroup.userId) continue;
+      updatedUsersPromise.push(
+        this.usersService.findOneBy({
+          id: userGroup.userId,
+          updatedAt: MoreThanOrEqual(toSyncDate),
+        }),
+      );
+    }
+    const updatedUsers = await Promise.all(updatedUsersPromise);
     //get specials ids
+
+    for (const updatedUser of updatedUsers) {
+      usersId.push(updatedUser ? updatedUser.id : null);
+    }
     for (const userGroup of userGroups) {
       usersId.push(userGroup.userId);
     }

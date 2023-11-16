@@ -21,7 +21,11 @@ import { User } from 'src/users/entities/user.entity';
 import { In, MoreThanOrEqual } from 'typeorm';
 import { CoreEntity } from 'src/core/entities/core-entity';
 import { ReminderTimeService } from 'src/reminder-time/reminder-time.service';
-import { SyncPushDto, SyncPushPayload } from './dto/sync.push.dto';
+import {
+  SyncPushDto,
+  SyncPushPayload,
+  SyncPushPayloadUpdate,
+} from './dto/sync.push.dto';
 
 @Injectable()
 export class SyncPushService {
@@ -42,7 +46,7 @@ export class SyncPushService {
     await this.toUpdatePayload(syncDto.toUpdate, user);
   }
 
-  async toUpdatePayload(syncPayload: SyncPushPayload, user: User) {
+  async toUpdatePayload(syncPayload: SyncPushPayloadUpdate, user: User) {
     await this.groupsService.batchUpdate(syncPayload.groups);
     await this.userSettingsService.batchUpdate(syncPayload.userSettings);
 
@@ -69,12 +73,12 @@ export class SyncPushService {
   async toCreatePayload(syncPayload: SyncPushPayload, user: User) {
     //special implementation of the batch operation because creating extra groups
     // require some validations
-    await this.groupsService.batchAdd(syncPayload.groups, user);
+    // await this.groupsService.batchAdd(syncPayload.groups, user);
     await this.userSettingsService.batchCreate(syncPayload.userSettings);
 
     await this.filesService.batchCreate(syncPayload.files);
 
-    await this.userGroupService.batchCreate(syncPayload.userGroups);
+    // await this.userGroupService.batchCreate(syncPayload.userGroups);
 
     await this.groupFilesService.batchCreate(syncPayload.groupFiles);
 
