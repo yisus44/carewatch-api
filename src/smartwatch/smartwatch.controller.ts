@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { SmartwatchService } from './smartwatch.service';
 import { CreateSmartwatchDto } from './dto/create-smartwatch.dto';
@@ -29,6 +30,13 @@ export class SmartwatchController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.smartwatchService.findOneById(id);
+  }
+
+  @Get('/tokenAccount/:tokenAccount')
+  async findOneByTokenAccount(@Param('tokenAccount') tokenAccount: string) {
+    const token = await this.smartwatchService.findOneBy({ tokenAccount });
+    if (!token) throw new NotFoundException();
+    return token;
   }
 
   @Patch(':id')
