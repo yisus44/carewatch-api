@@ -168,7 +168,7 @@ export class SyncPullService {
         medicines,
         reminders,
         reminderTimes,
-        reminderFile: reminderFiles,
+        reminderFiles,
         schedules,
       },
     };
@@ -191,8 +191,10 @@ export class SyncPullService {
       const entityKey = key as keyof SyncPullPayload;
       for (const entity of syncPayload[entityKey]) {
         if (syncDate <= entity.createdAt) {
+          console.log({ entityKey });
           syncDto.toCreate[entityKey].push(entity as any);
         } else {
+          console.log({ entityKey });
           syncDto.toUpdate[entityKey].push(entity as any);
         }
       }
