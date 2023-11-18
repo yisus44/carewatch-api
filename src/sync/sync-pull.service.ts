@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SyncDto, SyncPullPayload, SyncSpecialDto } from './dto/sync.pull.dto';
 import { UsersService } from 'src/users/users.service';
 import { UserSettingsService } from 'src/user-settings/user-settings.service';
@@ -50,6 +50,8 @@ export class SyncPullService {
       groupId,
       userId: user.id,
     });
+
+    if (!userGroup) throw new BadRequestException('User not in group anymore');
 
     const groupPromise = this.groupsService.findOneBy({
       id: groupId,

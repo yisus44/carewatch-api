@@ -17,13 +17,14 @@ import { User } from 'src/users/entities/user.entity';
 import { PullSyncDto } from './dto/sync-group.pull.dto';
 import { SyncPullService } from './sync-pull.service';
 import { SyncPushDto } from './dto/sync.push.dto';
+import { InternalServerError } from '@aws-sdk/client-ssm';
 
 @UseGuards(AuthGuard)
 @Controller('sync')
 export class SyncController {
   constructor(
     private readonly syncService: SyncPushService,
-    private readonly syncSPullervice: SyncPullService,
+    private readonly syncPullService: SyncPullService,
   ) {}
 
   @Post('/push')
@@ -39,6 +40,6 @@ export class SyncController {
 
   @Post('/pull')
   toReturn(@GetCurrentUser() user: User, @Body() pullSyncDto: PullSyncDto) {
-    return this.syncSPullervice.toReturn(pullSyncDto, user);
+    return this.syncPullService.toReturn(pullSyncDto, user);
   }
 }
