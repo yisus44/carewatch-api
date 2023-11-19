@@ -7,6 +7,10 @@
       {
         "include": "/assets/**/*",
         "outDir": "dist/src/"
+      },
+      {
+        "include": "/firebase/**",
+        "outDir": "dist/src/"
       }
     ],
     "deleteOutDir": true,
