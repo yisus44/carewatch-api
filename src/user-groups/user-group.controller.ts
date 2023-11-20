@@ -130,6 +130,18 @@ export class UserGroupsController {
   ) {
     return await this.userGroupService.removeBy({ id, userId: user.id });
   }
+
+  @Delete(':token/external')
+  async deleteExternalInvitation(@Param('token') token: string) {
+    return await this.userGroupService.updateBy(
+      { token },
+      {
+        emailCommunication: false,
+        whatsAppCommunication: false,
+      },
+    );
+  }
+
   @Patch(':token/accept')
   async acceptInvitation(
     @Param('token') token: string,
