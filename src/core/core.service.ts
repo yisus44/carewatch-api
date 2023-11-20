@@ -116,6 +116,7 @@ export abstract class CoreService<T extends CoreEntity> {
 
   async batchCreate(entities: Partial<T>[]) {
     const promiseArr = [];
+    if (!entities) return;
     for (const entity of entities) {
       delete entity.id;
       promiseArr.push(this.create(entity));
@@ -125,6 +126,7 @@ export abstract class CoreService<T extends CoreEntity> {
 
   async batchUpdate(entities: Partial<T>[]) {
     const promiseArr = [];
+    if (!entities) return;
     for (const entity of entities) {
       // const found = await this.findOneById(entity.id);
       // //if the user tries to update an non existent identity
