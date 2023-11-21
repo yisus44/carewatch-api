@@ -15,13 +15,13 @@ import {
 
 @Entity()
 export class File extends CoreEntity {
-  @Column({ length: 50 })
+  @Column({ length: 300 })
   key: string;
 
   @Column({ length: 300 })
   location: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 300 })
   localLocation: string;
 
   @Column()
