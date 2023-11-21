@@ -2,6 +2,7 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 import {
   DeepPartial,
   DeleteResult,
+  EntityPropertyNotFoundError,
   FindOptionsOrder,
   FindOptionsWhere,
   IsNull,
@@ -150,14 +151,27 @@ export abstract class CoreService<T extends CoreEntity> {
   }
 
   async update(id: number, updateDto: Partial<T>) {
-    const query = { id, deletedAt: IsNull() } as unknown as FindOptionsWhere<T>;
-    delete updateDto.id;
+    try {
+      if (!id) throw new BadRequestException('id not provided');
+      const query = {
+        id,
+        deletedAt: IsNull(),
+      } as unknown as FindOptionsWhere<T>;
+      delete updateDto.id;
 
-    const entity = await this.repository.update(
-      query,
-      updateDto as unknown as QueryDeepPartialEntity<T>,
-    );
-    return entity;
+      const entity = await this.repository.update(
+        query,
+        updateDto as unknown as QueryDeepPartialEntity<T>,
+      );
+      return entity;
+    } catch (error) {
+      if (error instanceof EntityPropertyNotFoundError) {
+        throw new BadRequestException(
+          `You somehow send fields to update that are not in the model, ${error.message}`,
+        );
+      }
+      throw error;
+    }
   }
 
   async updateBy(query: any, updateDto: Partial<T>) {
