@@ -5,7 +5,7 @@ export class CreateReminderTimeDto {
   reminderId: number;
 
   @IsOptional()
-  atTime?: Date;
+  atTime?: string;
 
   @IsOptional()
   eachHours?: string;

@@ -53,7 +53,36 @@ export class WhatsappService {
       console.log(error);
     }
   }
-
+  async sendWhatsappReminderWithFrequencyString(
+    userName: string,
+    phone: number,
+    reminder: Reminder,
+    medicine: Medicine,
+    group: Group,
+    frequency: string,
+    token: string,
+  ) {
+    try {
+      const body = `
+      Hola ${userName}!
+      
+      Carewatch te recuerda que es tu turno de apoyar en tu grupo ${group.name}
+      
+      ***********RECORDATORIO***********
+      
+      Medicamento: ${medicine.name}
+      Dosis: ${reminder.dosis}
+      Detalles adicionales: ${reminder.additionalDetails}
+      Aplicación: ${frequency}
+      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
+    `;
+      const from = 'whatsapp:+14155238886';
+      const to = `whatsapp:+${phone}`;
+      await this.sendWhatsapp(body, to, from);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async sendWhatsappReminder(
     userName: string,
     phone: number,

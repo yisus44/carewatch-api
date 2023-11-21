@@ -98,6 +98,49 @@ export class ReminderExecutionService {
       return timeRemaining; // Time remaining until the next frequency interval
     }
   }
+
+  createOrUpdateSpecificTimeEachDays(
+    hour: string,
+    days: number,
+    name: string,
+    initialDateTime: Date,
+    fn: Function,
+  ): void {
+    const [hourOfDay, minute] = hour.split(':').map(Number);
+
+    const currentDate = new Date();
+    const timeToExecute = new Date(
+      initialDateTime.getFullYear(),
+      initialDateTime.getMonth(),
+      initialDateTime.getDate(),
+      hourOfDay,
+      minute,
+    );
+
+    let timeToWait = timeToExecute.getTime() - currentDate.getTime();
+
+    if (timeToWait < 0) {
+      // If the scheduled time is in the past, calculate time until the next occurrence
+      timeToWait += days * 24 * 60 * 60 * 1000; // Add 'days' in milliseconds
+    }
+    this.removeWithName(name);
+    const timeoutId = setTimeout(() => {
+      fn();
+      const intervalId = setInterval(() => {
+        fn();
+      }, days * 24 * 60 * 60 * 1000); // Execute task every 'days' days
+
+      this.schedulerRegistry.addInterval(name, {
+        intervalId,
+      });
+    }, timeToWait);
+
+    console.log('add timeout');
+    this.schedulerRegistry.addTimeout(name, {
+      jobId: timeoutId,
+    });
+  }
+  //create a cronjob in a specific day of the week
   createOrUpdateSpecificDayOfTheWeek(
     hour: string,
     days: string,
@@ -106,7 +149,8 @@ export class ReminderExecutionService {
   ) {
     const daysArray = days.split(',').map((day) => this.daysOfWeek[day.trim()]);
     const validDays = daysArray.filter((day) => !!day);
-    const [hours, minutes, seconds] = hour.split(':').map(Number);
+    const [hours, minutes] = hour.split(':').map(Number);
+    const seconds = 0;
     this.removeWithName(name);
     // Create a cron expression with the specified hour and days
     const cronExpression = `${seconds} ${minutes} ${hours} * * ${validDays.join(
@@ -119,6 +163,7 @@ export class ReminderExecutionService {
     job.start();
     this.schedulerRegistry.addCronJob(name, job);
   }
+
   createOrUpdateSpecificDate(
     hourToBeExecuted: string,
     dateToBeExecuted: string,

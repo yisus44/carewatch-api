@@ -66,7 +66,31 @@ export class MailService {
       }),
     );
   }
-
+  async sendMailReminderWithFrequencyString(
+    userName: string,
+    email: string,
+    reminder: Reminder,
+    medicine: Medicine,
+    group: Group,
+    frequency: string,
+    token: string,
+  ) {
+    await this.awsService.generateReminderTemplate();
+    this.awsService.sendEmail(
+      [email],
+      'jesusadrian1953.1@gmail.com',
+      EmailTemplates.reminder,
+      JSON.stringify({
+        userName,
+        medicineName: medicine.name,
+        groupName: group.name,
+        dosis: reminder.dosis,
+        aditionalDetails: reminder.additionalDetails,
+        time: frequency,
+        domain: ` ${process.env.DOMAIN}/delete/${token}`,
+      }),
+    );
+  }
   async demoEmail() {
     this.awsService.generateAuthTemplate();
     this.awsService.sendEmail(

@@ -7,6 +7,7 @@ import {
   FrequencyTypeEnum,
 } from 'src/frequency-types/entities/frequency-type.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
+import { ReminderTime } from 'src/reminder-time/entities/reminder-time.entity';
 
 @Injectable()
 export class CommonService {
@@ -46,7 +47,21 @@ export class CommonService {
       executionDate,
     };
   }
+  buildFrequencyStringWithReminderTime(reminderTime: ReminderTime): string {
+    const { eachHours, eachDays, atTime, atWeekdays } = reminderTime;
+    if (atWeekdays == 'DIARIO') {
+      return `Cada ${eachHours} hora${Number(eachHours) > 1 ?? 's'}`;
+    }
 
+    if (atTime && atWeekdays) {
+      return `A las ${atTime} los dias ${atWeekdays}`;
+    }
+
+    if (atTime && eachDays) {
+      return `A las ${atTime} cada ${eachDays}`;
+    }
+    return '';
+  }
   buildFrequencyString(
     reminderActivationTime: ReminderActivationTime,
     frequencyType: FrequencyType,

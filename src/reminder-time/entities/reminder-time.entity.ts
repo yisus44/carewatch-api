@@ -13,7 +13,7 @@ export class ReminderTime extends CoreEntity {
   reminderId: number;
 
   @Column({ nullable: true, type: 'time' })
-  atTime?: Date;
+  atTime?: string;
 
   @Column({ nullable: true })
   eachHours?: string;

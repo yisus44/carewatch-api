@@ -86,7 +86,7 @@ export class SyncPushService {
 
     await this.medicinesService.batchCreate(syncPayload.medicines);
 
-    await this.reminderTimeService.batchCreate(syncPayload.reminderTimes);
+    await this.reminderTimeService.batchAdd(syncPayload.reminderTimes);
 
     await this.scheduleService.batchCreate(syncPayload.schedules);
 
