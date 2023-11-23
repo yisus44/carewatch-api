@@ -32,7 +32,6 @@ export class ReminderTimeHelper {
 
   async executeReminder(reminderId: number, reminderTimeId: number) {
     try {
-      console.log({ reminderId, reminderTimeId });
       const reminder = await this.reminderService.findOneById(reminderId);
       const group = await this.groupService.findOneById(reminder.groupId);
       const medicine = await this.medicineService.findOneById(

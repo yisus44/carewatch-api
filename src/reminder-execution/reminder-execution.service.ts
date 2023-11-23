@@ -104,41 +104,38 @@ export class ReminderExecutionService {
     days: number,
     name: string,
     initialDateTime: Date,
-    fn: Function,
+    fn: () => void,
   ): void {
-    const [hourOfDay, minute] = hour.split(':').map(Number);
-
-    const currentDate = new Date();
-    const timeToExecute = new Date(
-      initialDateTime.getFullYear(),
-      initialDateTime.getMonth(),
-      initialDateTime.getDate(),
-      hourOfDay,
-      minute,
-    );
-
-    let timeToWait = timeToExecute.getTime() - currentDate.getTime();
-
-    if (timeToWait < 0) {
-      // If the scheduled time is in the past, calculate time until the next occurrence
-      timeToWait += days * 24 * 60 * 60 * 1000; // Add 'days' in milliseconds
-    }
+    const secondsInDay = 24 * 60 * 60;
+    const interval = days * secondsInDay;
     this.removeWithName(name);
-    const timeoutId = setTimeout(() => {
-      fn();
-      const intervalId = setInterval(() => {
-        fn();
-      }, days * 24 * 60 * 60 * 1000); // Execute task every 'days' days
 
-      this.schedulerRegistry.addInterval(name, {
-        intervalId,
-      });
-    }, timeToWait);
+    const delay = this.calculateDelay(initialDateTime, hour);
+    const timeout = setTimeout(() => {
+      this.createOrUpdateFrequency(
+        initialDateTime.toString(),
+        interval.toString(),
+        name,
+        fn,
+      );
+    }, delay);
+    this.schedulerRegistry.addTimeout(name, timeout);
+  }
 
-    console.log('add timeout');
-    this.schedulerRegistry.addTimeout(name, {
-      jobId: timeoutId,
-    });
+  private calculateDelay(startDate: Date, time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    const scheduledTime = new Date(startDate);
+    scheduledTime.setHours(hours);
+    scheduledTime.setMinutes(minutes);
+    scheduledTime.setSeconds(0);
+    scheduledTime.setMilliseconds(0);
+
+    const currentTime = new Date();
+    if (scheduledTime.getTime() <= currentTime.getTime()) {
+      scheduledTime.setDate(scheduledTime.getDate() + 1);
+    }
+
+    return scheduledTime.getTime() - currentTime.getTime();
   }
   //create a cronjob in a specific day of the week
   createOrUpdateSpecificDayOfTheWeek(
@@ -153,9 +150,8 @@ export class ReminderExecutionService {
     const seconds = 0;
     this.removeWithName(name);
     // Create a cron expression with the specified hour and days
-    const cronExpression = `${seconds} ${minutes} ${hours} * * ${validDays.join(
-      ',',
-    )}`;
+    const cronDays = days === 'L,M,Mr,J,V,S,D' ? '*' : validDays.join(',');
+    const cronExpression = `${seconds} ${minutes} ${hours} * * ${cronDays}`;
     const job = new CronJob(cronExpression, () => {
       fn();
     });

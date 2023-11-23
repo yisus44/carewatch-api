@@ -52,6 +52,9 @@ export class ReminderTimeService
     };
     if (reminderTime.atWeekdays && reminderTime.atTime) {
       //specific days like tuesday 9:45
+      if (reminderTime.atWeekdays === 'DIARIO') {
+        reminderTime.atWeekdays = 'L,M,Mr,J,V,S,D';
+      }
       this.reminderExecutionService.createOrUpdateSpecificDayOfTheWeek(
         reminderTime.atTime,
         reminderTime.atWeekdays,
