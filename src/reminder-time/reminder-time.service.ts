@@ -64,7 +64,7 @@ export class ReminderTimeService
     } else if (reminderTime.atWeekdays === 'DIARIO' && reminderTime.eachHours) {
       //everyday each x hours counting from the initial daytime
       this.reminderExecutionService.createOrUpdateFrequency(
-        reminderTime.initialDateTime.toString(),
+        reminderTime.initialDatetime.toString(),
         (Number(reminderTime.eachHours) * 60 * 60).toString(),
         reminderTime.id.toString(),
         reminderFunction,
@@ -76,7 +76,7 @@ export class ReminderTimeService
         reminderTime.atTime,
         reminderTime.eachDays,
         reminderTime.id.toString(),
-        new Date(reminderTime.initialDateTime),
+        new Date(reminderTime.initialDatetime),
         reminderFunction,
       );
     }
@@ -87,5 +87,31 @@ export class ReminderTimeService
     await this.handleReminderTimeExecution(reminderTime);
 
     return reminderTime;
+  }
+
+  async update(id: number, updateReminderTimeDto: UpdateReminderTimeDto) {
+    const result = super.update(+id, updateReminderTimeDto);
+    const updatedReminderTime = await this.findOneById(id);
+    this.handleReminderTimeExecution(updatedReminderTime);
+    return result;
+  }
+  async batchUpdate(entities: Partial<ReminderTime>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      // const found = await this.findOneById(entity.id);
+      // //if the user tries to update an non existent identity
+      // if (!found) continue;
+
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async remove(id: number) {
+    const result = super.remove(+id);
+    const deletedReminderTime = await this.findOneById(id);
+    this.handleReminderTimeExecution(deletedReminderTime);
+    return result;
   }
 }

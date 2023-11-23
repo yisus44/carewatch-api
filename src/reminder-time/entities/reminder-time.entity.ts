@@ -25,5 +25,5 @@ export class ReminderTime extends CoreEntity {
   eachDays?: number;
 
   @Column()
-  initialDateTime: Date;
+  initialDatetime: Date;
 }

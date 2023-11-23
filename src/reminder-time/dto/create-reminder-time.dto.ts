@@ -17,5 +17,5 @@ export class CreateReminderTimeDto {
   eachDays?: number;
 
   @IsOptional()
-  initialDateTime: Date;
+  initialDatetime: Date;
 }
