@@ -39,6 +39,7 @@ export class SyncPushService {
     private readonly scheduleService: SchedulesService,
     private readonly userGroupService: UserGroupService,
     private readonly reminderTimeService: ReminderTimeService,
+    private readonly reminderFileService: ReminderFilesService,
   ) {}
 
   async toUpload(syncDto: SyncPushDto, user: User) {
@@ -63,6 +64,9 @@ export class SyncPushService {
     await this.reminderTimeService.batchUpdate(syncPayload.reminderTimes);
 
     await this.scheduleService.batchUpdate(syncPayload.schedules);
+
+    await this.reminderFileService.batchUpdate(syncPayload.reminderFiles);
+
     // await this.subscriptionsHistoryService.batchUpdate(
     //   syncPayload.subscriptionHistory,
     // );
@@ -89,6 +93,8 @@ export class SyncPushService {
     await this.reminderTimeService.batchAdd(syncPayload.reminderTimes);
 
     await this.scheduleService.batchCreate(syncPayload.schedules);
+
+    await this.reminderFileService.batchCreate(syncPayload.reminderFiles);
 
     // await this.subscriptionsHistoryService.batchCreate(
     //   syncPayload.subscriptionHistory,

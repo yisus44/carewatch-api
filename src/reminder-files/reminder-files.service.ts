@@ -20,4 +20,23 @@ export class ReminderFilesService extends CoreService<ReminderFile> {
     const match = await this.findOneBy({ reminderId, fileId });
     if (match) throw new ResourceAlreadyExist();
   }
+
+  async batchUpdate(entities: Partial<ReminderFile>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async batchCreate(entities: Partial<ReminderFile>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as ReminderFile));
+    }
+    await Promise.all(promiseArr);
+  }
 }

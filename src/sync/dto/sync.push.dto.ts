@@ -4,6 +4,7 @@ import { GroupFile } from 'src/group-files/entities/group-file.entity';
 import { Group } from 'src/groups/entities/group.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { ReminderActivationTime } from 'src/reminder-activation-time/entities/reminder-activation-time.entity';
+import { ReminderFile } from 'src/reminder-files/entities/reminder-file.entity';
 import { ReminderTime } from 'src/reminder-time/entities/reminder-time.entity';
 import { Reminder } from 'src/reminders/entities/reminder.entity';
 import { Schedule } from 'src/schedules/entities/schedule.entity';
@@ -22,6 +23,8 @@ export class SyncPushPayload {
   groupFiles: GroupFile[];
   medicines: Medicine[];
   reminderTimes: ReminderTime[];
+  reminderFiles: ReminderFile[];
+
   subscriptionHistory: SubscriptionsHistory[];
   files: File[];
   users: User[];
@@ -36,6 +39,7 @@ export class SyncPushPayload {
     this.reminderTimes = [];
     this.subscriptionHistory = [];
     this.files = [];
+    this.reminderFiles = [];
     this.users = [];
   }
 }

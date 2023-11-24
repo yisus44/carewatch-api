@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { SchedulerRegistry, CronExpression } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { CommonService } from 'src/common/common.service';
@@ -144,20 +149,27 @@ export class ReminderExecutionService {
     name: string,
     fn: Function,
   ) {
-    const daysArray = days.split(',').map((day) => this.daysOfWeek[day.trim()]);
-    const validDays = daysArray.filter((day) => !!day);
-    const [hours, minutes] = hour.split(':').map(Number);
-    const seconds = 0;
-    this.removeWithName(name);
-    // Create a cron expression with the specified hour and days
-    const cronDays = days === 'L,M,Mr,J,V,S,D' ? '*' : validDays.join(',');
-    const cronExpression = `${seconds} ${minutes} ${hours} * * ${cronDays}`;
-    const job = new CronJob(cronExpression, () => {
-      fn();
-    });
+    try {
+      const daysArray = days
+        .split(',')
+        .map((day) => this.daysOfWeek[day.trim()]);
+      const validDays = daysArray.filter((day) => !!day).sort();
+      const [hours, minutes] = hour.split(':').map(Number);
+      const seconds = 0;
+      this.removeWithName(name);
+      // Create a cron expression with the specified hour and days
+      const cronDays = days === 'L,M,Mr,J,V,S,D' ? '*' : validDays.join(',');
+      const cronExpression = `${seconds} ${minutes} ${hours} * * ${cronDays}`;
+      console.log(cronExpression);
+      const job = new CronJob(cronExpression, () => {
+        fn();
+      });
 
-    job.start();
-    this.schedulerRegistry.addCronJob(name, job);
+      job.start();
+      this.schedulerRegistry.addCronJob(name, job);
+    } catch (ex) {
+      console.log({ ex });
+    }
   }
 
   createOrUpdateSpecificDate(
