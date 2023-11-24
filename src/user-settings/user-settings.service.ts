@@ -38,6 +38,23 @@ export class UserSettingsService extends CoreService<UserSetting> {
     );
   }
 
+  async batchCreate(entities: Partial<UserSetting>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as UserSetting));
+    }
+    await Promise.all(promiseArr);
+  }
+  async batchUpdate(entities: Partial<UserSetting>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
   async findOne(id: number): Promise<UserSetting | null> {
     return await this.userSettingRepository.findOneBy({ id });
   }

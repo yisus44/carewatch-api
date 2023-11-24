@@ -12,4 +12,23 @@ export class RemindersService extends CoreService<Reminder> {
   ) {
     super(reminderRepository);
   }
+
+  async batchUpdate(entities: Partial<Reminder>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async batchCreate(entities: Partial<Reminder>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as Reminder));
+    }
+    await Promise.all(promiseArr);
+  }
 }

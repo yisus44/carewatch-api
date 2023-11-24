@@ -21,4 +21,21 @@ export class FilesService extends CoreService<File> {
   ) {
     super(fileRepository);
   }
+  async batchCreate(entities: Partial<File>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as File));
+    }
+    await Promise.all(promiseArr);
+  }
+  async batchUpdate(entities: Partial<File>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
 }

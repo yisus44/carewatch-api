@@ -15,7 +15,24 @@ export class GroupFilesService extends CoreService<GroupFile> {
   ) {
     super(groupFileRepository);
   }
+  async batchUpdate(entities: Partial<GroupFile>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
 
+  async batchCreate(entities: Partial<GroupFile>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as GroupFile));
+    }
+    await Promise.all(promiseArr);
+  }
   async failIfFileExist(groupId: number, fileId: number) {
     const match = await this.findOneBy({ groupId, fileId });
     if (match) throw new ResourceAlreadyExist();

@@ -36,7 +36,14 @@ export class GroupsService extends CoreService<Group> {
     }
     await Promise.all(promiseArr);
   }
-
+  async batchUpdate(entities: Partial<Group>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
   async add(createGroupDto: CreateGroupDto, user: User) {
     const canCreateMoreGroups = await this.canCreateMoreGroups(user);
     if (!canCreateMoreGroups) throw new FreePlanReachedException();

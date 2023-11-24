@@ -89,7 +89,7 @@ export class ReminderTimeService
     return reminderTime;
   }
 
-  async update(id: number, updateReminderTimeDto: UpdateReminderTimeDto) {
+  async updateCustom(id: number, updateReminderTimeDto: UpdateReminderTimeDto) {
     const result = super.update(+id, updateReminderTimeDto);
     const updatedReminderTime = await this.findOneById(id);
     this.handleReminderTimeExecution(updatedReminderTime);

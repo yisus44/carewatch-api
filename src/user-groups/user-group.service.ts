@@ -15,7 +15,14 @@ export class UserGroupService extends CoreService<UserGroup> {
   ) {
     super(userGroupRepository);
   }
-
+  async batchUpdate(entities: Partial<UserGroup>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
   sanitizeUserUpdate(updateUserGroupDto: UpdateUserGroupDto) {
     delete updateUserGroupDto.isAdmin;
     delete updateUserGroupDto.userId;

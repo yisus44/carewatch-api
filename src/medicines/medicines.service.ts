@@ -13,4 +13,23 @@ export class MedicinesService extends CoreService<Medicine> {
   ) {
     super(medicineRepository);
   }
+
+  async batchUpdate(entities: Partial<Medicine>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async batchCreate(entities: Partial<Medicine>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as Medicine));
+    }
+    await Promise.all(promiseArr);
+  }
 }

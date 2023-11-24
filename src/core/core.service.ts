@@ -115,29 +115,6 @@ export abstract class CoreService<T extends CoreEntity> {
     });
   }
 
-  async batchCreate(entities: Partial<T>[]) {
-    const promiseArr = [];
-    if (!entities) return;
-    for (const entity of entities) {
-      delete entity.id;
-      promiseArr.push(this.create(entity));
-    }
-    await Promise.all(promiseArr);
-  }
-
-  async batchUpdate(entities: Partial<T>[]) {
-    const promiseArr = [];
-    if (!entities) return;
-    for (const entity of entities) {
-      // const found = await this.findOneById(entity.id);
-      // //if the user tries to update an non existent identity
-      // if (!found) continue;
-
-      promiseArr.push(this.update(entity.id, entity));
-    }
-    await Promise.all(promiseArr);
-  }
-
   async create(createDto: Partial<T>) {
     try {
       const entity = this.repository.create(createDto as DeepPartial<T>);

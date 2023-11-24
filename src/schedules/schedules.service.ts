@@ -12,4 +12,23 @@ export class SchedulesService extends CoreService<Schedule> {
   ) {
     super(scheduleRepository);
   }
+
+  async batchUpdate(entities: Partial<Schedule>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      promiseArr.push(this.update(entity.id, entity));
+    }
+    await Promise.all(promiseArr);
+  }
+
+  async batchCreate(entities: Partial<Schedule>[]) {
+    const promiseArr = [];
+    if (!entities) return;
+    for (const entity of entities) {
+      delete entity.id;
+      promiseArr.push(this.create(entity as Schedule));
+    }
+    await Promise.all(promiseArr);
+  }
 }
