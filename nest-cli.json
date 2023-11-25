@@ -9,6 +9,10 @@
         "outDir": "dist/src/"
       },
       {
+        "include": "/mail/templates/**",
+        "outDir": "dist/src/"
+      },
+      {
         "include": "/firebase/**",
         "outDir": "dist/src/"
       }

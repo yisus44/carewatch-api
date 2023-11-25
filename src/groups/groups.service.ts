@@ -30,6 +30,7 @@ export class GroupsService extends CoreService<Group> {
     const promiseArr = [];
     for (const entity of entities) {
       delete entity.id;
+      delete entity.createdAt;
       const canCreateMoreGroups = await this.canCreateMoreGroups(user);
       if (!canCreateMoreGroups) throw new FreePlanReachedException();
       promiseArr.push(this.create(entity));

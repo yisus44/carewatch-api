@@ -45,7 +45,7 @@ export class SyncPullService {
     //this is needed to ensure the date recevied is a date and is not parsed as a string
     // as per the writing of this comment, sometimes happens
     const toSyncDate = new Date(syncDate);
-
+    toSyncDate.setHours(toSyncDate.getHours() + 6);
     const userGroup = await this.userGroupService.findOneBy({
       groupId,
       userId: user.id,
@@ -191,10 +191,8 @@ export class SyncPullService {
       const entityKey = key as keyof SyncPullPayload;
       for (const entity of syncPayload[entityKey]) {
         if (syncDate <= entity.createdAt) {
-          console.log({ entityKey });
           syncDto.toCreate[entityKey].push(entity as any);
         } else {
-          console.log({ entityKey });
           syncDto.toUpdate[entityKey].push(entity as any);
         }
       }
@@ -333,22 +331,18 @@ export class SyncPullService {
       const payload: SyncPullPayload = {
         ...groupInfo.data,
       };
-      syncInfo.push(
-        this.convertEntitesToSyncDto(payload, new Date(groupInfo.syncDate)),
-      );
+      const toSyncDate = new Date(groupInfo.syncDate);
+      toSyncDate.setHours(toSyncDate.getHours() + 6);
+      syncInfo.push(this.convertEntitesToSyncDto(payload, toSyncDate));
     }
     const syncInfoFlattened = await this.flatSyncDtos(syncInfo);
     const usersId = groupsSyncInfo.map((group) => group.usersId).flat();
     const filesId = groupsSyncInfo.map((group) => group.filesId).flat();
-
+    const baseSyncDate = new Date(pullSyncDto.baseSyncDate);
+    baseSyncDate.setHours(baseSyncDate.getHours() + 6);
     const [externalInfo, specialInfo] = await Promise.all([
-      await this.pullExternalInfo(
-        usersId,
-        filesId,
-        user,
-        new Date(pullSyncDto.baseSyncDate),
-      ),
-      await this.pullSpecialInfo(user, new Date(pullSyncDto.baseSyncDate)),
+      await this.pullExternalInfo(usersId, filesId, user, baseSyncDate),
+      await this.pullSpecialInfo(user, baseSyncDate),
     ]);
 
     return {
