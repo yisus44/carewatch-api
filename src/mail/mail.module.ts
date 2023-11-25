@@ -12,27 +12,28 @@ import { MailController } from './mail.controller';
   controllers: [MailController],
   imports: [
     AwsModule,
-    MailerModule.forRoot({
-      // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
-      // or
-      transport: {
-        host: 'smtp.gmail.com',
-        secure: false,
-        auth: {
-          user: 'blog27768@gmail.com',
-          pass: 'kmml ozro dfqo zyrj',
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: {
+          host: process.env.SMTP_ENDPOINT,
+          port: 465,
+          secure: true,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
         },
-      },
-      defaults: {
-        from: '"No Reply" <noreply@example.com>',
-      },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
-        options: {
-          strict: true,
+        defaults: {
+          from: '"No Reply" <noreply@example.com>',
         },
-      },
+        template: {
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
+          options: {
+            strict: true,
+          },
+        },
+      }),
     }),
   ],
 })
