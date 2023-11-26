@@ -64,7 +64,7 @@ export class WhatsappService {
     try {
       const body = `Hola ${invitatedUser}, ¡${adminUser.name} ${adminUser.lastName} te ha invitado a formar parte de su grupo ${groupName} de Carewatch!  
   
-      CareWatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
+      Carewatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
       
       Sí deseas unirte al grupo o conocer más acerca de nuestra aplicación sigue el siguiente enlace ${link}`;
 
@@ -94,7 +94,7 @@ export class WhatsappService {
       Dosis: ${reminder.dosis}
       Detalles adicionales: ${reminder.additionalDetails}
       Aplicación: ${frequency}
-      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
+      Sí deseas dejar de recibir notificaciones de Carewatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
     `;
       await this.sendMessage(phone.toString(), body);
     } catch (error) {
@@ -126,7 +126,7 @@ export class WhatsappService {
         reminderActivationTime,
         frequencyType,
       )}
-      Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${
+      Sí deseas dejar de recibir notificaciones de Carewatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${
         process.env.DOMAIN
       }/delete/${token}
     `;

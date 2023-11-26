@@ -35,7 +35,7 @@ export class MailService {
       </head>
       <body>
         Hola ${invitatedUser}, ¡${adminUserString} te ha invitado a formar parte de su
-        grupo ${groupName} de CareWatch! CareWatch es una applicación movil
+        grupo ${groupName} de Carewatch! Carewatch es una applicación movil
         comprometida con la sociedad, apoyando al cuidado de tu ser querido , para
         que puedas realizar sus cuidados con las indicaciones del medico y
         facilitandote la organización de los horarios de los cuidadores Sí deseas
@@ -115,7 +115,7 @@ export class MailService {
         adicionales: ${{ aditionalDetails }} <br />Hora de aplicación: ${{
       time,
     }}
-        <br />Sí deseas dejar de recibir notificaciones de CareWatch o deseas
+        <br />Sí deseas dejar de recibir notificaciones de Carewatch o deseas
         cambiar el medio para recibir las notificaciones ingresa al siguiente enlace
         ${{ domain }}
       </body>
