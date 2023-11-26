@@ -54,6 +54,9 @@ export class GroupsService extends CoreService<Group> {
       groupId: group.id,
       isAdmin: true,
       isActive: true,
+      carewatchCommunication: true,
+      emailCommunication: true,
+      whatsAppCommunication: true,
     });
     return group;
   }

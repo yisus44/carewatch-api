@@ -59,7 +59,7 @@ export class ReminderTimeHelper {
               AND
                 EXTRACT(DOW FROM now() AT TIME ZONE schedule.time_zone) = week_day.week_day_number
               AND
-                schedule.deleted_at is not null 
+                schedule.deleted_at is null 
               )
           /*Join the information*/
           SELECT
@@ -79,7 +79,7 @@ export class ReminderTimeHelper {
               AND 
                 user_group.is_active = true
               AND
-                user_group.deleted_at is not null
+                user_group.deleted_at is null
             `,
         [group.id],
       );
@@ -103,6 +103,9 @@ export class ReminderTimeHelper {
         if (guest_email) {
           mailToSend = guest_email;
         }
+        if (guest_name) {
+          nameToSend = guest_name;
+        }
         if (phone) {
           phoneToSend = phone;
         }
@@ -111,9 +114,6 @@ export class ReminderTimeHelper {
         }
         if (name) {
           nameToSend = `${name} ${last_name}`;
-        }
-        if (guest_name) {
-          nameToSend = guest_name;
         }
 
         if (whats_app_communication && phoneToSend) {

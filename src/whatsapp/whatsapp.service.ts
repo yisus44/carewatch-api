@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import axios from 'axios';
 import { WhatsAppTemplates } from './enums/whatsapp-templates.enum';
@@ -16,7 +16,28 @@ export class WhatsappService {
     private readonly client: Twilio,
     private readonly commonService: CommonService,
   ) {}
+  async sendMessage(phoneWithInternationalNumber: string, message: string) {
+    const idInstance = process.env.GREEN_API_ID_INSTANCE;
+    const apiTokenInstance = process.env.GREEN_API_TOKEN_INSTANCE;
 
+    const url = `https://api.greenapi.com/waInstance${idInstance}/sendMessage/${apiTokenInstance}`;
+
+    const payload = {
+      chatId: `${phoneWithInternationalNumber}@c.us`,
+      message: message,
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await axios.post(url, payload, { headers });
+      return response.data;
+    } catch (error) {
+      throw new BadRequestException(`Failed to send message: ${error.message}`);
+    }
+  }
   async sendWhatsapp(
     body: string,
     to: string,
@@ -46,9 +67,8 @@ export class WhatsappService {
       CareWatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
       
       Sí deseas unirte al grupo o conocer más acerca de nuestra aplicación sigue el siguiente enlace ${link}`;
-      const from = 'whatsapp:+14155238886';
-      const to = `whatsapp:+${phone}`;
-      await this.sendWhatsapp(body, to, from);
+
+      await this.sendMessage(phone.toString(), body);
     } catch (error) {
       console.log(error);
     }
@@ -76,9 +96,7 @@ export class WhatsappService {
       Aplicación: ${frequency}
       Sí deseas dejar de recibir notificaciones de CareWatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
     `;
-      const from = 'whatsapp:+14155238886';
-      const to = `whatsapp:+${phone}`;
-      await this.sendWhatsapp(body, to, from);
+      await this.sendMessage(phone.toString(), body);
     } catch (error) {
       console.log(error);
     }
@@ -112,11 +130,31 @@ export class WhatsappService {
         process.env.DOMAIN
       }/delete/${token}
     `;
-      const from = 'whatsapp:+14155238886';
-      const to = `whatsapp:+${phone}`;
-      await this.sendWhatsapp(body, to, from);
+      await this.sendMessage(phone.toString(), body);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async getAvailability(phoneNumber: string) {
+    const idInstance = process.env.GREEN_API_ID_INSTANCE;
+    const apiTokenInstance = process.env.GREEN_API_TOKEN_INSTANCE;
+
+    const url = `https://api.greenapi.com/waInstance${idInstance}/checkWhatsapp/${apiTokenInstance}`;
+
+    const payload = {
+      phoneNumber,
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await axios.post(url, payload, { headers });
+      return response.data;
+    } catch (error) {
+      throw new BadRequestException(`Failed to send message: ${error.message}`);
     }
   }
 }

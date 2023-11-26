@@ -47,18 +47,50 @@ export class CommonService {
       executionDate,
     };
   }
+
+  replaceDays(atWeekdays: string): string {
+    const days = {
+      L: 'Lunes',
+      M: 'Martes',
+      Mr: 'Miércoles',
+      J: 'Jueves',
+      V: 'Viernes',
+      S: 'Sábado',
+      D: 'Domingo',
+    };
+
+    const values = atWeekdays.split(',').map((valor) => valor.trim());
+
+    const replacedDays = values.map((valor: keyof typeof days, index) => {
+      return (
+        days[valor] +
+        (index === values.length - 1 && values.length > 1 ? '' : ',')
+      );
+    });
+
+    if (values.length >= 2) {
+      const lastCommaIndex = replacedDays.lastIndexOf(',');
+      replacedDays[lastCommaIndex] = ' y';
+    }
+
+    return replacedDays.join(' ');
+  }
+
   buildFrequencyStringWithReminderTime(reminderTime: ReminderTime): string {
     const { eachHours, eachDays, atTime, atWeekdays } = reminderTime;
+    const fullWeekdays = this.replaceDays(atWeekdays);
     if (atWeekdays == 'DIARIO') {
       return `Cada ${eachHours} hora${Number(eachHours) > 1 ?? 's'}`;
     }
 
-    if (atTime && atWeekdays) {
-      return `A las ${atTime} los dias ${atWeekdays}`;
+    if (atTime && fullWeekdays) {
+      return `A las ${atTime} los dias ${fullWeekdays}`;
     }
 
     if (atTime && eachDays) {
-      return `A las ${atTime} cada ${eachDays}`;
+      return `A las ${atTime} cada ${eachDays} ${
+        eachDays == 1 ? 'dia' : 'dias'
+      }`;
     }
     return '';
   }

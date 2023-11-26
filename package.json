@@ -29,6 +29,7 @@
     "@aws-sdk/client-s3": "^3.400.0",
     "@aws-sdk/client-ses": "^3.398.0",
     "@aws-sdk/client-ssm": "^3.398.0",
+    "@green-api/whatsapp-api-client": "^0.3.38",
     "@hapi/joi": "^17.1.1",
     "@nestjs-modules/mailer": "^1.9.1",
     "@nestjs/axios": "^3.0.0",
