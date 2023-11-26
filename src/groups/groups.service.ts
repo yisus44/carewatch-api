@@ -127,7 +127,7 @@ export class GroupsService extends CoreService<Group> {
           emailInvitation.name,
           user,
           group.name,
-          `${process.env.DOMAIN}/join/${userGroup.token}`,
+          `${process.env.DOMAIN}/join/${userGroup.token}?email=${emailInvitation.email}`,
         ),
       );
     }
@@ -144,7 +144,7 @@ export class GroupsService extends CoreService<Group> {
           whatsappInvitation.name,
           user,
           group.name,
-          `${process.env.DOMAIN}/join/${userGroup.token}`,
+          `${process.env.DOMAIN}/join/${userGroup.token}?phone=${whatsappInvitation.phone}`,
         ),
       );
     }

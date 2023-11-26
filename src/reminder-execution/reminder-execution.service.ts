@@ -12,13 +12,13 @@ import { UserGroupService } from 'src/user-groups/user-group.service';
 @Injectable()
 export class ReminderExecutionService {
   private readonly daysOfWeek: { [key: string]: string } = {
-    L: '1',
-    M: '2',
-    Mr: '3',
-    J: '4',
-    V: '5',
-    S: '6',
-    D: '7',
+    L: 'mon',
+    M: 'tue',
+    Mr: 'wed',
+    J: 'thu',
+    V: 'fri',
+    S: 'sat',
+    D: 'sun',
   };
   constructor(
     private readonly userGroupService: UserGroupService,
