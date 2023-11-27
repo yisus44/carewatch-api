@@ -45,7 +45,7 @@ export class SyncPullService {
     //this is needed to ensure the date recevied is a date and is not parsed as a string
     // as per the writing of this comment, sometimes happens
     const toSyncDate = new Date(syncDate);
-    toSyncDate.setHours(toSyncDate.getHours() + 6);
+    // toSyncDate.setHours(toSyncDate.getHours() + 6);
     const userGroup = await this.userGroupService.findOneBy({
       groupId,
       userId: user.id,
@@ -332,7 +332,7 @@ export class SyncPullService {
         ...groupInfo.data,
       };
       const toSyncDate = new Date(groupInfo.syncDate);
-      toSyncDate.setHours(toSyncDate.getHours() + 6);
+      // toSyncDate.setHours(toSyncDate.getHours() + 6);
       syncInfo.push(this.convertEntitesToSyncDto(payload, toSyncDate));
     }
     const syncInfoFlattened = await this.flatSyncDtos(syncInfo);
