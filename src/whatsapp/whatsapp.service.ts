@@ -56,18 +56,17 @@ export class WhatsappService {
   }
   async sendWhatsAppInvitation(
     phone: number,
-    invitatedUser: string,
+    invitedUser: string,
     adminUser: User,
     groupName: string,
     link: string,
   ) {
     try {
-      const body = `Hola ${invitatedUser}, ¡${adminUser.name} ${adminUser.lastName} te ha invitado a formar parte de su grupo ${groupName} de Carewatch!  
-  
-      Carewatch es una applicación movil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del medico y facilitandote la organización de los horarios de los cuidadores
-      
-      Sí deseas unirte al grupo o conocer más acerca de nuestra aplicación sigue el siguiente enlace ${link}`;
+      const body = `Hola ${invitedUser}, ¡${adminUser.name} ${adminUser.lastName} te ha invitado a formar parte de su grupo ${groupName} de Carewatch!
 
+      Carewatch es una aplicación móvil comprometida con la sociedad, apoyando al cuidado de tu ser querido, para que puedas realizar sus cuidados con las indicaciones del médico y facilitándote la organización de los horarios de los cuidadores.
+      
+      Si deseas unirte al grupo o conocer más acerca de nuestra aplicación, sigue el siguiente enlace ${link}`;
       await this.sendMessage(phone.toString(), body);
     } catch (error) {
       console.log(error);
@@ -94,8 +93,9 @@ export class WhatsappService {
       Dosis: ${reminder.dosis}
       Detalles adicionales: ${reminder.additionalDetails}
       Aplicación: ${frequency}
-      Sí deseas dejar de recibir notificaciones de Carewatch por correo o deseas cambiar el medio para recibir las notificaciones ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
-    `;
+      
+      Si deseas dejar de recibir notificaciones de Carewatch por correo o deseas cambiar el medio para recibir las notificaciones, ingresa al siguiente enlace ${process.env.DOMAIN}/delete/${token}
+      `;
       await this.sendMessage(phone.toString(), body);
     } catch (error) {
       console.log(error);
